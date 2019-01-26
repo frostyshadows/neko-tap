@@ -6,16 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.squad.betakua.tap_neko.nfc.NFCActivity">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="50dp"
-        android:src="@drawable/ic_launcher_background"
-        android:layout_centerHorizontal="true"/>
-
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/nfc_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -24,8 +16,15 @@
         android:textSize="20sp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="50dp"
         android:gravity="center_horizontal"
-        android:layout_below="@id/logo"/>
+        android:layout_above="@id/logo"/>
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/ic_launcher_background"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

@@ -21,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squad.betakua.tap_neko.nfc.Utils;
 import com.squad.betakua.tap_neko.R;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public class NFCActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
 
-        text = (TextView) findViewById(R.id.text);
+        text = (TextView) findViewById(R.id.nfc_text);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         if (nfcAdapter == null) {
@@ -70,6 +69,10 @@ public class NFCActivity extends AppCompatActivity {
     private String dumpTagData(Tag tag) {
         StringBuilder sb = new StringBuilder();
         byte[] id = tag.getId();
+
+        // Here, we transmit the ID to the callback
+
+
         sb.append("ID (hex): ").append(Utils.toHex(id)).append('\n');
         sb.append("ID (reversed hex): ").append(Utils.toReversedHex(id)).append('\n');
         sb.append("ID (dec): ").append(Utils.toDec(id)).append('\n');
@@ -182,31 +185,28 @@ public class NFCActivity extends AppCompatActivity {
         if (msgs == null || msgs.length == 0)
             return;
 
-        StringBuilder builder = new StringBuilder();
-        List<ParsedNdefRecord> records = NdefMessageParser.parse(msgs[0]);
-        final int size = records.size();
-
-        for (int i = 0; i < size; i++) {
-            ParsedNdefRecord record = records.get(i);
-            String str = record.str();
-            builder.append(str).append("\n");
-        }
-
-        text.setText(builder.toString());
+        // StringBuilder builder = new StringBuilder();
+        // List<ParsedNdefRecord> records = NdefMessageParser.parse(msgs[0]);
+        // final int size = records.size();
+        //
+        // for (int i = 0; i < size; i++) {
+        //     ParsedNdefRecord record = records.get(i);
+        //     String str = record.str();
+        //     builder.append(str).append("\n");
+        // }
 
         // Play a noise
         ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, ToneGenerator.MAX_VOLUME);
-        toneG.startTone(ToneGenerator.TONE_CDMA_ANSWER, 400); //200 is duration in ms
-
+        toneG.startTone(ToneGenerator.TONE_CDMA_ANSWER, 200); //200 is duration in ms
 
         // Vibrate phone
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+            v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
             //deprecated in API 26
-            v.vibrate(500);
+            v.vibrate(200);
         }
     }
 }
