@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.squad.betakua.tap_neko.nfc.NFCActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button audioRecorderButton;
@@ -27,5 +29,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(audioRecorderIntent);
             }
         });
+    }
+
+
+    public boolean onBtnClick(View v) {
+        int id = v.getId();
+
+        if (id == R.id.nfc_button) {
+            Intent intent = new Intent(MainActivity.this, NFCActivity.class);
+            startActivity(intent);
+        }
+
+        return true;
     }
 }

@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.squad.betakua.tap_neko">
 
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +20,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".AudioRecorderActivity"/>
+
+
+        <activity
+            android:name=".nfc.NFCActivity"
+            android:label="@string/nfc_activity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

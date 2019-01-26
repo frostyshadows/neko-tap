@@ -14,26 +14,30 @@
         android:text="Developer Panel" />
 
     <Button
-        android:id="@+id/audio-recorder-button"
+        android:id="@+id/audio_recorder_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onBtnClick"
         android:text="audio recorder"/>
 
     <Button
-        android:id="@+id/nfc-button"
+        android:id="@+id/nfc_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onBtnClick"
         android:text="nfc tapper"/>
 
     <Button
-        android:id="@+id/audio-player-button"
+        android:id="@+id/audio_player_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onBtnClick"
         android:text="audio player"/>
     <Button
-        android:id="@+id/list-button"
+        android:id="@+id/list_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="onBtnClick"
         android:text="view list"/>
 
 </LinearLayout>
