@@ -3,6 +3,7 @@ package com.squad.betakua.tap_neko.nfc;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.nfc.NdefMessage;
@@ -19,9 +20,11 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +60,15 @@ public class NFCActivity extends AppCompatActivity {
         nfcAnimation = findViewById(R.id.lottie_nfc);
         checkAnimation = findViewById(R.id.lottie_nfc_success);
         checkAnimation.setVisibility(View.GONE);
+
+        // background gradient animation
+        RelativeLayout relativeLayout = findViewById(R.id.activity_nfc);
+        AnimationDrawable animationDrawable = (AnimationDrawable) relativeLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
+
+
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {

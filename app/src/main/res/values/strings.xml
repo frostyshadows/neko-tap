@@ -3,4 +3,17 @@
 
     <!-- NFC -->
     <string name="nfc_activity">NFC Activity</string>
+
+    <!-- Languages Spinner -->
+    <string-array name="languages">
+        <item>English</item>
+        <item>Français</item>
+        <item>國語</item>
+        <item>廣東話</item>
+        <item>Español</item>
+        <item>ᜏᜒᜃᜅ᜔ ᜆᜄᜎᜓᜄ</item>
+        <item>العربية</item>
+        <item>Deutsch</item>
+    </string-array>
+
 </resources>
