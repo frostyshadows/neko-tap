@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.rd.PageIndicatorView;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
@@ -54,6 +55,7 @@ public class PatientActivity extends AppCompatActivity {
     private OutputStream audioStream;
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+
 
 
     @Override
@@ -125,6 +127,7 @@ public class PatientActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
@@ -145,9 +148,15 @@ public class PatientActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position){
-                case 0: return new ScreenSlideAudioPlayFragment();
-                case 1: return new ScreenSlideTextPanelFragment();
-                case 2: return new ScreenSlideVideoPanelFragment();
+                case 0:{
+                    return new ScreenSlideAudioPlayFragment();
+                }
+                case 1:{
+                    return new ScreenSlideTextPanelFragment();
+                }
+                case 2:{
+                    return new ScreenSlideVideoPanelFragment();
+                }
             }
 
             return null;
