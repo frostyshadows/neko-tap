@@ -19,7 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".SplashActivity">
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,9 +29,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".auth.AuthActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".PatientActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-        />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PharmacistActivity"
             android:theme="@style/AppTheme.NoActionBar"/>

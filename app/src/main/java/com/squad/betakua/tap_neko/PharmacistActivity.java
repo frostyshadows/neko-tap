@@ -1,13 +1,19 @@
 package com.squad.betakua.tap_neko;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
@@ -36,21 +42,31 @@ public class PharmacistActivity extends AppCompatActivity {
 
     private boolean isClient = false;
 
-    private Button audioRecorderButton;
+    private TableRow audioRecorderButton;
     private String outputFile;
     private InputStream audioStream;
     private boolean hasAudio = false;
     private File flacFile;
 
-    private Button barcodeScannerButton;
+    private TableRow barcodeScannerButton;
     private String barcodeId;
     private boolean hasBarcode = false;
 
-    private Button submitButton;
+    private TableRow nfcButton;
+    private TableRow submitButton;
 
-    private Button nfcButton;
     private String nfcId;
     private boolean hasNfcId = false;
+
+    private TextView textBarcode;
+    private TextView textNFC;
+    private TextView textAudio;
+    private TextView textSubmit;
+
+    private LottieAnimationView lottieBarcode;
+    private LottieAnimationView lottieNFC;
+    private LottieAnimationView lottieAudio;
+    private LottieAnimationView lottieSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,30 +74,57 @@ public class PharmacistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pharmacist);
         initAudioRecorderButton();
         initBarcodeScannerButton();
-        initNfcButton();
+        initNFCButton();
         initSubmitButton();
         refreshSubmitButton();
+
+        textBarcode = findViewById(R.id.scan_text);
+        textNFC = findViewById(R.id.nfc_text);
+        textAudio = findViewById(R.id.audio_text);
+        textSubmit = findViewById(R.id.submit_text);
+
+        lottieBarcode = findViewById(R.id.check_barcode);
+        lottieNFC = findViewById(R.id.check_nfc);
+        lottieAudio = findViewById(R.id.check_audio);
+        lottieSubmit = findViewById(R.id.check_submit);
+
         outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == BARCODE_REQ_CODE && resultCode == RESULT_OK) {
-            // get barcode
+
+        if(requestCode == BARCODE_REQ_CODE && resultCode == RESULT_OK) {
             barcodeId = data.getStringExtra(BARCODE_KEY);
             hasBarcode = true;
             // Toast.makeText(this, barcodeId, Toast.LENGTH_SHORT).show();
+
+            // change colors
+            textBarcode.setTextColor(Color.parseColor("#FFFFFF"));
+            barcodeScannerButton.setBackgroundColor(Color.parseColor("#6dcc5b"));
+            lottieBarcode.playAnimation();
+
             refreshSubmitButton();
         } else if (requestCode == AUDIO_REQ_CODE && resultCode == RESULT_OK) {
             // get audio
             hasAudio = true;
             flacFile = (File) data.getExtras().get(AUDIO_KEY);
             Toast.makeText(this, "got audio", Toast.LENGTH_SHORT).show();
+
+            // change colors
+            textAudio.setTextColor(Color.parseColor("#FFFFFF"));
+            audioRecorderButton.setBackgroundColor(Color.parseColor("#6dcc5b"));
+            lottieAudio.playAnimation();
             refreshSubmitButton();
         } else if (requestCode == NFC_REQ_CODE && resultCode == RESULT_OK) {
             // get NFC id
             nfcId = data.getStringExtra(NFC_ID_KEY);
             hasNfcId = true;
+
+            // change colors
+            textNFC.setTextColor(Color.parseColor("#FFFFFF"));
+            nfcButton.setBackgroundColor(Color.parseColor("#6dcc5b"));
+            lottieNFC.playAnimation();
             refreshSubmitButton();
         }
     }
@@ -102,14 +145,40 @@ public class PharmacistActivity extends AppCompatActivity {
         });
     }
 
+    private void initNFCButton() {
+        nfcButton = findViewById(R.id.nfc_button);
+        nfcButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), NFCActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
     private void initSubmitButton() {
         submitButton = findViewById(R.id.submit_button);
-        submitButton.setOnClickListener((View view) -> {
-            try {
-                AzureInterface.getInstance().uploadAudio(nfcId, new FileInputStream(outputFile), -1);
-                AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "", "");
-            } catch (AzureInterfaceException | FileNotFoundException e) {
-                e.printStackTrace();
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    textSubmit.setTextColor(Color.parseColor("#FFFFFF"));
+                    submitButton.setBackgroundColor(Color.parseColor("#6dcc5b"));
+                    lottieSubmit.playAnimation();
+                    AzureInterface.getInstance().uploadAudio(nfcId, audioStream, -1);
+                    AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "", "https://www.youtube.com/watch?v=uGkbreu169Q");
+
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // here we reset everything
+                        }
+                    }, 1500);
+
+                } catch (AzureInterfaceException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
