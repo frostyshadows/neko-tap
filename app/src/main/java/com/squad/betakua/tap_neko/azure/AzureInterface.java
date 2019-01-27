@@ -6,16 +6,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.*;
-import com.microsoft.cognitiveservices.speech.SpeechConfig;
-import com.microsoft.cognitiveservices.speech.SpeechRecognitionEventArgs;
-import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
-import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
-import com.microsoft.cognitiveservices.speech.internal.SpeechTranslationConfig;
-import com.microsoft.cognitiveservices.speech.internal.TranslationRecognizer;
-import com.microsoft.cognitiveservices.speech.internal.TranslationSynthesisEventListener;
-import com.microsoft.cognitiveservices.speech.internal.TranslationTexEventListener;
-import com.microsoft.cognitiveservices.speech.internal.VoidFuture;
-import com.microsoft.cognitiveservices.speech.util.EventHandler;
+import com.microsoft.cognitiveservices.speech.*;
+import com.microsoft.cognitiveservices.speech.translation.SpeechTranslationConfig;
+import com.microsoft.cognitiveservices.speech.translation.TranslationRecognizer;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
@@ -29,7 +22,6 @@ import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Future;
 
 public class AzureInterface {
     private static final String CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;" +
@@ -81,11 +73,7 @@ public class AzureInterface {
                     new MobileServiceClient("https://neko-tap.azurewebsites.net", context);
             this.infoTable = mobileServiceClient.getTable("InfoTable", InfoItem.class);
             this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
-        } catch (URISyntaxException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        } catch (InvalidKeyException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        } catch (MalformedURLException e) {
+        } catch (URISyntaxException | InvalidKeyException | MalformedURLException e) {
             throw new AzureInterfaceException(e.getMessage());
         }
     }
@@ -157,51 +145,44 @@ public class AzureInterface {
                     blobClient.getContainerReference("instructionaudio");
             final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
             blockBlob.download(out);
-        } catch (URISyntaxException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        } catch (StorageException e) {
+        } catch (URISyntaxException | StorageException e) {
             throw new AzureInterfaceException(e.getMessage());
         }
     }
 
     /**
-     * Transcribe audio from the given file
+     * Create a new speech recognizer (for speech-to-text).
+     * Subscribe to `recognizing` and `recognized` events to receive data while transcribing
+     * and after transcription complete, respectively, then call `startContinuousRecognitionAsync()`
+     * and `stopContinuousRecognitionAsync()` to start and stop transcription.
+     * <p>
+     * Note: see https://docs.microsoft.com/en-ca/azure/cognitive-services/speech-service/how-to-recognize-speech-java
+     * for more details
      *
-     * @param filename Filename of .wav file to transcribe
-     * @param handler  Handler that receives transcribed text
-     * @return Future to end task - call `.get()` to end transcription
+     * @return New speech recognizer
      */
-    public Future<Void> transcribeAudio(final String filename,
-                                        final EventHandler<SpeechRecognitionEventArgs> handler) {
-        AudioConfig audioInput = AudioConfig.fromWavFileInput(filename);
-        SpeechRecognizer recognizer = new SpeechRecognizer(speechConfig, audioInput);
-        recognizer.recognized.addEventListener(handler);
-        recognizer.startContinuousRecognitionAsync();
-        return recognizer.stopContinuousRecognitionAsync();
+    public SpeechRecognizer getSpeechRecognizer() {
+        return new SpeechRecognizer(speechConfig);
     }
 
     /**
-     * Translate audio from given file
+     * Create a new translation recognizer (for speech translation).
+     * Subscribe to the `recognizing`, `recognized`, and `synthesizing` events to
+     * receive text data while translating, text data after translation complete, and speech
+     * data after translation complete, respectively, then call `startContinuousRecognitionAsync()`
+     * and `stopContinuousRecognitionAsync()` to start and stop transcription.
+     * <p>
+     * Note: see https://docs.microsoft.com/en-ca/azure/cognitive-services/speech-service/how-to-translate-speech-java
+     * for more details
      *
-     * @param filename        Filename of .wav file to translate
-     * @param textHandler     Handler for translated text
-     * @param audioHandler    Handler for translated audio
-     * @param outputLanguages List of languages to output
-     * @return Future to end task - call `.get()` to end translation
+     * @param outputLanguages List of languages to translate to
+     * @return New speech translator
      */
-    public VoidFuture translateAudio(final String filename,
-                                     final TranslationTexEventListener textHandler,
-                                     final TranslationSynthesisEventListener audioHandler,
-                                     final List<String> outputLanguages) {
-        SpeechTranslationConfig config =
-                SpeechTranslationConfig.FromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
+    public TranslationRecognizer getTranslationRecognizer(final List<String> outputLanguages) {
+        SpeechTranslationConfig config = SpeechTranslationConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
         for (final String lang : outputLanguages) {
-            config.AddTargetLanguage(lang);
+            config.addTargetLanguage(lang);
         }
-        TranslationRecognizer recognizer = TranslationRecognizer.FromConfig(config);
-        recognizer.getRecognized().AddEventListener(textHandler);
-        recognizer.getSynthesizing().AddEventListener(audioHandler);
-        recognizer.StartContinuousRecognitionAsync();
-        return recognizer.StopContinuousRecognitionAsync();
+        return new TranslationRecognizer(config);
     }
 }
