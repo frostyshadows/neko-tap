@@ -55,4 +55,5 @@ dependencies {
 
     // Lottie
     implementation 'com.airbnb.android:lottie:2.7.0'
+    implementation 'com.android.support:design:27.1.1'
 }
