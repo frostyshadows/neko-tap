@@ -25,13 +25,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squad.betakua.tap_neko.R;
 import com.airbnb.lottie.LottieAnimationView;
+import com.squad.betakua.tap_neko.PatientActivity;
+import com.squad.betakua.tap_neko.R;
 
 import java.util.HashMap;
-import java.util.Locale;
 
-public class NFCActivity extends AppCompatActivity {
+public class NFCPatientActivity extends AppCompatActivity {
     public static final int NFC_REQ_CODE = 123;
     public static final String NFC_ID_KEY = "nfc_id";
 
@@ -282,7 +282,8 @@ public class NFCActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                finish();
+                Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class);
+                startActivity(patientIntent);
             }
         }, 2500);
     }

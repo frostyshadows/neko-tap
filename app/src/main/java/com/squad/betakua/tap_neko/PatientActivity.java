@@ -101,7 +101,7 @@ public class PatientActivity extends AppCompatActivity {
         String vidAddress = "https://archive.org/download/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4";
         Uri vidUri = Uri.parse(vidAddress);
         vidView.setVideoURI(vidUri);
-        vidView.start();
+        // vidView.start();
 
         vidControl = new MediaController(this);
         vidControl.setAnchorView(vidView);
