@@ -34,6 +34,7 @@ public class AzureInterface {
     private static AzureInterface AZURE_INTERFACE = null;
     private final CloudStorageAccount storageAccount;
     private final MobileServiceTable<InfoItem> infoTable;
+    private final MobileServiceTable<DrugInfoItem> drugInfoTable;
     private final SpeechConfig speechConfig;
 
     /**
@@ -72,6 +73,7 @@ public class AzureInterface {
             final MobileServiceClient mobileServiceClient =
                     new MobileServiceClient("https://neko-tap.azurewebsites.net", context);
             this.infoTable = mobileServiceClient.getTable("InfoTable", InfoItem.class);
+            this.drugInfoTable = mobileServiceClient.getTable("DrugInfoTable", DrugInfoItem.class);
             this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
         } catch (URISyntaxException | InvalidKeyException | MalformedURLException e) {
             throw new AzureInterfaceException(e.getMessage());
@@ -109,6 +111,31 @@ public class AzureInterface {
     }
 
     /**
+     * Write a new drug info item to the Azure DrugInfoTable
+     *
+     * @param nfcID NFC ID
+     * @param text Text of instructions
+     * @param youtubeURL YouTube URL of how-to video
+     */
+    public void writeDrugInfoItem(String nfcID, String text, String youtubeURL) {
+        final DrugInfoItem item = new DrugInfoItem();
+        item.setId(UUID.randomUUID().toString());
+        item.setNfcID(nfcID);
+        item.setText(text);
+        item.setYoutubeURL(youtubeURL);
+        this.drugInfoTable.insert(item);
+    }
+
+    /**
+     * Look up a drug info item in Azure DrugInfoTable by NFC ID
+     * @param nfcID NFC ID to look up
+     * @return Future for a list of matching InfoItems
+     */
+    public ListenableFuture<MobileServiceList<DrugInfoItem>> readDrugInfoItem(String nfcID) {
+        return this.drugInfoTable.where().field("nfcID").eq(nfcID).execute();
+    }
+
+    /**
      * Upload an audio file to Azure
      * Warning: will overwrite file if file with the same audioTitle already exists
      *
@@ -135,10 +162,8 @@ public class AzureInterface {
      *
      * @param audioTitle Title of audio clip in Azure Storage; note: should be `$NFCID_$LANG`
      * @param out        OutputStream to write to
-     * @throws AzureInterfaceException If something goes wrong
      */
-    public void downloadAudio(final String audioTitle, final OutputStream out)
-            throws AzureInterfaceException {
+    public void downloadAudio(final String audioTitle, final OutputStream out) {
         new Thread(() -> {
             try {
                 final CloudBlobClient blobClient = this.storageAccount.createCloudBlobClient();
