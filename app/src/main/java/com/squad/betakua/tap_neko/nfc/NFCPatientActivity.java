@@ -29,12 +29,14 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.squad.betakua.tap_neko.PatientActivity;
 import com.squad.betakua.tap_neko.R;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 public class NFCPatientActivity extends AppCompatActivity {
     public static final int NFC_REQ_CODE = 123;
     public static final String NFC_ID_KEY = "nfc_id";
 
+    String nfcId;
     TextView text;
     TextView textSuccess;
     NfcAdapter nfcAdapter;
@@ -127,6 +129,7 @@ public class NFCPatientActivity extends AppCompatActivity {
     private String dumpTagData(Tag tag) {
         StringBuilder sb = new StringBuilder();
         byte[] id = tag.getId();
+        nfcId = Utils.toHex(id);
 
         // TODO: Here, we transmit the ID to the callback
         sb.append("ID (hex): ").append(Utils.toHex(id)).append('\n');
@@ -226,13 +229,14 @@ public class NFCPatientActivity extends AppCompatActivity {
             } else {
                 byte[] empty = new byte[0];
                 byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
+                nfcId = Utils.toHex(id);
                 Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 byte[] payload = dumpTagData(tag).getBytes();
                 NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
                 NdefMessage msg = new NdefMessage(new NdefRecord[] {record});
                 msgs = new NdefMessage[] {msg};
                 Intent data = new Intent();
-                data.putExtra(NFC_ID_KEY, id);
+                data.putExtra(NFC_ID_KEY, nfcId);
                 setResult(NFC_REQ_CODE, data);
             }
 
@@ -283,6 +287,7 @@ public class NFCPatientActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class);
+                patientIntent.putExtra(NFC_ID_KEY, nfcId);
                 startActivity(patientIntent);
             }
         }, 2500);

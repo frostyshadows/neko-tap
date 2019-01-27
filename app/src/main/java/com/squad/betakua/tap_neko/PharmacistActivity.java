@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +49,7 @@ public class PharmacistActivity extends AppCompatActivity {
     private boolean hasBarcode = false;
 
     private TableRow nfcButton;
-    private TableRow submitButton;
+    private ImageButton submitButton;
 
     private String nfcId;
     private boolean hasNfcId = false;
@@ -55,12 +57,10 @@ public class PharmacistActivity extends AppCompatActivity {
     private TextView textBarcode;
     private TextView textNFC;
     private TextView textAudio;
-    private TextView textSubmit;
 
     private LottieAnimationView lottieBarcode;
     private LottieAnimationView lottieNFC;
     private LottieAnimationView lottieAudio;
-    private LottieAnimationView lottieSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +75,10 @@ public class PharmacistActivity extends AppCompatActivity {
         textBarcode = findViewById(R.id.scan_text);
         textNFC = findViewById(R.id.nfc_text);
         textAudio = findViewById(R.id.audio_text);
-        textSubmit = findViewById(R.id.submit_text);
 
         lottieBarcode = findViewById(R.id.check_barcode);
         lottieNFC = findViewById(R.id.check_nfc);
         lottieAudio = findViewById(R.id.check_audio);
-        lottieSubmit = findViewById(R.id.check_submit);
 
         outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
         translatedOutputFile = Environment.getExternalStorageDirectory().getAbsolutePath() +
@@ -145,9 +143,6 @@ public class PharmacistActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.submit_button);
         submitButton.setOnClickListener((View view) -> {
             try {
-                textSubmit.setTextColor(Color.parseColor("#FFFFFF"));
-                submitButton.setBackgroundColor(Color.parseColor("#6dcc5b"));
-                lottieSubmit.playAnimation();
                 final String translationID = nfcId + "_fr";
                 AzureInterface.getInstance().uploadAudio(nfcId, new FileInputStream(outputFile), -1);
                 AzureInterface.getInstance().uploadAudio(translationID, new FileInputStream(translatedOutputFile), -1);
