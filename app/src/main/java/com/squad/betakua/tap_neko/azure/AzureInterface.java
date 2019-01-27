@@ -22,7 +22,7 @@ public class AzureInterface {
             "AccountKey=%s";
     private static AzureInterface AZURE_INTERFACE = null;
     private final CloudBlobClient blobClient;
-    private final MobileServiceTable<InfoTable> infoTable;
+    private final MobileServiceTable<InfoItem> infoTable;
 
     /**
      * Initialize singleton instance of Azure interface
@@ -62,7 +62,7 @@ public class AzureInterface {
             this.blobClient = storageAccount.createCloudBlobClient();
             final MobileServiceClient mobileServiceClient =
                     new MobileServiceClient("https://neko-tap.azurewebsites.net", context);
-            this.infoTable = mobileServiceClient.getTable(InfoTable.class);
+            this.infoTable = mobileServiceClient.getTable(InfoItem.class);
         } catch (URISyntaxException e) {
             throw new AzureInterfaceException(e.getMessage());
         } catch (InvalidKeyException e) {
