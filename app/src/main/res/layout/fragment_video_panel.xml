@@ -49,5 +49,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@color/colorAccent" />
 
+    <Button
+        android:id="@+id/open_yt_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="485dp" />
+
 
 </android.support.constraint.ConstraintLayout>
