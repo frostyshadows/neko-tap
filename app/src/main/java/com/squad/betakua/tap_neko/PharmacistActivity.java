@@ -62,7 +62,7 @@ public class PharmacistActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == BARCODE_REQ_CODE && resultCode == RESULT_OK) {
+        if (requestCode == BARCODE_REQ_CODE && resultCode == RESULT_OK) {
             // get barcode
             barcodeId = data.getStringExtra(BARCODE_KEY);
             hasBarcode = true;
@@ -83,37 +83,31 @@ public class PharmacistActivity extends AppCompatActivity {
 
     private void initAudioRecorderButton() {
         audioRecorderButton = findViewById(R.id.audio_recorder_button);
-        audioRecorderButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent audioRecorderIntent = new Intent(getApplicationContext(), AudioRecorderActivity.class);
-                startActivityForResult(audioRecorderIntent, AUDIO_REQ_CODE);
-            }
+        audioRecorderButton.setOnClickListener((View view) -> {
+            Intent audioRecorderIntent = new Intent(getApplicationContext(), AudioRecorderActivity.class);
+            startActivityForResult(audioRecorderIntent, AUDIO_REQ_CODE);
         });
     }
+
     private void initBarcodeScannerButton() {
         barcodeScannerButton = findViewById(R.id.barcode_scanner_button);
-        barcodeScannerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent barcodeScannerIntent = new Intent(getApplicationContext(), BarcodeScannerActivity.class);
-                startActivityForResult(barcodeScannerIntent, BARCODE_REQ_CODE);
-            }
+        barcodeScannerButton.setOnClickListener((View view) -> {
+            Intent barcodeScannerIntent = new Intent(getApplicationContext(), BarcodeScannerActivity.class);
+            startActivityForResult(barcodeScannerIntent, BARCODE_REQ_CODE);
         });
     }
 
     private void initSubmitButton() {
         submitButton = findViewById(R.id.submit_button);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    AzureInterface.getInstance().uploadAudio(nfcId, new FileInputStream(outputFile), -1);
-                    AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "transcript", "www.google.com");
-                } catch (AzureInterfaceException | FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+
+        submitButton.setOnClickListener((View view) -> {
+            try {
+                AzureInterface.getInstance().uploadAudio(nfcId, new FileInputStream(outputFile), -1);
+                AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "transcript", "www.google.com");
+            } catch (AzureInterfaceException | FileNotFoundException e) {
+                e.printStackTrace();
             }
+
         });
     }
 
@@ -129,12 +123,9 @@ public class PharmacistActivity extends AppCompatActivity {
     public void initNfcButton() {
         nfcButton = findViewById(R.id.nfc_button);
 
-        nfcButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PharmacistActivity.this, NFCActivity.class);
-                startActivityForResult(intent, NFC_REQ_CODE);
-            }
+        nfcButton.setOnClickListener((View view) -> {
+            Intent intent = new Intent(PharmacistActivity.this, NFCActivity.class);
+            startActivityForResult(intent, NFC_REQ_CODE);
         });
     }
 }
