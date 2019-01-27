@@ -97,15 +97,19 @@ public class AzureInterface {
     /**
      * Write a new info item to the Azure InfoTable
      *
-     * @param nfcID           NFC ID
-     * @param productID       Product ID
-     * @param instrTranscript Transcript of instruction audio
+     * @param nfcID      NFC ID
+     * @param productID  Product ID
+     * @param transcript Transcript of instruction audio
      */
-    public void writeInfoItem(String nfcID, String productID, String instrTranscript) {
+    public void writeInfoItem(String nfcID,
+                              String productID,
+                              String transcript,
+                              String url) {
         final InfoItem item = new InfoItem();
         item.setNfcID(nfcID);
         item.setProductID(productID);
-        item.setTranscript(instrTranscript);
+        item.setTranscript(transcript);
+        item.setURL(url);
         this.infoTable.insert(item);
     }
 
