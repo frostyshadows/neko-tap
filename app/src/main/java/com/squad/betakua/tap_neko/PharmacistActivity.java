@@ -18,12 +18,9 @@ import com.squad.betakua.tap_neko.nfc.NFCActivity;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_REQ_CODE;
-import static com.squad.betakua.tap_neko.AudioRecorderActivity.TRANSCRIPTION_STR_KEY;
-import static com.squad.betakua.tap_neko.AudioRecorderActivity.TRANSLATION_STR_KEY;
 
 /**
  * Created by sherryuan on 2019-01-26.
@@ -37,10 +34,7 @@ public class PharmacistActivity extends AppCompatActivity {
 
     private TableRow audioRecorderButton;
     private String outputFile;
-    private String translatedOutputFile;
     private boolean hasAudio = false;
-    private String transcription;
-    private ArrayList<String> translations;
 
     private TableRow barcodeScannerButton;
     private String barcodeId;
@@ -83,8 +77,6 @@ public class PharmacistActivity extends AppCompatActivity {
         lottieSubmit = findViewById(R.id.check_submit);
 
         outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
-        translatedOutputFile = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/recording_translated.wav";
     }
 
     @Override
@@ -101,8 +93,6 @@ public class PharmacistActivity extends AppCompatActivity {
 
             refreshSubmitButton();
         } else if (requestCode == AUDIO_REQ_CODE && resultCode == RESULT_OK) {
-            transcription = data.getStringExtra(TRANSCRIPTION_STR_KEY);
-            translations = data.getStringArrayListExtra(TRANSLATION_STR_KEY);
             // get audio
             hasAudio = true;
             Toast.makeText(this, "got audio", Toast.LENGTH_SHORT).show();
@@ -150,8 +140,7 @@ public class PharmacistActivity extends AppCompatActivity {
                 lottieSubmit.playAnimation();
                 final String translationID = nfcId + "_fr";
                 AzureInterface.getInstance().uploadAudio(nfcId, new FileInputStream(outputFile), -1);
-                AzureInterface.getInstance().uploadAudio(translationID, new FileInputStream(translatedOutputFile), -1);
-                AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, transcription, "https://www.youtube.com/watch?v=uGkbreu169Q");
+                AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "", "https://www.youtube.com/watch?v=uGkbreu169Q");
 
                 final Handler handler = new Handler();
                 handler.postDelayed(() -> {
