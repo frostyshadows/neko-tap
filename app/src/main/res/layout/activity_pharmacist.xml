@@ -1,116 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context="com.squad.betakua.tap_neko.PharmacistActivity"
-    android:stretchColumns="0"
-    android:shrinkColumns="1">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
-    <TableRow
-        android:id="@+id/barcode-scanner-button"
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:shrinkColumns="1"
+        android:stretchColumns="0"
+        tools:context="com.squad.betakua.tap_neko.PharmacistActivity">
 
-        <TextView
-            android:id="@+id/scan_text"
-            android:layout_column="0"
-            android:layout_width="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="Product Scan"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+        <TableRow
+            android:id="@+id/barcode-scanner-button"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/check_barcode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            app:lottie_fileName="checkbox.json"
-            app:lottie_imageAssetsFolder="images"
-            android:layout_column="1" />
-    </TableRow>
+            <TextView
+                android:id="@+id/scan_text"
+                android:layout_width="wrap_content"
+                android:layout_column="0"
+                android:layout_marginStart="30dp"
+                android:text="Product Scan"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
-    <TableRow
-        android:id="@+id/nfc_button"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/nfc_text"
-            android:layout_column="0"
-            android:layout_width="0dp"
-            android:layout_weight="0.7"
-            android:text="NFC Registration"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:layout_marginStart="30dp" />
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/check_barcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_marginStart="80dp"
+                app:lottie_fileName="checkbox.json"
+                app:lottie_imageAssetsFolder="images" />
+        </TableRow>
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/check_nfc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            app:lottie_fileName="checkbox.json"
-            app:lottie_imageAssetsFolder="images"
-            android:layout_column="1" />
-    </TableRow>
+        <TableRow
+            android:id="@+id/nfc_button"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-    <TableRow
-        android:id="@+id/audio_recorder_button"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/audio_text"
-            android:layout_column="0"
-            android:layout_width="0dp"
-            android:layout_weight="0.7"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:text="Audio Recording"
-            android:layout_marginStart="30dp" />
+            <TextView
+                android:id="@+id/nfc_text"
+                android:layout_width="0dp"
+                android:layout_column="0"
+                android:layout_marginStart="30dp"
+                android:layout_weight="0.7"
+                android:text="NFC Registration"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/check_audio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            app:lottie_fileName="checkbox.json"
-            app:lottie_imageAssetsFolder="images"
-            android:layout_column="1" />
-    </TableRow>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/check_nfc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_marginStart="80dp"
+                app:lottie_fileName="checkbox.json"
+                app:lottie_imageAssetsFolder="images" />
+        </TableRow>
 
-    <TableRow
+        <TableRow
+            android:id="@+id/audio_recorder_button"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/audio_text"
+                android:layout_width="0dp"
+                android:layout_column="0"
+                android:layout_marginStart="30dp"
+                android:layout_weight="0.7"
+                android:text="Audio Recording"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/check_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_marginStart="80dp"
+                app:lottie_fileName="checkbox.json"
+                app:lottie_imageAssetsFolder="images" />
+        </TableRow>
+
+    </TableLayout>
+
+    <ImageButton
         android:id="@+id/submit-button"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/submit_text"
-            android:layout_column="0"
-            android:layout_width="0dp"
-            android:layout_weight="0.7"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:text="Submit"
-            android:layout_marginStart="30dp" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/check_submit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            app:lottie_fileName="checkbox.json"
-            app:lottie_imageAssetsFolder="images"
-            android:layout_column="1" />
-    </TableRow>
-
-</TableLayout>
+        android:src="@drawable/submit_button"
+        android:background="#ffffff"
+        android:contentDescription="submit" />
+</LinearLayout>

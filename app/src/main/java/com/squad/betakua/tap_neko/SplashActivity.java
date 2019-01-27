@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private Button audioRecorderButton;
     private Button barcodeScannerButton;
-    private boolean isPatient = false;
+    private boolean isPatient = true;
     private boolean bypassAuth = true;
 
     @Override
