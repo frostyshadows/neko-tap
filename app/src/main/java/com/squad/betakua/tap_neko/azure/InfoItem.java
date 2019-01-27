@@ -1,14 +1,55 @@
 package com.squad.betakua.tap_neko.azure;
 
-public class InfoItem {
-    private String nfcID;
-    private String productID;
-    private String instrTranscript;
+import com.microsoft.windowsazure.mobileservices.table.DateTimeOffset;
 
-    public InfoItem(String nfcID, String productID, String instrTranscript) {
-        this.nfcID = nfcID;
-        this.productID = productID;
-        this.instrTranscript = instrTranscript;
+public class InfoItem {
+    @com.google.gson.annotations.SerializedName("id")
+    private String id;
+    @com.google.gson.annotations.SerializedName("createdAt")
+    private DateTimeOffset createdAt;
+    @com.google.gson.annotations.SerializedName("updatedAt")
+    private DateTimeOffset updatedAt;
+    @com.google.gson.annotations.SerializedName("version")
+    private String version;
+    @com.google.gson.annotations.SerializedName("nfcID")
+    private String nfcID;
+    @com.google.gson.annotations.SerializedName("productID")
+    private String productID;
+    @com.google.gson.annotations.SerializedName("transcript")
+    private String transcript;
+    @com.google.gson.annotations.SerializedName("url")
+    private String url;
+
+    public String getId() {
+        return id;
+    }
+
+    public final void setId(String id) {
+        this.id = id;
+    }
+
+    public DateTimeOffset getUpdatedAt() {
+        return updatedAt;
+    }
+
+    protected void setUpdatedAt(DateTimeOffset updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public DateTimeOffset getCreatedAt() {
+        return createdAt;
+    }
+
+    protected void setCreatedAt(DateTimeOffset createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public final void setVersion(String version) {
+        this.version = version;
     }
 
     public String getNfcID() {
@@ -27,12 +68,20 @@ public class InfoItem {
         this.productID = productID;
     }
 
-    public String getInstrTranscript() {
-        return instrTranscript;
+    public String getTranscript() {
+        return transcript;
     }
 
-    public void setInstrTranscript(final String instrTranscript) {
-        this.instrTranscript = instrTranscript;
+    public void setTranscript(final String transcript) {
+        this.transcript = transcript;
+    }
+
+    public String getURL() {
+        return url;
+    }
+
+    public void setURL(final String url) {
+        this.url = url;
     }
 
 }
