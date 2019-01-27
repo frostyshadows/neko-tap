@@ -1,6 +1,7 @@
 package com.squad.betakua.tap_neko.azure;
 
 import android.content.Context;
+import android.icu.text.IDNA;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.azure.storage.CloudStorageAccount;
@@ -99,7 +100,11 @@ public class AzureInterface {
      * @param instrTranscript Transcript of instruction audio
      */
     public void writeInfoItem(String nfcID, String productID, String instrTranscript) {
-        this.infoTable.insert(new InfoItem(nfcID, productID, instrTranscript));
+        final InfoItem item = new InfoItem();
+        item.setNfcID(nfcID);
+        item.setProductID(productID);
+        item.setInstrTranscript(instrTranscript);
+        this.infoTable.insert(item);
     }
 
     /**
