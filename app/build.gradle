@@ -44,4 +44,7 @@ dependencies {
 
     // NFC
     api 'com.google.guava:guava:27.0.1-android'
+
+    // Lottie
+    implementation 'com.airbnb.android:lottie:2.7.0'
 }

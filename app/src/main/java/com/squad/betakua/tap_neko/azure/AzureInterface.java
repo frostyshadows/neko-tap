@@ -10,6 +10,14 @@ import com.microsoft.cognitiveservices.speech.SpeechConfig;
 import com.microsoft.cognitiveservices.speech.SpeechRecognitionEventArgs;
 import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
+import com.microsoft.cognitiveservices.speech.internal.SpeechTranslationConfig;
+import com.microsoft.cognitiveservices.speech.internal.TranslationRecognitionEventArgs;
+import com.microsoft.cognitiveservices.speech.internal.TranslationRecognizer;
+import com.microsoft.cognitiveservices.speech.internal.TranslationSynthesisEventArgs;
+import com.microsoft.cognitiveservices.speech.internal.TranslationSynthesisEventListener;
+import com.microsoft.cognitiveservices.speech.internal.TranslationSynthesisEventSignal;
+import com.microsoft.cognitiveservices.speech.internal.TranslationTexEventListener;
+import com.microsoft.cognitiveservices.speech.internal.VoidFuture;
 import com.microsoft.cognitiveservices.speech.util.EventHandler;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
@@ -22,6 +30,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
+import java.util.List;
 import java.util.concurrent.Future;
 
 public class AzureInterface {
@@ -153,7 +162,7 @@ public class AzureInterface {
     }
 
     /**
-     * Transcribe audio from the given file for 15 seconds
+     * Transcribe audio from the given file
      *
      * @param filename Filename of .wav file to transcribe
      * @param handler  Handler that receives transcribed text
@@ -166,5 +175,30 @@ public class AzureInterface {
         recognizer.recognized.addEventListener(handler);
         recognizer.startContinuousRecognitionAsync();
         return recognizer.stopContinuousRecognitionAsync();
+    }
+
+    /**
+     * Translate audio from given file
+     *
+     * @param filename        Filename of .wav file to translate
+     * @param textHandler     Handler for translated text
+     * @param audioHandler    Handler for translated audio
+     * @param outputLanguages List of languages to output
+     * @return Future to end task - call `.get()` to end translation
+     */
+    public VoidFuture translateAudio(final String filename,
+                                     final TranslationTexEventListener textHandler,
+                                     final TranslationSynthesisEventListener audioHandler,
+                                     final List<String> outputLanguages) {
+        SpeechTranslationConfig config =
+                SpeechTranslationConfig.FromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
+        for (final String lang : outputLanguages) {
+            config.AddTargetLanguage(lang);
+        }
+        TranslationRecognizer recognizer = TranslationRecognizer.FromConfig(config);
+        recognizer.getRecognized().AddEventListener(textHandler);
+        recognizer.getSynthesizing().AddEventListener(audioHandler);
+        recognizer.StartContinuousRecognitionAsync();
+        return recognizer.StopContinuousRecognitionAsync();
     }
 }
