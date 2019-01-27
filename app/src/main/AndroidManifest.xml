@@ -57,6 +57,9 @@
             android:label="@string/nfc_activity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <receiver android:name=".notifications.AlarmReceiver"
+            android:enabled="true">
+        </receiver>
     </application>
 
 </manifest>

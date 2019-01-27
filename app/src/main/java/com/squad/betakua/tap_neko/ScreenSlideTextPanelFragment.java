@@ -37,7 +37,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 
+
 public class ScreenSlideTextPanelFragment extends Fragment implements TranscriptListener {
+
 
 
     TextView transcriptView;
