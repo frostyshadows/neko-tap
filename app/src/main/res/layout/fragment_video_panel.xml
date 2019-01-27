@@ -23,9 +23,10 @@
         android:layout_marginBottom="5dp"
         android:src="@drawable/ic_add_black_24dp"
         android:clickable="true"
+        android:scaleType="fitCenter"
+        app:backgroundTint="@color/zxing_transparent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@color/colorAccent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/callFab"
@@ -35,9 +36,10 @@
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_call_black_24dp"
         android:clickable="true"
+        android:scaleType="center"
+        app:backgroundTint="@color/zxing_transparent"
         app:layout_constraintBottom_toTopOf="@+id/mainFab"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@color/colorAccent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/alertFab"
@@ -47,9 +49,10 @@
         android:layout_marginBottom="8dp"
         android:src="@drawable/ic_notifications_none_black_24dp"
         android:clickable="true"
+        android:scaleType="center"
+        app:backgroundTint="@color/zxing_transparent"
         app:layout_constraintBottom_toTopOf="@+id/callFab"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@color/colorAccent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/open_yt_button"
