@@ -12,6 +12,7 @@ import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
 
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,6 +30,7 @@ public class PharmacistActivity extends AppCompatActivity {
 
     public static final int BARCODE_REQ_CODE = 100;
     public static final String BARCODE_KEY = "barcode";
+    public static final String AUDIO_KEY = "audio";
     public static final int AUDIO_REQ_CODE = 101;
 
     private boolean isClient = false;
@@ -37,6 +39,7 @@ public class PharmacistActivity extends AppCompatActivity {
     private String outputFile;
     private InputStream audioStream;
     private boolean hasAudio = false;
+    private File flacFile;
 
     private Button barcodeScannerButton;
     private String barcodeId;
@@ -71,6 +74,7 @@ public class PharmacistActivity extends AppCompatActivity {
         } else if (requestCode == AUDIO_REQ_CODE && resultCode == RESULT_OK) {
             // get audio
             hasAudio = true;
+            flacFile = (File) data.getExtras().get(AUDIO_KEY);
             Toast.makeText(this, "got audio", Toast.LENGTH_SHORT).show();
             refreshSubmitButton();
         } else if (requestCode == NFC_REQ_CODE && resultCode == RESULT_OK) {

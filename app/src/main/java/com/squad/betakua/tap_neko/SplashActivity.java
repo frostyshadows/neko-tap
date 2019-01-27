@@ -10,6 +10,7 @@ import android.widget.Button;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
+import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -17,12 +18,12 @@ public class SplashActivity extends AppCompatActivity {
 
     private Button audioRecorderButton;
     private Button barcodeScannerButton;
-    private boolean isPatient = false;
+    private boolean isPatient = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient);
+        setContentView(R.layout.activity_splash);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -34,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
 
                 if (isPatient) {
-                    Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class);
+                    Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class);
                     startActivity(patientIntent);
                 } else {
                     Intent pharmacistIntent = new Intent(getApplicationContext(), PharmacistActivity.class);

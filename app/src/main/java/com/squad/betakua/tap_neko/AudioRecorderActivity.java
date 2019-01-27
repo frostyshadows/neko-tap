@@ -23,6 +23,9 @@ import cafe.adriel.androidaudioconverter.AndroidAudioConverter;
 import cafe.adriel.androidaudioconverter.callback.IConvertCallback;
 import cafe.adriel.androidaudioconverter.model.AudioFormat;
 
+
+import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_KEY;
+
 /**
  * Created by sherryuan on 2019-01-26.
  */
@@ -167,11 +170,8 @@ public class AudioRecorderActivity extends AppCompatActivity {
     }
 
     private void initSaveButton() {
-
         saveButton = findViewById(R.id.save_button);
-        saveButton.setOnClickListener(new View.OnClickListener()
-
-        {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Convert audio to .wav file
