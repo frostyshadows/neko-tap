@@ -76,22 +76,16 @@ public class PatientActivity extends AppCompatActivity {
 
     private void initPlayButton() {
         playButton = findViewById(R.id.play_button);
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    mediaPlayer.start();
-                    Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
-            }
+        playButton.setOnClickListener((View view) -> {
+            mediaPlayer.start();
+            Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
         });
     }
 
     private void initStopButton() {
         stopButton = findViewById(R.id.stop_button);
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mediaPlayer.stop();
-            }
+        stopButton.setOnClickListener((View view) -> {
+            mediaPlayer.stop();
         });
     }
 
