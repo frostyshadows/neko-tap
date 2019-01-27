@@ -1,7 +1,5 @@
 package com.squad.betakua.tap_neko;
 
-import android.os.Build;
-
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.*;
@@ -12,15 +10,29 @@ import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
-import static java.lang.System.getenv;
-
 public class AzureInterface {
     private static final String CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;" +
             "AccountName=%s;" +
             "AccountKey=%s";
     private final CloudBlobClient blobClient;
+    private static AzureInterface AZURE_INTERFACE = null;
 
-    public AzureInterface() throws URISyntaxException, InvalidKeyException {
+    /**
+     * Get singleton instance of Azure interface
+     * Note: Ensure you have Azure storage account name and key in gradle.properties
+     *
+     * @return Singleton instance of Azure interface
+     * @throws URISyntaxException  Rethrown from Azure client
+     * @throws InvalidKeyException Rethrown from Azure client
+     */
+    public static AzureInterface getInstance() throws URISyntaxException, InvalidKeyException {
+        if (AZURE_INTERFACE == null) {
+            AZURE_INTERFACE = new AzureInterface();
+        }
+        return AZURE_INTERFACE;
+    }
+
+    private AzureInterface() throws URISyntaxException, InvalidKeyException {
         final String accountName = BuildConfig.AzureStorageAccountName;
         final String accountKey = BuildConfig.AzureStorageAccountKey;
         final String connectionString =
