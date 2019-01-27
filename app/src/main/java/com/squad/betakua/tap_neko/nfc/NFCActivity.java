@@ -24,6 +24,9 @@ import android.widget.Toast;
 import com.squad.betakua.tap_neko.R;
 
 public class NFCActivity extends AppCompatActivity {
+    public static final int NFC_REQ_CODE = 123;
+    public static final String NFC_ID_KEY = "nfc_id";
+
     TextView text;
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
@@ -173,6 +176,10 @@ public class NFCActivity extends AppCompatActivity {
                 NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
                 NdefMessage msg = new NdefMessage(new NdefRecord[] {record});
                 msgs = new NdefMessage[] {msg};
+                Intent data = new Intent();
+                data.putExtra(NFC_ID_KEY, id);
+                setResult(NFC_REQ_CODE, data);
+                finish();
             }
 
             displayMsgs(msgs);

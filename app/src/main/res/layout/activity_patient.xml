@@ -29,4 +29,10 @@
 
     </LinearLayout>
 
+    <VideoView
+        android:id="@+id/video"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" />
+
 </LinearLayout>
