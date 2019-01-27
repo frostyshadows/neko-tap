@@ -26,6 +26,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     private Button recordButton;
     private Button stopButton;
     private Button playButton;
+    private Button saveButton;
 
     private MediaRecorder audioRecorder;
     private String outputFile;
@@ -41,8 +42,10 @@ public class AudioRecorderActivity extends AppCompatActivity {
         initRecordButton();
         initStopButton();
         initPlayButton();
+        initSaveButton();
         stopButton.setEnabled(false);
         playButton.setEnabled(false);
+        saveButton.setEnabled(false);
 
     }
 
@@ -92,6 +95,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
                 recordButton.setEnabled(true);
                 stopButton.setEnabled(false);
                 playButton.setEnabled(true);
+                saveButton.setEnabled(true);
                 Toast.makeText(getApplicationContext(), "Audio Recorder stopped", Toast.LENGTH_LONG).show();
             }
         });
@@ -116,13 +120,15 @@ public class AudioRecorderActivity extends AppCompatActivity {
         });
     }
 
-    private void convert(){
+
+    private void convert() {
         File flacFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp");
         IConvertCallback callback = new IConvertCallback() {
             @Override
             public void onSuccess(File convertedFile) {
                 // So fast? Love it!
             }
+
             @Override
             public void onFailure(Exception error) {
                 // Oops! Something went wrong
@@ -141,4 +147,20 @@ public class AudioRecorderActivity extends AppCompatActivity {
                 // Start conversion
                 .convert();
     }
+
+    private void initSaveButton() {
+
+        saveButton = findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick(View view) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
+    }
+
 }

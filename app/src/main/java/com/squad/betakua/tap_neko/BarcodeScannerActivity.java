@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import static com.squad.betakua.tap_neko.PharmacistActivity.BARCODE_KEY;
+
 /**
  * Created by sherryuan on 2019-01-26.
  */
@@ -48,14 +50,12 @@ public class BarcodeScannerActivity extends AppCompatActivity {
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                updateText(result.getContents());
+                data.putExtra(BARCODE_KEY, result.getContents());
+                setResult(RESULT_OK, data);
+                finish();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-    private void updateText(String scanCode) {
-        tvCardText.setText(scanCode);
     }
 }
