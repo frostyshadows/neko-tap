@@ -1,11 +1,12 @@
 package com.squad.betakua.tap_neko.azure;
 
 import android.content.Context;
-import android.icu.text.IDNA;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.*;
+import com.microsoft.cognitiveservices.speech.SpeechConfig;
+import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.squad.betakua.tap_neko.BuildConfig;
@@ -22,9 +23,14 @@ public class AzureInterface {
     private static final String CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;" +
             "AccountName=%s;" +
             "AccountKey=%s";
+    private static final String STORAGE_ACCOUNT_NAME = BuildConfig.AzureStorageAccountName;
+    private static final String STORAGE_ACCOUNT_KEY = BuildConfig.AzureStorageAccountKey;
+    private static final String SPEECH_SUB_KEY = BuildConfig.AzureSpeechSubscriptionKey;
+    private static final String SERVICE_REGION = "westus";
     private static AzureInterface AZURE_INTERFACE = null;
     private final CloudBlobClient blobClient;
     private final MobileServiceTable<InfoItem> infoTable;
+    private final SpeechRecognizer speechRecognizer;
 
     /**
      * Initialize singleton instance of Azure interface
@@ -55,16 +61,18 @@ public class AzureInterface {
 
     private AzureInterface(Context context) throws AzureInterfaceException {
         try {
-            final String accountName = BuildConfig.AzureStorageAccountName;
-            final String accountKey = BuildConfig.AzureStorageAccountKey;
-            final String connectionString =
-                    String.format(CONNECTION_STRING_TEMPLATE, accountName, accountKey);
+            final String connectionString = String.format(CONNECTION_STRING_TEMPLATE,
+                    STORAGE_ACCOUNT_NAME,
+                    STORAGE_ACCOUNT_KEY);
             final CloudStorageAccount storageAccount =
                     CloudStorageAccount.parse(connectionString);
             this.blobClient = storageAccount.createCloudBlobClient();
             final MobileServiceClient mobileServiceClient =
                     new MobileServiceClient("https://neko-tap.azurewebsites.net", context);
             this.infoTable = mobileServiceClient.getTable(InfoItem.class);
+            SpeechConfig speechConfig =
+                    SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
+            this.speechRecognizer = new SpeechRecognizer(speechConfig);
         } catch (URISyntaxException e) {
             throw new AzureInterfaceException(e.getMessage());
         } catch (InvalidKeyException e) {
