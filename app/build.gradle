@@ -11,7 +11,15 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField 'String', "AzureStorageAccountName", NekoTap_AzureStorageAccountName
         buildConfigField 'String', "AzureStorageAccountKey", NekoTap_AzureStorageAccountKey
+        buildConfigField 'String', "AzureSpeechSubscriptionKey", NekoTap_AzureSpeechSubscriptionKey
     }
+
+    repositories {
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -21,11 +29,13 @@ android {
 }
 
 dependencies {
+    implementation 'com.github.adrielcafe:AndroidAudioConverter:0.0.8'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.microsoft.azure:azure-mobile-android:3.4.0@aar'
     implementation 'com.microsoft.azure.android:azure-storage-android:2.0.0@aar'
+    implementation 'com.microsoft.cognitiveservices.speech:client-sdk:1.2.0'
     implementation 'com.journeyapps:zxing-android-embedded:3.3.0@aar'
     implementation 'com.google.zxing:core:3.2.1'
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -35,4 +45,7 @@ dependencies {
 
     // NFC
     api 'com.google.guava:guava:27.0.1-android'
+
+    // Lottie
+    implementation 'com.airbnb.android:lottie:2.7.0'
 }

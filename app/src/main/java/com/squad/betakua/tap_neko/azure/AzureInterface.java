@@ -1,12 +1,26 @@
 package com.squad.betakua.tap_neko.azure;
 
 import android.content.Context;
-import android.icu.text.IDNA;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.*;
+import com.microsoft.cognitiveservices.speech.SpeechConfig;
+import com.microsoft.cognitiveservices.speech.SpeechRecognitionEventArgs;
+import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
+import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
+import com.microsoft.cognitiveservices.speech.internal.SpeechTranslationConfig;
+import com.microsoft.cognitiveservices.speech.internal.TranslationRecognitionEventArgs;
+import com.microsoft.cognitiveservices.speech.internal.TranslationRecognizer;
+import com.microsoft.cognitiveservices.speech.internal.TranslationSynthesisEventArgs;
+import com.microsoft.cognitiveservices.speech.internal.TranslationSynthesisEventListener;
+import com.microsoft.cognitiveservices.speech.internal.TranslationSynthesisEventSignal;
+import com.microsoft.cognitiveservices.speech.internal.TranslationTexEventListener;
+import com.microsoft.cognitiveservices.speech.internal.VoidFuture;
+import com.microsoft.cognitiveservices.speech.util.EventHandler;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.squad.betakua.tap_neko.BuildConfig;
 
@@ -16,15 +30,21 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
-import java.util.concurrent.ExecutionException;
+import java.util.List;
+import java.util.concurrent.Future;
 
 public class AzureInterface {
     private static final String CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;" +
             "AccountName=%s;" +
             "AccountKey=%s";
+    private static final String STORAGE_ACCOUNT_NAME = BuildConfig.AzureStorageAccountName;
+    private static final String STORAGE_ACCOUNT_KEY = BuildConfig.AzureStorageAccountKey;
+    private static final String SPEECH_SUB_KEY = BuildConfig.AzureSpeechSubscriptionKey;
+    private static final String SERVICE_REGION = "westus";
     private static AzureInterface AZURE_INTERFACE = null;
     private final CloudBlobClient blobClient;
     private final MobileServiceTable<InfoItem> infoTable;
+    private final SpeechConfig speechConfig;
 
     /**
      * Initialize singleton instance of Azure interface
@@ -55,16 +75,16 @@ public class AzureInterface {
 
     private AzureInterface(Context context) throws AzureInterfaceException {
         try {
-            final String accountName = BuildConfig.AzureStorageAccountName;
-            final String accountKey = BuildConfig.AzureStorageAccountKey;
-            final String connectionString =
-                    String.format(CONNECTION_STRING_TEMPLATE, accountName, accountKey);
+            final String connectionString = String.format(CONNECTION_STRING_TEMPLATE,
+                    STORAGE_ACCOUNT_NAME,
+                    STORAGE_ACCOUNT_KEY);
             final CloudStorageAccount storageAccount =
                     CloudStorageAccount.parse(connectionString);
             this.blobClient = storageAccount.createCloudBlobClient();
             final MobileServiceClient mobileServiceClient =
                     new MobileServiceClient("https://neko-tap.azurewebsites.net", context);
             this.infoTable = mobileServiceClient.getTable(InfoItem.class);
+            this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
         } catch (URISyntaxException e) {
             throw new AzureInterfaceException(e.getMessage());
         } catch (InvalidKeyException e) {
@@ -89,17 +109,10 @@ public class AzureInterface {
      * Look up an info item in Azure InfoTable by NFC ID
      *
      * @param nfcID NFC ID to look up
-     * @return InfoItem matching NFC ID
-     * @throws AzureInterfaceException If something goes wrong
+     * @return Future for a list of matching InfoItems
      */
-    public InfoItem readInfoItem(String nfcID) throws AzureInterfaceException {
-        try {
-            return this.infoTable.where().field("nfcID").eq(nfcID).execute().get().get(0);
-        } catch (InterruptedException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        } catch (ExecutionException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        }
+    public ListenableFuture<MobileServiceList<InfoItem>> readInfoItem(String nfcID) {
+        return this.infoTable.where().field("nfcID").eq(nfcID).execute();
     }
 
     /**
@@ -146,5 +159,46 @@ public class AzureInterface {
         } catch (StorageException e) {
             throw new AzureInterfaceException(e.getMessage());
         }
+    }
+
+    /**
+     * Transcribe audio from the given file
+     *
+     * @param filename Filename of .wav file to transcribe
+     * @param handler  Handler that receives transcribed text
+     * @return Future to end task - call `.get()` to end transcription
+     */
+    public Future<Void> transcribeAudio(final String filename,
+                                        final EventHandler<SpeechRecognitionEventArgs> handler) {
+        AudioConfig audioInput = AudioConfig.fromWavFileInput(filename);
+        SpeechRecognizer recognizer = new SpeechRecognizer(speechConfig, audioInput);
+        recognizer.recognized.addEventListener(handler);
+        recognizer.startContinuousRecognitionAsync();
+        return recognizer.stopContinuousRecognitionAsync();
+    }
+
+    /**
+     * Translate audio from given file
+     *
+     * @param filename        Filename of .wav file to translate
+     * @param textHandler     Handler for translated text
+     * @param audioHandler    Handler for translated audio
+     * @param outputLanguages List of languages to output
+     * @return Future to end task - call `.get()` to end translation
+     */
+    public VoidFuture translateAudio(final String filename,
+                                     final TranslationTexEventListener textHandler,
+                                     final TranslationSynthesisEventListener audioHandler,
+                                     final List<String> outputLanguages) {
+        SpeechTranslationConfig config =
+                SpeechTranslationConfig.FromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
+        for (final String lang : outputLanguages) {
+            config.AddTargetLanguage(lang);
+        }
+        TranslationRecognizer recognizer = TranslationRecognizer.FromConfig(config);
+        recognizer.getRecognized().AddEventListener(textHandler);
+        recognizer.getSynthesizing().AddEventListener(audioHandler);
+        recognizer.StartContinuousRecognitionAsync();
+        return recognizer.StopContinuousRecognitionAsync();
     }
 }

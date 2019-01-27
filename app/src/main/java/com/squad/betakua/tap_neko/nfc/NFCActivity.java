@@ -13,31 +13,52 @@ import android.nfc.tech.MifareClassic;
 import android.nfc.tech.MifareUltralight;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squad.betakua.tap_neko.R;
+import com.airbnb.lottie.LottieAnimationView;
+
+import java.util.HashMap;
+import java.util.Locale;
 
 public class NFCActivity extends AppCompatActivity {
     public static final int NFC_REQ_CODE = 123;
     public static final String NFC_ID_KEY = "nfc_id";
 
     TextView text;
+    TextView textSuccess;
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
+    static final String TAG = "TTS";
+    TextToSpeech mTts;
+    LottieAnimationView nfcAnimation;
+    LottieAnimationView checkAnimation;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
 
-        text = (TextView) findViewById(R.id.nfc_text);
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        text = findViewById(R.id.nfc_text);
+        text.setText("Tap the medicine cap or device tag!");
 
+        textSuccess = findViewById(R.id.nfc_text_success);
+        textSuccess.setVisibility(View.GONE);
+
+        nfcAnimation = findViewById(R.id.lottie_nfc);
+        checkAnimation = findViewById(R.id.lottie_nfc_success);
+        checkAnimation.setVisibility(View.GONE);
+
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
             Toast.makeText(this, "No NFC", Toast.LENGTH_SHORT).show();
             finish();
@@ -47,6 +68,42 @@ public class NFCActivity extends AppCompatActivity {
         pendingIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, this.getClass())
                         .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
+
+        // text-to-speech: prompt user to tap
+        // TODO: replace with azure text-to-speech?
+        // mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+        //     @Override
+        //     public void onInit(int status) {
+        //         if (status == TextToSpeech.SUCCESS) {
+        //             int result = mTts.setLanguage(Locale.KOREA);
+        //             if (result == TextToSpeech.LANG_MISSING_DATA
+        //                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+        //                 Toast.makeText(getApplicationContext(), "This language is not supported", Toast.LENGTH_SHORT).show();
+        //             }
+        //             else{
+        //                 Log.v("TTS","onInit succeeded");
+        //                 speak("Tap your phone against the bottle cap or medical device tag");
+        //             }
+        //         } else {
+        //             Toast.makeText(getApplicationContext(), "Initialization failed", Toast.LENGTH_SHORT).show();
+        //         }
+        //     }
+        // });
+    }
+
+    void speak(String s){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Log.v(TAG, "Speak new API");
+            Bundle bundle = new Bundle();
+            bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
+            mTts.speak(s, TextToSpeech.QUEUE_FLUSH, bundle, null);
+        } else {
+            Log.v(TAG, "Speak old API");
+            HashMap<String, String> param = new HashMap<>();
+            param.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_MUSIC));
+            mTts.speak(s, TextToSpeech.QUEUE_FLUSH, param);
+        }
     }
 
     @Override
@@ -71,9 +128,7 @@ public class NFCActivity extends AppCompatActivity {
         StringBuilder sb = new StringBuilder();
         byte[] id = tag.getId();
 
-        // Here, we transmit the ID to the callback
-
-
+        // TODO: Here, we transmit the ID to the callback
         sb.append("ID (hex): ").append(Utils.toHex(id)).append('\n');
         sb.append("ID (reversed hex): ").append(Utils.toReversedHex(id)).append('\n');
         sb.append("ID (dec): ").append(Utils.toDec(id)).append('\n');
@@ -213,5 +268,24 @@ public class NFCActivity extends AppCompatActivity {
             //deprecated in API 26
             v.vibrate(200);
         }
+
+        displaySuccessAnimation();
     }
+
+    private void displaySuccessAnimation() {
+        nfcAnimation.setVisibility(View.GONE);
+        text.setVisibility(View.GONE);
+        checkAnimation.setVisibility(View.VISIBLE);
+        textSuccess.setVisibility(View.VISIBLE);
+        checkAnimation.playAnimation();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 2000);
+    }
+
 }
