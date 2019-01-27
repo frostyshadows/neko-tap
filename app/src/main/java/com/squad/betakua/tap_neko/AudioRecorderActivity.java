@@ -1,7 +1,6 @@
 package com.squad.betakua.tap_neko;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -10,8 +9,6 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.util.LogPrinter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,9 +19,6 @@ import java.io.IOException;
 import cafe.adriel.androidaudioconverter.AndroidAudioConverter;
 import cafe.adriel.androidaudioconverter.callback.IConvertCallback;
 import cafe.adriel.androidaudioconverter.model.AudioFormat;
-
-
-import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_KEY;
 
 /**
  * Created by sherryuan on 2019-01-26.
@@ -81,11 +75,8 @@ public class AudioRecorderActivity extends AppCompatActivity {
                 try {
                     audioRecorder.prepare();
                     audioRecorder.start();
-                } catch (IllegalStateException ise) {
-                    // make something ...
-                } catch (IOException ioe) {
-                    // make something
-                    ioe.printStackTrace();
+                } catch (IllegalStateException | IOException e) {
+                    e.printStackTrace();
                 }
                 recordButton.setEnabled(false);
                 stopButton.setEnabled(true);

@@ -22,9 +22,7 @@ import com.squad.betakua.tap_neko.nfc.NFCActivity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_REQ_CODE;
