@@ -21,10 +21,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="5dp"
+
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_add_black_24dp"
         android:clickable="true"
         android:scaleType="center"
-        android:src="@drawable/ic_menu_green"
         app:backgroundTint="@color/zxing_transparent"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -35,9 +36,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_call_black_24dp"
         android:clickable="true"
         android:scaleType="center"
-        android:src="@drawable/ic_phone_green"
         app:backgroundTint="@color/zxing_transparent"
         app:layout_constraintBottom_toTopOf="@+id/mainFab"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -52,8 +53,8 @@
         android:scaleType="center"
         android:scaleX="1.2"
         android:scaleY="1.2"
-        android:src="@drawable/ic_reminder_green"
-        app:backgroundTint="@color/zxing_transparent"
+        android:src="@drawable/ic_notifications_none_black_24dp"
+        app:backgroundTint="@color/greenSuccess"
         app:layout_constraintBottom_toTopOf="@+id/callFab"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -94,7 +95,8 @@
         android:layout_height="wrap_content"
         android:text="Translate"
         tools:layout_editor_absoluteX="140dp"
-        tools:layout_editor_absoluteY="444dp" />
+        tools:layout_editor_absoluteY="444dp"
+        tools:ignore="MissingConstraints" />
 
 
 </android.support.constraint.ConstraintLayout>
