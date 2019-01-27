@@ -39,6 +39,7 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
         FloatingActionButton alertFab = getView().findViewById(R.id.alertFab);
 
         Button ytButton = getView().findViewById(R.id.open_yt_button);
+        ytButton.setText("Open in YouTube");
 
         alertFab.setOnClickListener((View v) -> {
             showTimePickerDialog();
