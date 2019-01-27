@@ -21,11 +21,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.squad.betakua.tap_neko.azure.AzureInterface;
+import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
+import com.squad.betakua.tap_neko.azure.InfoItem;
+import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class ScreenSlideTextPanelFragment extends Fragment {
+public class ScreenSlideTextPanelFragment extends Fragment implements TranscriptListener {
 
 import android.widget.TextView;
 
@@ -35,6 +45,8 @@ import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
     TextToSpeech mTts;
     Button largerFont;
     Button smallerFont;
+    private boolean hasInfo = false;
+    private String nfcId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,6 +62,34 @@ import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
         transcriptView = getView().findViewById(R.id.transcriptView);
         largerFont = getView().findViewById(R.id.largerFont);
         smallerFont = getView().findViewById(R.id.smallerFont);
+
+        private void loadData(){
+            try {
+
+                ListenableFuture<MobileServiceList<InfoItem>> infoItemsFuture = AzureInterface.getInstance().readDrugInfoItem(nfcId);
+
+                Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
+                    public void onSuccess(MobileServiceList<InfoItem> infoItems) {
+                        hasInfo = true;
+                        // transcriptListener.onTranscriptLoaded("dummy transcript");
+                        transcriptListener.onTranscriptLoaded(infoItems.get(0).getTranscript());
+                        barcodeId = infoItems.get(0).getProductID();
+                    }
+
+                    public void onFailure(Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+                outputFile.createNewFile();
+                audioStream = new FileOutputStream(outputFile, false);
+                AzureInterface.getInstance().downloadAudio(outputFilePath, audioStream);
+                audioStream.close();
+            } catch (AzureInterfaceException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        transcriptView.setText(this.loadData);
 
         largerFont.setOnClickListener(new View.OnClickListener() {
             @Override
