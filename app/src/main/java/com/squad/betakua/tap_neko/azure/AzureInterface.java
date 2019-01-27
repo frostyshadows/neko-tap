@@ -2,12 +2,17 @@ package com.squad.betakua.tap_neko.azure;
 
 import android.content.Context;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.*;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
+import com.microsoft.cognitiveservices.speech.SpeechRecognitionEventArgs;
 import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
+import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
+import com.microsoft.cognitiveservices.speech.util.EventHandler;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.squad.betakua.tap_neko.BuildConfig;
 
@@ -17,7 +22,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class AzureInterface {
     private static final String CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;" +
@@ -30,7 +35,7 @@ public class AzureInterface {
     private static AzureInterface AZURE_INTERFACE = null;
     private final CloudBlobClient blobClient;
     private final MobileServiceTable<InfoItem> infoTable;
-    private final SpeechRecognizer speechRecognizer;
+    private final SpeechConfig speechConfig;
 
     /**
      * Initialize singleton instance of Azure interface
@@ -70,9 +75,7 @@ public class AzureInterface {
             final MobileServiceClient mobileServiceClient =
                     new MobileServiceClient("https://neko-tap.azurewebsites.net", context);
             this.infoTable = mobileServiceClient.getTable(InfoItem.class);
-            SpeechConfig speechConfig =
-                    SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
-            this.speechRecognizer = new SpeechRecognizer(speechConfig);
+            this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
         } catch (URISyntaxException e) {
             throw new AzureInterfaceException(e.getMessage());
         } catch (InvalidKeyException e) {
@@ -97,17 +100,10 @@ public class AzureInterface {
      * Look up an info item in Azure InfoTable by NFC ID
      *
      * @param nfcID NFC ID to look up
-     * @return InfoItem matching NFC ID
-     * @throws AzureInterfaceException If something goes wrong
+     * @return Future for a list of matching InfoItems
      */
-    public InfoItem readInfoItem(String nfcID) throws AzureInterfaceException {
-        try {
-            return this.infoTable.where().field("nfcID").eq(nfcID).execute().get().get(0);
-        } catch (InterruptedException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        } catch (ExecutionException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        }
+    public ListenableFuture<MobileServiceList<InfoItem>> readInfoItem(String nfcID) {
+        return this.infoTable.where().field("nfcID").eq(nfcID).execute();
     }
 
     /**
@@ -154,5 +150,21 @@ public class AzureInterface {
         } catch (StorageException e) {
             throw new AzureInterfaceException(e.getMessage());
         }
+    }
+
+    /**
+     * Transcribe audio from the given file for 15 seconds
+     *
+     * @param filename Filename of .wav file to transcribe
+     * @param handler  Handler that receives transcribed text
+     * @return Future to end task - call `.get()` to end transcription
+     */
+    public Future<Void> transcribeAudio(final String filename,
+                                        final EventHandler<SpeechRecognitionEventArgs> handler) {
+        AudioConfig audioInput = AudioConfig.fromWavFileInput(filename);
+        SpeechRecognizer recognizer = new SpeechRecognizer(speechConfig, audioInput);
+        recognizer.recognized.addEventListener(handler);
+        recognizer.startContinuousRecognitionAsync();
+        return recognizer.stopContinuousRecognitionAsync();
     }
 }
