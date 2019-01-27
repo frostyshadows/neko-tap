@@ -20,8 +20,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private Button audioRecorderButton;
     private Button barcodeScannerButton;
-    private boolean isPatient = false;
-    private boolean bypassAuth = false;
+    private boolean isPatient = true;
+    private boolean bypassAuth = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
 
                 if (isPatient) {
-                    Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class); //NFCPatientActivity.class
+                    Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class); //NFCPatientActivity.class
                     startActivity(patientIntent);
                 } else {
                     if (bypassAuth) {

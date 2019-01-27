@@ -6,22 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/largerFont"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/smallerFont"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="-"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <TextView
         android:id="@+id/transcriptView"
         android:layout_width="358dp"
@@ -36,10 +20,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="5dp"
         android:clickable="true"
-        app:backgroundTint="@color/greenSuccess"
-        app:layout_constraintBottom_toTopOf="@+id/smallerFont"
+        android:scaleType="center"
+        android:src="@drawable/ic_menu_green"
+        app:backgroundTint="@color/zxing_transparent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
@@ -49,7 +35,9 @@
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        app:backgroundTint="@color/greenSuccess"
+        android:scaleType="center"
+        android:src="@drawable/ic_phone_green"
+        app:backgroundTint="@color/zxing_transparent"
         app:layout_constraintBottom_toTopOf="@+id/mainFab"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -60,9 +48,44 @@
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="8dp"
         android:clickable="true"
-        app:backgroundTint="@color/greenSuccess"
+        android:scaleType="center"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
+        android:src="@drawable/ic_reminder_green"
+        app:backgroundTint="@color/zxing_transparent"
         app:layout_constraintBottom_toTopOf="@+id/callFab"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="245dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/smallerFont"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:text="-"
+            tools:layout_editor_absoluteX="184dp"
+            tools:layout_editor_absoluteY="503dp" />
+
+        <Button
+            android:id="@+id/largerFont"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:text="+"
+            tools:layout_editor_absoluteX="40dp"
+            tools:layout_editor_absoluteY="481dp" />
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

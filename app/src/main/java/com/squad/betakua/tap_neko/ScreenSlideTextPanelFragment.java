@@ -1,6 +1,7 @@
 package com.squad.betakua.tap_neko;
 
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         FloatingActionButton mainFab = getView().findViewById(R.id.mainFab);
         FloatingActionButton callFab = getView().findViewById(R.id.callFab);
         FloatingActionButton alertFab = getView().findViewById(R.id.alertFab);
+
 
         callFab.setVisibility(View.INVISIBLE);
         alertFab.setVisibility(View.INVISIBLE);
