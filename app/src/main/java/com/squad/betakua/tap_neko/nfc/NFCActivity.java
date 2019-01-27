@@ -23,8 +23,6 @@ import android.widget.Toast;
 
 import com.squad.betakua.tap_neko.R;
 
-import java.util.List;
-
 public class NFCActivity extends AppCompatActivity {
     TextView text;
     NfcAdapter nfcAdapter;
