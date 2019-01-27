@@ -70,7 +70,6 @@ public class PatientActivity extends AppCompatActivity {
     private File outputFile = new File(outputFilePath);
     private FileOutputStream audioStream;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,8 +176,6 @@ public class PatientActivity extends AppCompatActivity {
         vidControl = new MediaController(this);
         vidControl.setAnchorView(vidView);
         vidView.setMediaController(vidControl);
-
-
     }
 
 
