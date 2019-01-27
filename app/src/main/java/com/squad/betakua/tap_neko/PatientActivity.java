@@ -101,7 +101,7 @@ public class PatientActivity extends AppCompatActivity {
                 }
 
                 public void onFailure(Throwable t) {
-                    t.getStackTrace();
+                    t.printStackTrace();
                 }
             });
             outputFile.createNewFile();

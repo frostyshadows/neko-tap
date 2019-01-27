@@ -139,15 +139,21 @@ public class AzureInterface {
      */
     public void downloadAudio(final String audioTitle, final OutputStream out)
             throws AzureInterfaceException {
-        try {
-            final CloudBlobClient blobClient = this.storageAccount.createCloudBlobClient();
-            final CloudBlobContainer container =
-                    blobClient.getContainerReference("instructionaudio");
-            final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
-            blockBlob.download(out);
-        } catch (URISyntaxException | StorageException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        }
+        new Thread(() -> {
+            try {
+                final CloudBlobClient blobClient = this.storageAccount.createCloudBlobClient();
+                final CloudBlobContainer container =
+                        blobClient.getContainerReference("instructionaudio");
+                final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
+                blockBlob.download(out);
+            } catch (URISyntaxException | StorageException e) {
+                try {
+                    throw new AzureInterfaceException(e.getMessage());
+                } catch (AzureInterfaceException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     /**
