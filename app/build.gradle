@@ -18,6 +18,10 @@ android {
         maven {
             url "https://jitpack.io"
         }
+
+        //pageIndicatorView
+        jcenter()
+
     }
 
     buildTypes {
@@ -35,6 +39,7 @@ android {
 }
 
 dependencies {
+
     implementation 'com.github.adrielcafe:AndroidAudioConverter:0.0.8'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -56,4 +61,7 @@ dependencies {
     // Lottie
     implementation 'com.airbnb.android:lottie:2.7.0'
     implementation 'com.android.support:design:27.1.1'
+
+    //pageIndicatorView
+    implementation 'com.romandanylyk:pageindicatorview:1.0.3'
 }
