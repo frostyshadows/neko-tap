@@ -109,7 +109,7 @@ public class PharmacistActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     AzureInterface.getInstance().uploadAudio(nfcId, new FileInputStream(outputFile), -1);
-                    AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "", "");
+                    AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "transcript", "www.google.com");
                 } catch (AzureInterfaceException | FileNotFoundException e) {
                     e.printStackTrace();
                 }
