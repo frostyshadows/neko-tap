@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+
 import com.rd.PageIndicatorView;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
@@ -55,8 +56,6 @@ public class PatientActivity extends AppCompatActivity {
     private OutputStream audioStream;
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +122,6 @@ public class PatientActivity extends AppCompatActivity {
         vidControl = new MediaController(this);
         vidControl.setAnchorView(vidView);
         vidView.setMediaController(vidControl);
-
-
     }
 
 

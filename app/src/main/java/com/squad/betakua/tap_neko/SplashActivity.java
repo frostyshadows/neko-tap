@@ -46,7 +46,8 @@ public class SplashActivity extends AppCompatActivity {
                 }
 
                 if (isPatient) {
-                    Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class); //NFCPatientActivity.class
+                    // Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class); //NFCPatientActivity.class
+                    Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class); //NFCPatientActivity.class
                     startActivity(patientIntent);
                 } else {
                     if (bypassAuth) {
