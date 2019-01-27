@@ -1,6 +1,7 @@
 package com.squad.betakua.tap_neko.azure;
 
 import android.content.Context;
+import android.icu.text.IDNA;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.azure.storage.CloudStorageAccount;
@@ -11,11 +12,8 @@ import com.microsoft.cognitiveservices.speech.SpeechRecognitionEventArgs;
 import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import com.microsoft.cognitiveservices.speech.internal.SpeechTranslationConfig;
-import com.microsoft.cognitiveservices.speech.internal.TranslationRecognitionEventArgs;
 import com.microsoft.cognitiveservices.speech.internal.TranslationRecognizer;
-import com.microsoft.cognitiveservices.speech.internal.TranslationSynthesisEventArgs;
 import com.microsoft.cognitiveservices.speech.internal.TranslationSynthesisEventListener;
-import com.microsoft.cognitiveservices.speech.internal.TranslationSynthesisEventSignal;
 import com.microsoft.cognitiveservices.speech.internal.TranslationTexEventListener;
 import com.microsoft.cognitiveservices.speech.internal.VoidFuture;
 import com.microsoft.cognitiveservices.speech.util.EventHandler;
@@ -102,7 +100,11 @@ public class AzureInterface {
      * @param instrTranscript Transcript of instruction audio
      */
     public void writeInfoItem(String nfcID, String productID, String instrTranscript) {
-        this.infoTable.insert(new InfoItem(nfcID, productID, instrTranscript));
+        final InfoItem item = new InfoItem();
+        item.setNfcID(nfcID);
+        item.setProductID(productID);
+        item.setInstrTranscript(instrTranscript);
+        this.infoTable.insert(item);
     }
 
     /**
