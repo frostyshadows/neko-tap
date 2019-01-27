@@ -1,6 +1,6 @@
 package com.squad.betakua.tap_neko.azure;
 
-public class InfoTable {
+public class InfoItem {
     private String nfcID;
     private String productID;
     private String instrTranscript;
