@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Future;
 
 public class AzureInterface {
@@ -101,6 +102,7 @@ public class AzureInterface {
                               String transcript,
                               String url) {
         final InfoItem item = new InfoItem();
+        item.setId(UUID.randomUUID().toString());
         item.setNfcID(nfcID);
         item.setProductID(productID);
         item.setTranscript(transcript);
