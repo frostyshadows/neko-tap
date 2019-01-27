@@ -79,7 +79,7 @@ public class AzureInterface {
             this.storageAccount = CloudStorageAccount.parse(connectionString);
             final MobileServiceClient mobileServiceClient =
                     new MobileServiceClient("https://neko-tap.azurewebsites.net", context);
-            this.infoTable = mobileServiceClient.getTable(InfoItem.class);
+            this.infoTable = mobileServiceClient.getTable("InfoTable", InfoItem.class);
             this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
         } catch (URISyntaxException e) {
             throw new AzureInterfaceException(e.getMessage());
