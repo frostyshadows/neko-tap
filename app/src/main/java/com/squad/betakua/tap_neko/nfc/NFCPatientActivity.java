@@ -64,7 +64,10 @@ public class NFCPatientActivity extends AppCompatActivity {
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
             Toast.makeText(this, "No NFC", Toast.LENGTH_SHORT).show();
-            finish();
+            //finish();
+            Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class);
+            patientIntent.putExtra(NFC_ID_KEY, "123");
+            startActivity(patientIntent);
             return;
         }
 
