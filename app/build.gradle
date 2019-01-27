@@ -12,6 +12,13 @@ android {
         buildConfigField 'String', "AzureStorageAccountName", NekoTap_AzureStorageAccountName
         buildConfigField 'String', "AzureStorageAccountKey", NekoTap_AzureStorageAccountKey
     }
+
+    repositories {
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -21,6 +28,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.github.adrielcafe:AndroidAudioConverter:0.0.8'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
