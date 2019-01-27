@@ -81,11 +81,7 @@ public class AzureInterface {
                     new MobileServiceClient("https://neko-tap.azurewebsites.net", context);
             this.infoTable = mobileServiceClient.getTable("InfoTable", InfoItem.class);
             this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
-        } catch (URISyntaxException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        } catch (InvalidKeyException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        } catch (MalformedURLException e) {
+        } catch (URISyntaxException | InvalidKeyException | MalformedURLException e) {
             throw new AzureInterfaceException(e.getMessage());
         }
     }
@@ -157,9 +153,7 @@ public class AzureInterface {
                     blobClient.getContainerReference("instructionaudio");
             final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
             blockBlob.download(out);
-        } catch (URISyntaxException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        } catch (StorageException e) {
+        } catch (URISyntaxException | StorageException e) {
             throw new AzureInterfaceException(e.getMessage());
         }
     }
