@@ -1,6 +1,7 @@
 package com.squad.betakua.tap_neko.azure;
 
 import android.content.Context;
+import android.icu.text.IDNA;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
@@ -15,6 +16,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
+import java.util.concurrent.ExecutionException;
 
 public class AzureInterface {
     private static final String CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;" +
@@ -73,10 +75,38 @@ public class AzureInterface {
     }
 
     /**
+     * Write a new info item to the Azure InfoTable
+     *
+     * @param nfcID           NFC ID
+     * @param productID       Product ID
+     * @param instrTranscript Transcript of instruction audio
+     */
+    public void writeInfoItem(String nfcID, String productID, String instrTranscript) {
+        this.infoTable.insert(new InfoItem(nfcID, productID, instrTranscript));
+    }
+
+    /**
+     * Look up an info item in Azure InfoTable by NFC ID
+     *
+     * @param nfcID NFC ID to look up
+     * @return InfoItem matching NFC ID
+     * @throws AzureInterfaceException If something goes wrong
+     */
+    public InfoItem readInfoItem(String nfcID) throws AzureInterfaceException {
+        try {
+            return this.infoTable.where().field("nfcID").eq(nfcID).execute().get().get(0);
+        } catch (InterruptedException e) {
+            throw new AzureInterfaceException(e.getMessage());
+        } catch (ExecutionException e) {
+            throw new AzureInterfaceException(e.getMessage());
+        }
+    }
+
+    /**
      * Upload an audio file to Azure
      * Warning: will overwrite file if file with the same audioTitle already exists
      *
-     * @param audioTitle Title of audio clip to store
+     * @param audioTitle Title of audio clip to store; note: should be same as NFC ID
      * @param in         InputStream to read from
      * @param length     Length in bytes of file (or -1 if unknown)
      * @throws AzureInterfaceException If something goes wrong
@@ -100,7 +130,7 @@ public class AzureInterface {
     /**
      * Download audio file from Azure
      *
-     * @param audioTitle Title of audio clip in Azure Storage
+     * @param audioTitle Title of audio clip in Azure Storage; note: should be same as NFC ID
      * @param out        OutputStream to write to
      * @throws AzureInterfaceException If something goes wrong
      */
