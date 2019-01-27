@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.squad.betakua.tap_neko">
 
-    <uses-permission android:name="android.permission.NFC" />
     <uses-feature android:name="android.hardware.nfc" />
+
+    <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -17,16 +18,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".AudioRecorderActivity"/>
-
+        <activity android:name=".PatientActivity" />
+        <activity android:name=".PharmacistActivity" />
+        <activity android:name=".AudioRecorderActivity" />
+        <activity android:name=".BarcodeScannerActivity" />
         <activity
             android:name=".nfc.NFCActivity"
             android:label="@string/nfc_activity"

@@ -6,38 +6,36 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.squad.betakua.tap_neko.MainActivity">
+    tools:context="com.squad.betakua.tap_neko.PharmacistActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Developer Panel" />
+        android:text="Pharmacist" />
 
     <Button
         android:id="@+id/audio_recorder_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onBtnClick"
         android:text="audio recorder"/>
 
     <Button
-        android:id="@+id/nfc_button"
+        android:id="@+id/barcode-scanner-button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="barcode scanner"/>
+
+    <Button
+        android:id="@+id/nfc-button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onBtnClick"
         android:text="nfc tapper"/>
 
     <Button
-        android:id="@+id/audio_player_button"
+        android:id="@+id/submit-button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onBtnClick"
-        android:text="audio player"/>
-    <Button
-        android:id="@+id/list_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onBtnClick"
-        android:text="view list"/>
+        android:text="submit"/>
 
 </LinearLayout>
