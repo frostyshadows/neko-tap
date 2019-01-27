@@ -112,7 +112,7 @@ public class AzureInterface {
      * Upload an audio file to Azure
      * Warning: will overwrite file if file with the same audioTitle already exists
      *
-     * @param audioTitle Title of audio clip to store; note: should be same as NFC ID
+     * @param audioTitle Title of audio clip to store; note: should be `$NFCID_$LANG`
      * @param in         InputStream to read from
      * @param length     Length in bytes of file (or -1 if unknown)
      */
@@ -133,7 +133,7 @@ public class AzureInterface {
     /**
      * Download audio file from Azure
      *
-     * @param audioTitle Title of audio clip in Azure Storage; note: should be same as NFC ID
+     * @param audioTitle Title of audio clip in Azure Storage; note: should be `$NFCID_$LANG`
      * @param out        OutputStream to write to
      * @throws AzureInterfaceException If something goes wrong
      */
