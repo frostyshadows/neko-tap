@@ -5,10 +5,20 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.MediaController;
+import android.widget.ScrollView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -30,6 +40,13 @@ public class PatientActivity extends AppCompatActivity {
     private Button stopButton;
     private Button playButton;
 
+    //Pages in pagerView
+    private static final int NUM_PAGES = 3;
+    //Allows swiping between fragments
+    private ViewPager mPager;
+    //Provides the pages (fragments) to the ViewPager
+    private PagerAdapter mPagerAdapter;
+
     VideoView vidView;
     MediaController vidControl;
 
@@ -47,6 +64,10 @@ public class PatientActivity extends AppCompatActivity {
         initPlayButton();
         initStopButton();
         initVideoPlayer();
+
+        mPager = findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
     }
 
     @Override
@@ -101,6 +122,41 @@ public class PatientActivity extends AppCompatActivity {
         vidControl.setAnchorView(vidView);
         vidView.setMediaController(vidControl);
 
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }
+
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position){
+                case 0: return new ScreenSlideAudioPlayFragment();
+                case 1: return new ScreenSlideTextPanelFragment();
+                case 2: return new ScreenSlideVideoPanelFragment();
+            }
+
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
 
     }
 }
