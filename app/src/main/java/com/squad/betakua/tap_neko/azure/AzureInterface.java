@@ -1,7 +1,6 @@
 package com.squad.betakua.tap_neko.azure;
 
 import android.content.Context;
-import android.icu.text.IDNA;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.azure.storage.CloudStorageAccount;
@@ -29,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Future;
 
 public class AzureInterface {
@@ -40,7 +40,7 @@ public class AzureInterface {
     private static final String SPEECH_SUB_KEY = BuildConfig.AzureSpeechSubscriptionKey;
     private static final String SERVICE_REGION = "westus";
     private static AzureInterface AZURE_INTERFACE = null;
-    private final CloudBlobClient blobClient;
+    private final CloudStorageAccount storageAccount;
     private final MobileServiceTable<InfoItem> infoTable;
     private final SpeechConfig speechConfig;
 
@@ -76,9 +76,7 @@ public class AzureInterface {
             final String connectionString = String.format(CONNECTION_STRING_TEMPLATE,
                     STORAGE_ACCOUNT_NAME,
                     STORAGE_ACCOUNT_KEY);
-            final CloudStorageAccount storageAccount =
-                    CloudStorageAccount.parse(connectionString);
-            this.blobClient = storageAccount.createCloudBlobClient();
+            this.storageAccount = CloudStorageAccount.parse(connectionString);
             final MobileServiceClient mobileServiceClient =
                     new MobileServiceClient("https://neko-tap.azurewebsites.net", context);
             this.infoTable = mobileServiceClient.getTable(InfoItem.class);
@@ -104,6 +102,7 @@ public class AzureInterface {
                               String transcript,
                               String url) {
         final InfoItem item = new InfoItem();
+        item.setId(UUID.randomUUID().toString());
         item.setNfcID(nfcID);
         item.setProductID(productID);
         item.setTranscript(transcript);
@@ -128,22 +127,19 @@ public class AzureInterface {
      * @param audioTitle Title of audio clip to store; note: should be same as NFC ID
      * @param in         InputStream to read from
      * @param length     Length in bytes of file (or -1 if unknown)
-     * @throws AzureInterfaceException If something goes wrong
      */
-    public void uploadAudio(final String audioTitle, final InputStream in, final long length)
-            throws AzureInterfaceException {
-        try {
-            final CloudBlobContainer container =
-                    this.blobClient.getContainerReference("instructionaudio");
-            final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
-            blockBlob.upload(in, length);
-        } catch (URISyntaxException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        } catch (StorageException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        } catch (IOException e) {
-            throw new AzureInterfaceException(e.getMessage());
-        }
+    public void uploadAudio(final String audioTitle, final InputStream in, final long length) {
+        new Thread(() -> {
+            try {
+                final CloudBlobClient blobClient = this.storageAccount.createCloudBlobClient();
+                final CloudBlobContainer container =
+                        blobClient.getContainerReference("instructionaudio");
+                final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
+                blockBlob.upload(in, length);
+            } catch (URISyntaxException | StorageException | IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     /**
@@ -156,8 +152,9 @@ public class AzureInterface {
     public void downloadAudio(final String audioTitle, final OutputStream out)
             throws AzureInterfaceException {
         try {
+            final CloudBlobClient blobClient = this.storageAccount.createCloudBlobClient();
             final CloudBlobContainer container =
-                    this.blobClient.getContainerReference("instructionaudio");
+                    blobClient.getContainerReference("instructionaudio");
             final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
             blockBlob.download(out);
         } catch (URISyntaxException e) {

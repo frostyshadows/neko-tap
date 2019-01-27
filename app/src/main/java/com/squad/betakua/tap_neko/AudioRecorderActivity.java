@@ -174,11 +174,9 @@ public class AudioRecorderActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent data = new Intent();
                 //Convert audio to .wav file
-                File flacFile = convert();
-                data.putExtra(AUDIO_KEY, flacFile);
-                setResult(RESULT_OK, data);
+                convert();
+                setResult(RESULT_OK);
                 finish();
             }
         });
