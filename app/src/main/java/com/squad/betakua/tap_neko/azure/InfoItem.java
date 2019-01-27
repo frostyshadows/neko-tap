@@ -17,6 +17,8 @@ public class InfoItem {
     private String productID;
     @com.google.gson.annotations.SerializedName("transcript")
     private String transcript;
+    @com.google.gson.annotations.SerializedName("url")
+    private String url;
 
     public String getId() {
         return id;
@@ -74,5 +76,12 @@ public class InfoItem {
         this.transcript = transcript;
     }
 
+    public String getURL() {
+        return url;
+    }
+
+    public void setURL(final String url) {
+        this.url = url;
+    }
 
 }

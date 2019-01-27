@@ -51,15 +51,14 @@ public class AudioRecorderActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_CODE);
         } else {
             initAudioRecorder();
+            initRecordButton();
+            initStopButton();
+            initPlayButton();
+            initSaveButton();
+            stopButton.setEnabled(false);
+            playButton.setEnabled(false);
+            saveButton.setEnabled(false);
         }
-
-        initRecordButton();
-        initStopButton();
-        initPlayButton();
-        initSaveButton();
-        stopButton.setEnabled(false);
-        playButton.setEnabled(false);
-        saveButton.setEnabled(false);
 
     }
 
