@@ -5,6 +5,12 @@ public class InfoItem {
     private String productID;
     private String instrTranscript;
 
+    public InfoItem(String nfcID, String productID, String instrTranscript) {
+        this.nfcID = nfcID;
+        this.productID = productID;
+        this.instrTranscript = instrTranscript;
+    }
+
     public String getNfcID() {
         return nfcID;
     }
