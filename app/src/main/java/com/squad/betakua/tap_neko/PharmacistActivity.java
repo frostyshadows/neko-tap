@@ -72,11 +72,6 @@ public class PharmacistActivity extends AppCompatActivity {
             // get audio
             hasAudio = true;
             Toast.makeText(this, "got audio", Toast.LENGTH_SHORT).show();
-            try {
-                audioStream = new FileInputStream(outputFile);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
             refreshSubmitButton();
         } else if (requestCode == NFC_REQ_CODE && resultCode == RESULT_OK) {
             // get NFC id
@@ -113,9 +108,9 @@ public class PharmacistActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    AzureInterface.getInstance().uploadAudio(nfcId, audioStream, -1);
-                    AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "");
-                } catch (AzureInterfaceException e) {
+                    AzureInterface.getInstance().uploadAudio(nfcId, new FileInputStream(outputFile), -1);
+                    AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "", "");
+                } catch (AzureInterfaceException | FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
