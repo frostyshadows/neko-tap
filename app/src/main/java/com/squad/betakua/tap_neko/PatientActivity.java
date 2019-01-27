@@ -31,6 +31,7 @@ import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.InfoItem;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
+import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,6 +57,7 @@ public class PatientActivity extends AppCompatActivity {
     private ViewPager mPager;
     //Provides the pages (fragments) to the ViewPager
     private PagerAdapter mPagerAdapter;
+    private TranscriptListener transcriptListener;
 
     VideoView vidView;
     MediaController vidControl;
@@ -96,6 +98,8 @@ public class PatientActivity extends AppCompatActivity {
             Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
                 public void onSuccess(MobileServiceList<InfoItem> infoItems) {
                     hasInfo = true;
+                    // transcriptListener.onTranscriptLoaded("dummy transcript");
+                    transcriptListener.onTranscriptLoaded(infoItems.get(0).getTranscript());
                     barcodeId = infoItems.get(0).getProductID();
                 }
 
@@ -203,7 +207,9 @@ public class PatientActivity extends AppCompatActivity {
                     return new ScreenSlideAudioPlayFragment();
                 }
                 case 1: {
-                    return new ScreenSlideTextPanelFragment();
+                    ScreenSlideTextPanelFragment screenSlideTextPanelFragment = new ScreenSlideTextPanelFragment();
+                    transcriptListener = screenSlideTextPanelFragment;
+                    return screenSlideTextPanelFragment;
                 }
                 case 2: {
                     return new ScreenSlideVideoPanelFragment();

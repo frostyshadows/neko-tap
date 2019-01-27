@@ -8,6 +8,7 @@
 
     <TextView
         android:id="@+id/transcriptView"
+        android:layout_margin="10dp"
         android:layout_width="358dp"
         android:layout_height="417dp"
         android:text="@string/dummyString"
