@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.squad.betakua.tap_neko.nfc.NFCActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button audioRecorderButton;
@@ -30,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void initBarcodeScannerButton() {
         barcodeScannerButton = findViewById(R.id.barcode_scanner_button);
         barcodeScannerButton.setOnClickListener(new View.OnClickListener() {
@@ -40,5 +41,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(barcodeScannerIntent);
             }
         });
+    }
+
+    public boolean onBtnClick(View v) {
+        int id = v.getId();
+
+        if (id == R.id.nfc_button) {
+            Intent intent = new Intent(MainActivity.this, NFCActivity.class);
+            startActivity(intent);
+        }
+
+        return true;
     }
 }

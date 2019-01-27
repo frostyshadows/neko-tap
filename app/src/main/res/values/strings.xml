@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">tap-neko</string>
+
+    <!-- NFC -->
+    <string name="nfc_activity">NFC Activity</string>
 </resources>
