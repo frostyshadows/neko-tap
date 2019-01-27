@@ -35,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
 
                 if (isPatient) {
-                    Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class);
+                    Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class); //NFCPatientActivity.class
                     startActivity(patientIntent);
                 } else {
                     Intent pharmacistIntent = new Intent(getApplicationContext(), PharmacistActivity.class);
