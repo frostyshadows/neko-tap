@@ -247,7 +247,7 @@ public class NFCActivity extends AppCompatActivity {
                 NdefMessage msg = new NdefMessage(new NdefRecord[] {record});
                 msgs = new NdefMessage[] {msg};
                 Intent data = new Intent();
-                data.putExtra(NFC_ID_KEY, id);
+                data.putExtra(NFC_ID_KEY, Utils.toHex(id));
                 setResult(RESULT_OK, data);
             }
 

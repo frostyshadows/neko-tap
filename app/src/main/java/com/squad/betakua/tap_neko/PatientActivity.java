@@ -22,11 +22,20 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.rd.PageIndicatorView;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
+import com.squad.betakua.tap_neko.azure.InfoItem;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
@@ -51,17 +60,25 @@ public class PatientActivity extends AppCompatActivity {
     VideoView vidView;
     MediaController vidControl;
 
+    private boolean hasInfo = false;
+    private String nfcId;
+    private String barcodeId;
+
     private boolean hasAudio = false;
-    private OutputStream audioStream;
     private MediaPlayer mediaPlayer = new MediaPlayer();
-    private String outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
-
-
+    private String outputFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+    private File outputFile = new File(outputFilePath);
+    private FileOutputStream audioStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient);
+
+        nfcId = getIntent().getStringExtra(NFC_ID_KEY);
+
+        loadData();
+
         initAudioPlayer();
         initPlayButton();
         initStopButton();
@@ -72,22 +89,58 @@ public class PatientActivity extends AppCompatActivity {
         mPager.setAdapter(mPagerAdapter);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == NFC_REQ_CODE && resultCode == RESULT_OK) {
-            try {
-                String nfcId = data.getStringExtra(NFC_ID_KEY);
-                AzureInterface.getInstance().readInfoItem(nfcId);
-                AzureInterface.getInstance().downloadAudio(nfcId, audioStream);
-            } catch (AzureInterfaceException e) {
-                e.printStackTrace();
-            }
+    private void loadData() {
+        try {
+            ListenableFuture<MobileServiceList<InfoItem>> infoItemsFuture = AzureInterface.getInstance().readInfoItem(nfcId);
+
+            Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
+                public void onSuccess(MobileServiceList<InfoItem> infoItems) {
+                    hasInfo = true;
+                    barcodeId = infoItems.get(0).getProductID();
+                }
+
+                public void onFailure(Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+            outputFile.createNewFile();
+            audioStream = new FileOutputStream(outputFile, false);
+            AzureInterface.getInstance().downloadAudio(outputFilePath, audioStream);
+            audioStream.close();
+        } catch (AzureInterfaceException | IOException e) {
+            e.printStackTrace();
         }
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == NFC_REQ_CODE && resultCode == RESULT_OK) {
+//            try {
+//                String nfcId = data.getStringExtra(NFC_ID_KEY);
+//                ListenableFuture<MobileServiceList<InfoItem>> infoItemsFuture = AzureInterface.getInstance().readInfoItem(nfcId);
+//
+//                Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
+//                    public void onSuccess(MobileServiceList<InfoItem> infoItems) {
+//                        hasInfo = true;
+//                        barcodeId = infoItems.get(0).getProductID();
+//                    }
+//
+//                    public void onFailure(Throwable t) {
+//                        t.getStackTrace();
+//                    }
+//                });
+//                audioStream = new FileOutputStream(outputFile, false);
+//                AzureInterface.getInstance().downloadAudio(outputFilePath, audioStream);
+//                audioStream.close();
+//            } catch (AzureInterfaceException | IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
     private void initAudioPlayer() {
         try {
-            mediaPlayer.setDataSource(outputFile);
+            mediaPlayer.setDataSource(outputFilePath);
             mediaPlayer.prepare();
             mediaPlayer.start();
             Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
@@ -123,8 +176,6 @@ public class PatientActivity extends AppCompatActivity {
         vidControl = new MediaController(this);
         vidControl.setAnchorView(vidView);
         vidView.setMediaController(vidControl);
-
-
     }
 
 
@@ -147,14 +198,14 @@ public class PatientActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position){
-                case 0:{
+            switch (position) {
+                case 0: {
                     return new ScreenSlideAudioPlayFragment();
                 }
-                case 1:{
+                case 1: {
                     return new ScreenSlideTextPanelFragment();
                 }
-                case 2:{
+                case 2: {
                     return new ScreenSlideVideoPanelFragment();
                 }
             }
