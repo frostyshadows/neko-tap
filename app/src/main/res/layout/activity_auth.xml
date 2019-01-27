@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_test"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.squad.betakua.tap_neko.BarcodeScannerActivity">
+    android:layout_gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/tv_code_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/auth_text"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="20dp"
-        android:text="Loading Scanner..."
+        android:text="Voice Login"
         android:textStyle="bold"
         android:textSize="40sp"
         android:gravity="center" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_nfc"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/lottie_auth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        app:lottie_fileName="barcode_scanner.json"
+        app:lottie_fileName="listening_red.json"
         app:lottie_imageAssetsFolder="images"
         app:lottie_loop="true"
         app:lottie_autoPlay="true" />
-
 
 </RelativeLayout>

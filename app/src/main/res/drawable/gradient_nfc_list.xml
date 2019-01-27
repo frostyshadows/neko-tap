@@ -1,0 +1,9 @@
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/gradient_nfc_1"
+        android:duration="4000" />
+
+    <item
+        android:drawable="@drawable/gradient_nfc_2"
+        android:duration="4000" />
+</animation-list>

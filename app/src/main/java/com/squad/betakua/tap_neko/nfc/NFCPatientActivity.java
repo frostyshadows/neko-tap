@@ -3,7 +3,6 @@ package com.squad.betakua.tap_neko.nfc;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.nfc.NdefMessage;
@@ -20,21 +19,19 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squad.betakua.tap_neko.R;
 import com.airbnb.lottie.LottieAnimationView;
+import com.squad.betakua.tap_neko.PatientActivity;
+import com.squad.betakua.tap_neko.R;
 
 import java.util.HashMap;
-import java.util.Locale;
 
-public class NFCActivity extends AppCompatActivity {
+public class NFCPatientActivity extends AppCompatActivity {
     public static final int NFC_REQ_CODE = 123;
     public static final String NFC_ID_KEY = "nfc_id";
 
@@ -61,21 +58,9 @@ public class NFCActivity extends AppCompatActivity {
         checkAnimation = findViewById(R.id.lottie_nfc_success);
         checkAnimation.setVisibility(View.GONE);
 
-        // background gradient animation
-        RelativeLayout relativeLayout = findViewById(R.id.activity_nfc);
-        AnimationDrawable animationDrawable = (AnimationDrawable) relativeLayout.getBackground();
-        animationDrawable.setEnterFadeDuration(2000);
-        animationDrawable.setExitFadeDuration(4000);
-        animationDrawable.start();
-
-
-
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
             Toast.makeText(this, "No NFC", Toast.LENGTH_SHORT).show();
-            Intent data = new Intent();
-            data.putExtra(NFC_ID_KEY, "321");
-            setResult(RESULT_OK, data);
             finish();
             return;
         }
@@ -248,7 +233,7 @@ public class NFCActivity extends AppCompatActivity {
                 msgs = new NdefMessage[] {msg};
                 Intent data = new Intent();
                 data.putExtra(NFC_ID_KEY, id);
-                setResult(RESULT_OK, data);
+                setResult(NFC_REQ_CODE, data);
             }
 
             displayMsgs(msgs);
@@ -297,7 +282,8 @@ public class NFCActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                finish();
+                Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class);
+                startActivity(patientIntent);
             }
         }, 2500);
     }

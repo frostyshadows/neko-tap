@@ -19,19 +19,37 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".SplashActivity">
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PatientActivity" />
-        <activity android:name=".PharmacistActivity" />
-        <activity android:name=".AudioRecorderActivity" />
-        <activity android:name=".BarcodeScannerActivity" />
+        <activity
+            android:name=".auth.AuthActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PatientActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PharmacistActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".AudioRecorderActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".BarcodeScannerActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".nfc.NFCActivity"
+            android:label="@string/nfc_activity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".nfc.NFCPatientActivity"
             android:label="@string/nfc_activity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

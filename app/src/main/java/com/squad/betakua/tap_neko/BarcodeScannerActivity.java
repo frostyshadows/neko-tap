@@ -2,6 +2,7 @@ package com.squad.betakua.tap_neko;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -28,15 +29,14 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_barcode_scanner);
 
         tvCardText = findViewById(R.id.tv_code_text);
-        btStartScan = findViewById(R.id.btn_scan);
 
-        btStartScan.setOnClickListener(new View.OnClickListener() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onClick(View view) {
+            public void run() {
                 startQRScanner();
             }
-        });
-
+        }, 1500);
     }
 
     private void startQRScanner() {
