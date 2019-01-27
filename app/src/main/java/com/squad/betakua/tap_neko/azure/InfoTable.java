@@ -1,4 +1,4 @@
-package com.squad.betakua.tap_neko;
+package com.squad.betakua.tap_neko.azure;
 
 public class InfoTable {
     private String nfcID;

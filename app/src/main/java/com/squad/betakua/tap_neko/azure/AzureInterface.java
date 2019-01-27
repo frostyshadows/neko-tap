@@ -1,13 +1,13 @@
-package com.squad.betakua.tap_neko;
+package com.squad.betakua.tap_neko.azure;
 
 import android.content.Context;
-import android.icu.text.IDNA;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.*;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+import com.squad.betakua.tap_neko.BuildConfig;
 
 import java.io.IOException;
 import java.io.InputStream;
