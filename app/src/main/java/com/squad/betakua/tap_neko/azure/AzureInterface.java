@@ -1,8 +1,6 @@
 package com.squad.betakua.tap_neko.azure;
 
 import android.content.Context;
-import android.icu.text.IDNA;
-import android.os.Handler;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.azure.storage.CloudStorageAccount;
@@ -27,12 +25,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.UUID;
 import java.util.concurrent.Future;
 
 public class AzureInterface {
@@ -106,6 +102,7 @@ public class AzureInterface {
                               String transcript,
                               String url) {
         final InfoItem item = new InfoItem();
+        item.setId(UUID.randomUUID().toString());
         item.setNfcID(nfcID);
         item.setProductID(productID);
         item.setTranscript(transcript);
@@ -130,7 +127,6 @@ public class AzureInterface {
      * @param audioTitle Title of audio clip to store; note: should be same as NFC ID
      * @param in         InputStream to read from
      * @param length     Length in bytes of file (or -1 if unknown)
-     * @throws AzureInterfaceException If something goes wrong
      */
     public void uploadAudio(final String audioTitle, final InputStream in, final long length) {
         new Thread(() -> {

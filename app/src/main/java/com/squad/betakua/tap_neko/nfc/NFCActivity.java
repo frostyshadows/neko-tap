@@ -61,6 +61,9 @@ public class NFCActivity extends AppCompatActivity {
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
             Toast.makeText(this, "No NFC", Toast.LENGTH_SHORT).show();
+            Intent data = new Intent();
+            data.putExtra(NFC_ID_KEY, "321");
+            setResult(RESULT_OK, data);
             finish();
             return;
         }
@@ -233,7 +236,7 @@ public class NFCActivity extends AppCompatActivity {
                 msgs = new NdefMessage[] {msg};
                 Intent data = new Intent();
                 data.putExtra(NFC_ID_KEY, id);
-                setResult(NFC_REQ_CODE, data);
+                setResult(RESULT_OK, data);
                 finish();
             }
 
