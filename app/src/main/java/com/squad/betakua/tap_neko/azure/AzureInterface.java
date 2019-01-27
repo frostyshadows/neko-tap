@@ -103,7 +103,7 @@ public class AzureInterface {
         final InfoItem item = new InfoItem();
         item.setNfcID(nfcID);
         item.setProductID(productID);
-        item.setInstrTranscript(instrTranscript);
+        item.setTranscript(instrTranscript);
         this.infoTable.insert(item);
     }
 
