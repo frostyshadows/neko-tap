@@ -93,10 +93,11 @@
         android:id="@+id/translate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Translate"
-        tools:layout_editor_absoluteX="140dp"
-        tools:layout_editor_absoluteY="444dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="140dp" />
 
 
 </android.support.constraint.ConstraintLayout>
