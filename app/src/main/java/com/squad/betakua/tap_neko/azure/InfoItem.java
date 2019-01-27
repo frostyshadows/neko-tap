@@ -5,10 +5,6 @@ import com.microsoft.windowsazure.mobileservices.table.DateTimeOffset;
 public class InfoItem {
     @com.google.gson.annotations.SerializedName("id")
     private String id;
-    @com.google.gson.annotations.SerializedName("createdAt")
-    private DateTimeOffset createdAt;
-    @com.google.gson.annotations.SerializedName("updatedAt")
-    private DateTimeOffset updatedAt;
     @com.google.gson.annotations.SerializedName("version")
     private String version;
     @com.google.gson.annotations.SerializedName("nfcID")
@@ -26,22 +22,6 @@ public class InfoItem {
 
     public final void setId(String id) {
         this.id = id;
-    }
-
-    public DateTimeOffset getUpdatedAt() {
-        return updatedAt;
-    }
-
-    protected void setUpdatedAt(DateTimeOffset updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public DateTimeOffset getCreatedAt() {
-        return createdAt;
-    }
-
-    protected void setCreatedAt(DateTimeOffset createdAt) {
-        this.createdAt = createdAt;
     }
 
     public String getVersion() {

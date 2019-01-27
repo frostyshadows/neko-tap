@@ -7,8 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-public class ScreenSlideTextPanelFragment extends Fragment {
+import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
+
+public class ScreenSlideTextPanelFragment extends Fragment implements TranscriptListener {
+
+    TextView transcriptView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,6 +30,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         FloatingActionButton mainFab = getView().findViewById(R.id.mainFab);
         FloatingActionButton callFab = getView().findViewById(R.id.callFab);
         FloatingActionButton alertFab = getView().findViewById(R.id.alertFab);
+        transcriptView = getView().findViewById(R.id.transcriptView);
 
         callFab.setVisibility(View.INVISIBLE);
         alertFab.setVisibility(View.INVISIBLE);
@@ -43,5 +49,12 @@ public class ScreenSlideTextPanelFragment extends Fragment {
 
         });
 
+    }
+
+    @Override
+    public void onTranscriptLoaded(String transcript) {
+        if (this.isVisible()) {
+            transcriptView.setText(transcript);
+        }
     }
 }
