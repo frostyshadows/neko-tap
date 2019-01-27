@@ -98,8 +98,6 @@ public class PatientActivity extends AppCompatActivity {
             Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
                 public void onSuccess(MobileServiceList<InfoItem> infoItems) {
                     hasInfo = true;
-                    // transcriptListener.onTranscriptLoaded("dummy transcript");
-                    transcriptListener.onTranscriptLoaded(infoItems.get(0).getTranscript());
                     barcodeId = infoItems.get(0).getProductID();
                 }
 
