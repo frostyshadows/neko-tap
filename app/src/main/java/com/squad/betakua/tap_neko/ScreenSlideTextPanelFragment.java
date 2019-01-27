@@ -23,12 +23,15 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class ScreenSlideTextPanelFragment extends Fragment {
+
+import android.widget.TextView;
+
+import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
+    TextView transcriptView;
     TextView text;
     TextToSpeech mTts;
     Button largerFont;
     Button smallerFont;
-    TextView transcriptView;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,6 +91,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         FloatingActionButton mainFab = getView().findViewById(R.id.mainFab);
         FloatingActionButton callFab = getView().findViewById(R.id.callFab);
         FloatingActionButton alertFab = getView().findViewById(R.id.alertFab);
+        transcriptView = getView().findViewById(R.id.transcriptView);
 
         callFab.setVisibility(View.INVISIBLE);
         alertFab.setVisibility(View.INVISIBLE);
@@ -115,6 +119,13 @@ public class ScreenSlideTextPanelFragment extends Fragment {
             HashMap<String, String> param = new HashMap<>();
             param.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_MUSIC));
             mTts.speak(s, TextToSpeech.QUEUE_FLUSH, param);
+        }
+    }
+
+    @Override
+    public void onTranscriptLoaded(String transcript) {
+        if (this.isVisible()) {
+            transcriptView.setText(transcript);
         }
     }
 }
