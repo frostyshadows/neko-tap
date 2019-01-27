@@ -18,13 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".PatientActivity" />
+        <activity android:name=".PharmacistActivity" />
         <activity android:name=".AudioRecorderActivity" />
         <activity android:name=".BarcodeScannerActivity" />
         <activity

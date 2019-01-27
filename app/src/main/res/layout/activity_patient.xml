@@ -2,43 +2,33 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    tools:context="com.squad.betakua.tap_neko.PatientActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Patient" />
 
     <Button
+        android:id="@+id/nfc-button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Record"
-        android:textSize="20sp"
-        android:id="@+id/record_button"
-        android:layout_marginTop="15dp"
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop"
-        android:textSize="20sp"
-        android:id="@+id/stop_button"
-        android:layout_marginTop="10dp"
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Play"
-        android:textSize="20sp"
-        android:id="@+id/play_button"
-        android:layout_marginTop="10dp"
-        />
+        android:onClick="onBtnClick"
+        android:text="nfc tapper"/>
 
     <Button
+        android:id="@+id/audio_player_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
-        android:textSize="20sp"
-        android:id="@+id/save_button"
-        android:layout_marginTop="10dp"
-        />
+        android:text="audio player"/>
+    <Button
+        android:id="@+id/list_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="view list"/>
 
 </LinearLayout>
