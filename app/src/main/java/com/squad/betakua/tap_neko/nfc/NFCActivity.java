@@ -83,28 +83,6 @@ public class NFCActivity extends AppCompatActivity {
         pendingIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, this.getClass())
                         .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-
-
-        // text-to-speech: prompt user to tap
-        // TODO: replace with azure text-to-speech?
-        // mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-        //     @Override
-        //     public void onInit(int status) {
-        //         if (status == TextToSpeech.SUCCESS) {
-        //             int result = mTts.setLanguage(Locale.KOREA);
-        //             if (result == TextToSpeech.LANG_MISSING_DATA
-        //                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-        //                 Toast.makeText(getApplicationContext(), "This language is not supported", Toast.LENGTH_SHORT).show();
-        //             }
-        //             else{
-        //                 Log.v("TTS","onInit succeeded");
-        //                 speak("Tap your phone against the bottle cap or medical device tag");
-        //             }
-        //         } else {
-        //             Toast.makeText(getApplicationContext(), "Initialization failed", Toast.LENGTH_SHORT).show();
-        //         }
-        //     }
-        // });
     }
 
     void speak(String s){
