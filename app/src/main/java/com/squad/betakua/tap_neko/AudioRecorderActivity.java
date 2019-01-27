@@ -69,61 +69,52 @@ public class AudioRecorderActivity extends AppCompatActivity {
 
     private void initRecordButton() {
         recordButton = findViewById(R.id.record_button);
-        recordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    audioRecorder.prepare();
-                    audioRecorder.start();
-                } catch (IllegalStateException | IOException e) {
-                    e.printStackTrace();
-                }
-                recordButton.setEnabled(false);
-                stopButton.setEnabled(true);
-                Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
+        recordButton.setOnClickListener((View view) -> {
+            try {
+                audioRecorder.prepare();
+                audioRecorder.start();
+            } catch (IllegalStateException | IOException e) {
+                e.printStackTrace();
             }
+            recordButton.setEnabled(false);
+            stopButton.setEnabled(true);
+            Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
         });
     }
 
     private void initStopButton() {
         stopButton = findViewById(R.id.stop_button);
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(AudioRecorderActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(AudioRecorderActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
-                } else {
-                    audioRecorder.stop();
-                    audioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                    audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                    audioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-                    audioRecorder.setOutputFile(outputFile);
-                }
-
-                recordButton.setEnabled(true);
-                stopButton.setEnabled(false);
-                playButton.setEnabled(true);
-                saveButton.setEnabled(true);
-                Toast.makeText(getApplicationContext(), "Audio Recorder stopped", Toast.LENGTH_LONG).show();
+        stopButton.setOnClickListener((View view) -> {
+            if (ContextCompat.checkSelfPermission(AudioRecorderActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(AudioRecorderActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+            } else {
+                audioRecorder.stop();
+                audioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                audioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+                audioRecorder.setOutputFile(outputFile);
             }
+
+            recordButton.setEnabled(true);
+            stopButton.setEnabled(false);
+            playButton.setEnabled(true);
+            saveButton.setEnabled(true);
+            Toast.makeText(getApplicationContext(), "Audio Recorder stopped", Toast.LENGTH_LONG).show();
         });
     }
 
     private void initPlayButton() {
         playButton = findViewById(R.id.play_button);
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaPlayer mediaPlayer = new MediaPlayer();
-                try {
-                    mediaPlayer.setDataSource(outputFile);
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    // make something
-                    e.printStackTrace();
-                }
+        playButton.setOnClickListener((View view) -> {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(outputFile);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+                Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                // make something
+                e.printStackTrace();
             }
         });
     }
@@ -162,14 +153,11 @@ public class AudioRecorderActivity extends AppCompatActivity {
 
     private void initSaveButton() {
         saveButton = findViewById(R.id.save_button);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Convert audio to .wav file
-                convert();
-                setResult(RESULT_OK);
-                finish();
-            }
+        saveButton.setOnClickListener((View view) -> {
+            //Convert audio to .wav file
+            convert();
+            setResult(RESULT_OK);
+            finish();
         });
 
     }
