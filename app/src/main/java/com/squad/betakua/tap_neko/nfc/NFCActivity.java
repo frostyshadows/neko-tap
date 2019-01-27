@@ -17,10 +17,13 @@ import android.os.Parcelable;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.squad.betakua.tap_neko.R;
 
 public class NFCActivity extends AppCompatActivity {
@@ -45,6 +48,11 @@ public class NFCActivity extends AppCompatActivity {
                 new Intent(this, this.getClass())
                         .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
     }
+
+    // @Override
+    // public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    //     super.onViewCreated(view, savedInstanceState);
+    // }
 
     @Override
     protected void onResume() {
