@@ -22,11 +22,11 @@ import com.airbnb.lottie.LottieAnimationView;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class ScreenSlideTextPanelFragment extends Fragment {
-
 import android.widget.TextView;
-
 import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
+
+public class ScreenSlideTextPanelFragment extends Fragment implements TranscriptListener {
+
     TextView transcriptView;
     TextView text;
     TextToSpeech mTts;
