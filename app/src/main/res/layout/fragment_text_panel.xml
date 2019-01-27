@@ -88,5 +88,13 @@
             tools:layout_editor_absoluteY="481dp" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/translate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Translate"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="444dp" />
+
 
 </android.support.constraint.ConstraintLayout>

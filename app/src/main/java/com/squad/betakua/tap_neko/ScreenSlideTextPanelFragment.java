@@ -27,6 +27,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
+import com.squad.betakua.tap_neko.azure.DrugInfoItem;
 import com.squad.betakua.tap_neko.azure.InfoItem;
 import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
 
@@ -35,11 +36,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 
+
 public class ScreenSlideTextPanelFragment extends Fragment implements TranscriptListener {
 
-import android.widget.TextView;
 
-import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
     TextView transcriptView;
     TextView text;
     TextToSpeech mTts;
@@ -47,6 +47,7 @@ import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
     Button smallerFont;
     private boolean hasInfo = false;
     private String nfcId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,33 +64,36 @@ import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
         largerFont = getView().findViewById(R.id.largerFont);
         smallerFont = getView().findViewById(R.id.smallerFont);
 
-        private void loadData(){
-            try {
+        transcriptView.setText("This medication is used to treat and prevent osteoporosis, a condition where the bones become thin, weak. It works by preventing bone breakdown and increasing bone density (thickness).\n" +
+                "\n" +
+                "Alendronate may not work properly and may damage the esophagus or cause sores in the mouth if it is not taken according to the following instructions. Tell your doctor if you do not understand these instructions.\n" +
+                "\n" +
+                "You must take alendronate just after you get out of bed in the morning, before you eat or drink anything. Never take alendronate at bedtime. \n" +
+                "\n" +
+                "Swallow alendronate tablets with a full glass of plain water. Never take alendronate tablets or solution with any liquid other than plain water.\n" +
+                "\n" +
+                "After you take alendronate, do not eat, drink, or take any other medications for at least 30 minutes. Do not lie down for at least 30 minutes after you take alendronate. Sit upright or stand upright until at least 30 minutes have passed and you have eaten your meal of the day.");
 
-                ListenableFuture<MobileServiceList<InfoItem>> infoItemsFuture = AzureInterface.getInstance().readDrugInfoItem(nfcId);
+        try {
+            TranscriptListener transcriptListener = this;
+            ListenableFuture<MobileServiceList<DrugInfoItem>> druginfoItemsFuture = AzureInterface.getInstance().readDrugInfoItem(nfcId);
 
-                Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
-                    public void onSuccess(MobileServiceList<InfoItem> infoItems) {
-                        hasInfo = true;
-                        // transcriptListener.onTranscriptLoaded("dummy transcript");
-                        transcriptListener.onTranscriptLoaded(infoItems.get(0).getTranscript());
-                        barcodeId = infoItems.get(0).getProductID();
-                    }
+            Futures.addCallback(druginfoItemsFuture, new FutureCallback<MobileServiceList<DrugInfoItem>>() {
+                public void onSuccess(MobileServiceList<DrugInfoItem> infoItems) {
+                    hasInfo = true;
+                    // transcriptListener.onTranscriptLoaded("dummy transcript");
+                    transcriptListener.onTranscriptLoaded(infoItems.get(0).getText());
+                }
 
-                    public void onFailure(Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-                outputFile.createNewFile();
-                audioStream = new FileOutputStream(outputFile, false);
-                AzureInterface.getInstance().downloadAudio(outputFilePath, audioStream);
-                audioStream.close();
-            } catch (AzureInterfaceException | IOException e) {
-                e.printStackTrace();
-            }
+                public void onFailure(Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+
+        } catch (AzureInterfaceException e) {
+            e.printStackTrace();
         }
 
-        transcriptView.setText(this.loadData);
 
         largerFont.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,10 +122,17 @@ import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
                             if (result == TextToSpeech.LANG_MISSING_DATA
                                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                                 Toast.makeText(getActivity().getApplicationContext(), "This language is not supported", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
+                            } else {
                                 // TODO - insert text here
-                                speak("Tap your phone against the bottle cap or medical device tag");
+                                speak("This medication is used to treat and prevent osteoporosis, a condition where the bones become thin, weak. It works by preventing bone breakdown and increasing bone density (thickness).\n" +
+                                        "\n" +
+                                        "Alendronate may not work properly and may damage the esophagus or cause sores in the mouth if it is not taken according to the following instructions. Tell your doctor if you do not understand these instructions.\n" +
+                                        "\n" +
+                                        "You must take alendronate just after you get out of bed in the morning, before you eat or drink anything. Never take alendronate at bedtime. \n" +
+                                        "\n" +
+                                        "Swallow alendronate tablets with a full glass of plain water. Never take alendronate tablets or solution with any liquid other than plain water.\n" +
+                                        "\n" +
+                                        "After you take alendronate, do not eat, drink, or take any other medications for at least 30 minutes. Do not lie down for at least 30 minutes after you take alendronate. Sit upright or stand upright until at least 30 minutes have passed and you have eaten your meal of the day.");
                             }
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(), "Initialization failed", Toast.LENGTH_SHORT).show();
@@ -134,7 +145,12 @@ import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
         FloatingActionButton mainFab = getView().findViewById(R.id.mainFab);
         FloatingActionButton callFab = getView().findViewById(R.id.callFab);
         FloatingActionButton alertFab = getView().findViewById(R.id.alertFab);
-        transcriptView = getView().findViewById(R.id.transcriptView);
+        Button translate = getView().findViewById(R.id.translate);
+        transcriptView =
+
+                getView().
+
+                        findViewById(R.id.transcriptView);
 
 
         callFab.setVisibility(View.INVISIBLE);
@@ -143,18 +159,34 @@ import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
         mainFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (callFab.getVisibility()==View.VISIBLE){
+                if (callFab.getVisibility() == View.VISIBLE) {
                     callFab.setVisibility(View.INVISIBLE);
                     alertFab.setVisibility(View.INVISIBLE);
-                } else{
+                } else {
                     callFab.setVisibility(View.VISIBLE);
                     alertFab.setVisibility(View.VISIBLE);
                 }
             }
         });
+
+        translate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                transcriptView.setText("这种药物用于治疗和预防骨质疏松症，骨质疏松，骨骼变薄，变弱。它通过防止骨质破坏和增加骨密度（厚度）起作用。\n" +
+                        "\n" +
+                        "如果不按照以下说明服用，阿仑膦酸盐可能无法正常工作，可能会损坏食道或导致口腔溃疡。如果您不理解这些说明，请告诉您的医生。\n" +
+                        "\n" +
+                        "早上起床后，你必须服用阿仑膦酸钠，然后才能吃或喝任何东西。不要在睡前服用阿仑膦酸钠。\n" +
+                        "\n" +
+                        "吞下阿仑膦酸钠片，加满一杯清水。切勿使用除淡水以外的任何液体的阿仑膦酸盐片剂或溶液。\n" +
+                        "\n" +
+                        "吞下整个药片;不要分裂，咀嚼或粉碎它们。不要吮吸平板电脑。\n" +
+                        "服用阿仑膦酸钠后，不要进食，饮水或服用任何其他药物至少30分钟。服用阿仑膦酸钠后，不要躺下至少30分钟。吃了一天的饭后直立或站直至少30分钟。");
+            }
+        });
     }
 
-    void speak(String s){
+    private void speak(String s){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Bundle bundle = new Bundle();
             bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
@@ -167,9 +199,20 @@ import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
     }
 
     @Override
-    public void onTranscriptLoaded(String transcript) {
+    public void onTranscriptLoaded (String transcript){
         if (this.isVisible()) {
-            transcriptView.setText(transcript);
+            transcriptView.setText("This medication is used to treat and prevent osteoporosis, a condition where the bones become thin, weak. It works by preventing bone breakdown and increasing bone density (thickness).\n" +
+                    "\n" +
+                    "Alendronate may not work properly and may damage the esophagus or cause sores in the mouth if it is not taken according to the following instructions. Tell your doctor if you do not understand these instructions.\n" +
+                    "\n" +
+                    "You must take alendronate just after you get out of bed in the morning, before you eat or drink anything. Never take alendronate at bedtime. \n" +
+                    "\n" +
+                    "Swallow alendronate tablets with a full glass of plain water. Never take alendronate tablets or solution with any liquid other than plain water.\n" +
+                    "\n" +
+                    "After you take alendronate, do not eat, drink, or take any other medications for at least 30 minutes. Do not lie down for at least 30 minutes after you take alendronate. Sit upright or stand upright until at least 30 minutes have passed and you have eaten your meal of the day.");
         }
     }
+
 }
+
+
