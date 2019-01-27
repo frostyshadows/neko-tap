@@ -175,9 +175,9 @@ public class AudioRecorderActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View view) {
-                setResult(RESULT_OK);
                 //Convert audio to .wav file
                 convert();
+                setResult(RESULT_OK);
                 finish();
             }
         });

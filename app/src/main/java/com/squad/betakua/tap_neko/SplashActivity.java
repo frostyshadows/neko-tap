@@ -17,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private Button audioRecorderButton;
     private Button barcodeScannerButton;
-    private boolean isPatient = true;
+    private boolean isPatient = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

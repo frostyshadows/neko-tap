@@ -20,16 +20,15 @@
         android:text="audio recorder"/>
 
     <Button
-        android:id="@+id/barcode-scanner-button"
+        android:id="@+id/barcode_scanner_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="barcode scanner"/>
 
     <Button
-        android:id="@+id/nfc-button"
+        android:id="@+id/nfc_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onBtnClick"
         android:text="nfc tapper"/>
 
     <Button
