@@ -1,6 +1,8 @@
 package com.squad.betakua.tap_neko;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TimePicker;
 
 import com.squad.betakua.tap_neko.notifications.AlarmReceiver;
@@ -35,30 +38,31 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
         FloatingActionButton callFab = getView().findViewById(R.id.callFab);
         FloatingActionButton alertFab = getView().findViewById(R.id.alertFab);
 
-        alertFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTimePickerDialog();
-            }
+        Button ytButton = getView().findViewById(R.id.open_yt_button);
+        ytButton.setText("Open in YouTube");
+
+        alertFab.setOnClickListener((View v) -> {
+            showTimePickerDialog();
         });
 
         callFab.setVisibility(View.INVISIBLE);
         alertFab.setVisibility(View.INVISIBLE);
 
-        mainFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (callFab.getVisibility()==View.VISIBLE){
-                    callFab.setVisibility(View.INVISIBLE);
-                    alertFab.setVisibility(View.INVISIBLE);
-                } else{
-                    callFab.setVisibility(View.VISIBLE);
-                    alertFab.setVisibility(View.VISIBLE);
-                }
+        mainFab.setOnClickListener((View v) -> {
+            if (callFab.getVisibility() == View.VISIBLE) {
+                callFab.setVisibility(View.INVISIBLE);
+                alertFab.setVisibility(View.INVISIBLE);
+            } else {
+                callFab.setVisibility(View.VISIBLE);
+                alertFab.setVisibility(View.VISIBLE);
             }
-
         });
 
+        ytButton.setOnClickListener((View v) -> {
+            Intent browserIntent =
+                    new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=a1sn_UlUOio"));
+            startActivity(browserIntent);
+        });
     }
 
     private void showTimePickerDialog() {
@@ -69,14 +73,13 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
         mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                NotificationScheduler.setReminder(getContext(),AlarmReceiver.class,
+                NotificationScheduler.setReminder(getContext(), AlarmReceiver.class,
                         selectedHour, selectedMinute, "title", "dosage");
             }
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
     }
-
 
 
 }
