@@ -58,29 +58,29 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
 
 
         //VideoPlayer
-        VideoView videoView = getView().findViewById(R.id.videoView);
-
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.INTERNET}, REQUEST_CODE);
-        } else {
-            Uri uri = Uri.parse("https://www.youtube.com/watch?v=a1sn_UlUOio");
-            videoView.setVideoURI(uri);
-            videoView.start();
-            videoView.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    DisplayMetrics metrics = new DisplayMetrics();
-                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    android.widget.LinearLayout.LayoutParams params = (android.widget.LinearLayout.LayoutParams) videoView.getLayoutParams();
-                    params.width = metrics.widthPixels;
-                    params.height = metrics.heightPixels;
-                    params.leftMargin = 0;
-                    videoView.setLayoutParams(params);
-                }
-
-            });
-        }
+        // VideoView videoView = getView().findViewById(R.id.videoView);
+        //
+        // if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+        //     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.INTERNET}, REQUEST_CODE);
+        // } else {
+        //     Uri uri = Uri.parse("https://www.youtube.com/watch?v=a1sn_UlUOio");
+        //     videoView.setVideoURI(uri);
+        //     videoView.start();
+        //     videoView.setOnClickListener(new View.OnClickListener() {
+        //
+        //         @Override
+        //         public void onClick(View view) {
+        //             DisplayMetrics metrics = new DisplayMetrics();
+        //             getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        //             android.widget.LinearLayout.LayoutParams params = (android.widget.LinearLayout.LayoutParams) videoView.getLayoutParams();
+        //             params.width = metrics.widthPixels;
+        //             params.height = metrics.heightPixels;
+        //             params.leftMargin = 0;
+        //             videoView.setLayoutParams(params);
+        //         }
+        //
+        //     });
+        // }
 
         alertFab.setOnClickListener(new View.OnClickListener() {
                                         @Override

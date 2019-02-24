@@ -4,8 +4,12 @@ import android.Manifest;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +26,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.squad.betakua.tap_neko.notifications.AlarmReceiver;
 import com.squad.betakua.tap_neko.notifications.NotificationScheduler;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 public class ScreenSlideAudioPlayFragment extends Fragment {
@@ -48,6 +53,24 @@ public class ScreenSlideAudioPlayFragment extends Fragment {
             public void onClick(View view) {
                 playToPauseAudioIcon.playAnimation();
                 //Play audio file
+
+                String filePath = Environment.getExternalStorageDirectory()+"/Download/text.mp3";
+                try {
+                    final MediaPlayer mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setDataSource(filePath);
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mediaPlayer.stop();
+                        }
+                    }, 10000);
+                } catch (IOException e) {
+                    return;
+                }
+
             }
         });
 
