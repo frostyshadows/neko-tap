@@ -7,15 +7,16 @@ import android.os.Handler;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.squad.betakua.tap_neko.audiorecord.AudioRecorderActivity;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
+import com.squad.betakua.tap_neko.barcode.BarcodeScannerActivity;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
 
 import java.io.FileInputStream;

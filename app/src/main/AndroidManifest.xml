@@ -23,7 +23,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".splash.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,27 +36,24 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PatientActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PharmacistActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AudioRecorderActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".audiorecord.AudioRecorderActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BarcodeScannerActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".barcode.BarcodeScannerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".nfc.NFCActivity"
             android:label="@string/nfc_activity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".nfc.NFCPatientActivity"
             android:label="@string/nfc_activity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <receiver android:name=".notifications.AlarmReceiver"
             android:enabled="true">
         </receiver>

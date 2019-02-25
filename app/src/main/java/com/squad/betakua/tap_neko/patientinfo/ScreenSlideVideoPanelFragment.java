@@ -1,4 +1,4 @@
-package com.squad.betakua.tap_neko;
+package com.squad.betakua.tap_neko.patientinfo;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -29,6 +29,7 @@ import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE
 import android.widget.Button;
 import android.widget.TimePicker;
 
+import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.notifications.AlarmReceiver;
 import com.squad.betakua.tap_neko.notifications.NotificationScheduler;
 

@@ -1,4 +1,4 @@
-package com.squad.betakua.tap_neko;
+package com.squad.betakua.tap_neko.patientinfo;
 
 import android.app.PendingIntent;
 import android.media.AudioManager;
@@ -25,6 +25,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.DrugInfoItem;

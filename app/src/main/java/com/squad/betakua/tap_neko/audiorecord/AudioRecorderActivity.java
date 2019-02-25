@@ -1,4 +1,4 @@
-package com.squad.betakua.tap_neko;
+package com.squad.betakua.tap_neko.audiorecord;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.squad.betakua.tap_neko.R;
 
 import java.io.IOException;
 

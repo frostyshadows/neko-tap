@@ -1,4 +1,4 @@
-package com.squad.betakua.tap_neko;
+package com.squad.betakua.tap_neko.barcode;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.squad.betakua.tap_neko.R;
 
 import static com.squad.betakua.tap_neko.PharmacistActivity.BARCODE_KEY;
 
@@ -20,8 +21,6 @@ import static com.squad.betakua.tap_neko.PharmacistActivity.BARCODE_KEY;
 
 public class BarcodeScannerActivity extends AppCompatActivity {
     TextView tvCardText;
-    Button btStartScan;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

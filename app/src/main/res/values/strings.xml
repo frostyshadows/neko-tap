@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">tap-neko</string>
 
+    <!-- Debug -->
+    <string name="pharm_app">Pharmacists</string>
+
     <!-- NFC -->
     <string name="nfc_activity">NFC Activity</string>
+
 
     <!-- Languages Spinner -->
     <string-array name="languages">

@@ -15,7 +15,7 @@
         tools:context="com.squad.betakua.tap_neko.PharmacistActivity">
 
         <TableRow
-            android:id="@+id/barcode-scanner-button"
+            android:id="@+id/barcode_scanner_button"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
@@ -97,7 +97,7 @@
     </TableLayout>
 
     <ImageButton
-        android:id="@+id/submit-button"
+        android:id="@+id/submit_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"

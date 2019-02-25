@@ -1,24 +1,18 @@
 package com.squad.betakua.tap_neko;
 
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.MediaController;
-import android.widget.ScrollView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -26,21 +20,19 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
-import com.rd.PageIndicatorView;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.InfoItem;
-import com.squad.betakua.tap_neko.nfc.NFCActivity;
 import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
+import com.squad.betakua.tap_neko.patientinfo.ScreenSlideAudioPlayFragment;
+import com.squad.betakua.tap_neko.patientinfo.ScreenSlideTextPanelFragment;
+import com.squad.betakua.tap_neko.patientinfo.ScreenSlideVideoPanelFragment;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
-import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_REQ_CODE;
 
 /**
  * Created by sherryuan on 2019-01-26.

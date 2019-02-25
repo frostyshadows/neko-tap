@@ -1,4 +1,4 @@
-package com.squad.betakua.tap_neko;
+package com.squad.betakua.tap_neko.patientinfo;
 
 import android.Manifest;
 import android.app.TimePickerDialog;
@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.TimePicker;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.notifications.AlarmReceiver;
 import com.squad.betakua.tap_neko.notifications.NotificationScheduler;
 

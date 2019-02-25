@@ -22,7 +22,6 @@
         android:layout_marginTop="50dp"
         android:gravity="center"
         />
-        <!--android:gravity="center_horizontal"-->
 
     <TextView
         android:id="@+id/nfc_text_success"
@@ -38,7 +37,6 @@
         android:layout_marginTop="50dp"
         android:gravity="center"
         />
-        <!--android:gravity="center_horizontal"-->
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_nfc"
@@ -58,7 +56,6 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         app:lottie_fileName="check_mark_success.json"
-        app:lottie_imageAssetsFolder="images"
-        />
+        app:lottie_imageAssetsFolder="images" />
 
 </RelativeLayout>

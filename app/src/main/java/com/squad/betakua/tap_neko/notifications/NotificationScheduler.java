@@ -13,6 +13,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
+import com.squad.betakua.tap_neko.R;
+
 import java.util.Calendar;
 
 import static android.content.Context.ALARM_SERVICE;
@@ -72,7 +74,7 @@ public class NotificationScheduler {
                 .setContentText(title)
                 .setAutoCancel(true)
                 .setSound(alarmSound)
-                .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                .setSmallIcon(R.drawable.ic_nekotap_logo)
                 .setContentIntent(pendingIntent).build();
 
         NotificationManager notificationManager = (NotificationManager)

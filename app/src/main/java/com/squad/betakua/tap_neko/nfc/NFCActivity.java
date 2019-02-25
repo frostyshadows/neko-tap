@@ -28,8 +28,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squad.betakua.tap_neko.R;
 import com.airbnb.lottie.LottieAnimationView;
+import com.squad.betakua.tap_neko.R;
 
 import java.util.HashMap;
 import java.util.Locale;

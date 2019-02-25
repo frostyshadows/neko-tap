@@ -6,7 +6,7 @@
     android:id="@+id/activity_test"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.squad.betakua.tap_neko.BarcodeScannerActivity">
+    tools:context="com.squad.betakua.tap_neko.barcode.BarcodeScannerActivity">
 
     <TextView
         android:id="@+id/tv_code_text"
