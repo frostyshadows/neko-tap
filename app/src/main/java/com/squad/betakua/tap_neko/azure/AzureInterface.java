@@ -29,8 +29,10 @@ public class AzureInterface {
             "AccountKey=%s";
     private static final String STORAGE_ACCOUNT_NAME = BuildConfig.AzureStorageAccountName;
     private static final String STORAGE_ACCOUNT_KEY = BuildConfig.AzureStorageAccountKey;
-    private static final String SPEECH_SUB_KEY = BuildConfig.AzureSpeechSubscriptionKey;
+    // private static final String SPEECH_SUB_KEY = BuildConfig.AzureSpeechSubscriptionKey;
+    private static final String SPEECH_SUB_KEY = BuildConfig.azure_speech_key1;
     private static final String SERVICE_REGION = "westus";
+
     private static AzureInterface AZURE_INTERFACE = null;
     private final CloudStorageAccount storageAccount;
     private final MobileServiceTable<InfoItem> infoTable;

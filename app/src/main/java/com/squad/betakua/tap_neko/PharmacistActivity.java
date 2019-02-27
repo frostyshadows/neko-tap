@@ -132,20 +132,20 @@ public class PharmacistActivity extends AppCompatActivity {
 
     private void initSubmitButton() {
         submitButton = findViewById(R.id.submit_button);
-        submitButton.setOnClickListener((View view) -> {
-            try {
-                final String translationID = nfcId + "_fr";
-                AzureInterface.getInstance().uploadAudio(nfcId, new FileInputStream(outputFile), -1);
-                AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "", "https://www.youtube.com/watch?v=uGkbreu169Q");
-
-                final Handler handler = new Handler();
-                handler.postDelayed(() -> {
-                }, 1500);
-
-            } catch (AzureInterfaceException | FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
+        // submitButton.setOnClickListener((View view) -> {
+        //     try {
+        //         final String translationID = nfcId + "_fr";
+        //         AzureInterface.getInstance().uploadAudio(nfcId, new FileInputStream(outputFile), -1);
+        //         AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "", "https://www.youtube.com/watch?v=uGkbreu169Q");
+        //
+        //         final Handler handler = new Handler();
+        //         handler.postDelayed(() -> {
+        //         }, 1500);
+        //
+        //     } catch (AzureInterfaceException | FileNotFoundException e) {
+        //         e.printStackTrace();
+        //     }
+        // });
 
     }
 

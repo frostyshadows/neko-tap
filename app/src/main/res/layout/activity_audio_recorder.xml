@@ -5,42 +5,69 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical">
+    android:gravity="top">
+
+    <TextView
+        android:id="@+id/azure_speech_status"
+        android:layout_width="342dp"
+        android:layout_height="31dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:text="@string/audio_recorder_azure_status_message"
+        app:layout_constraintHorizontal_bias="0.802"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/record_button"
-        android:layout_width="200dp"
+        android:layout_width="341dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Record"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/azure_speech_status"
+        android:layout_marginTop="61dp"
+        android:text="@string/audio_recorder_record"
         android:textSize="20sp" />
 
     <Button
         android:id="@+id/stop_button"
-        android:layout_width="200dp"
+        android:layout_width="341dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/play_button"
-        android:layout_centerHorizontal="true"
-        android:text="Stop"
+        android:layout_alignStart="@+id/record_button"
+        android:layout_below="@+id/record_button"
+        android:text="@string/audio_recorder_stop"
         android:textSize="20sp" />
 
     <Button
         android:id="@+id/play_button"
-        android:layout_width="200dp"
+        android:layout_width="339dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/save_button"
-        android:layout_centerHorizontal="true"
-        android:text="Play"
+        android:layout_alignStart="@+id/record_button"
+        android:layout_below="@+id/stop_button"
+        android:text="@string/audio_recorder_play"
         android:textSize="20sp" />
 
     <Button
         android:id="@+id/save_button"
-        android:layout_width="200dp"
+        android:layout_width="337dp"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/record_button"
+        android:layout_below="@+id/play_button"
+        android:text="@string/audio_recorder_save"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/azure_speech_live_output"
+        android:layout_width="342dp"
+        android:layout_height="289dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="115dp"
-        android:text="Save"
-        android:textSize="20sp" />
+        android:layout_marginBottom="13dp"
+        android:text="@string/azure_speech_live_output_placeholder"
+        app:layout_constraintHorizontal_bias="0.802"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </RelativeLayout>

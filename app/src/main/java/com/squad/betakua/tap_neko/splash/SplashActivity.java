@@ -40,11 +40,11 @@ public class SplashActivity extends AppCompatActivity {
         animationDrawable.start();
 
         // Initiate azure interface singleton
-        try {
-            AzureInterface.init(getApplicationContext());
-        } catch (AzureInterfaceException e) {
-            e.printStackTrace();
-        }
+        // try {
+        //     AzureInterface.init(getApplicationContext());
+        // } catch (AzureInterfaceException e) {
+        //     e.printStackTrace();
+        // }
     }
 
     public void onClick(View v) {
