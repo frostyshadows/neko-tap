@@ -202,7 +202,8 @@ public class PatientActivity extends AppCompatActivity {
                     return screenSlideTextPanelFragment;
                 }
                 case 2: {
-                    return new ScreenSlideVideoPanelFragment();
+                    ScreenSlideVideoPanelFragment screenSlideVideoPanelFragment = new ScreenSlideVideoPanelFragment();
+                    return screenSlideVideoPanelFragment;
                 }
             }
 

@@ -1,6 +1,7 @@
 package com.squad.betakua.tap_neko.patientinfo;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.app.TimePickerDialog;
@@ -29,6 +30,10 @@ import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE
 import android.widget.Button;
 import android.widget.TimePicker;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerView;
 import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.notifications.AlarmReceiver;
 import com.squad.betakua.tap_neko.notifications.NotificationScheduler;
@@ -38,6 +43,12 @@ import java.util.Calendar;
 
 public class ScreenSlideVideoPanelFragment extends Fragment {
 
+
+    //API key for the Google API
+    public static final String API_KEY = "AIzaSyCK1ylJ9-3lMjHU8RuRWsanA1bbhZ5n42Q";
+
+    YouTubePlayerView youTubePlayerView;
+    YouTubePlayer.OnInitializedListener onInitializedListener;
 
 
     @Override
@@ -50,12 +61,36 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
         return rootView;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         FloatingActionButton mainFab = getView().findViewById(R.id.mainFab);
         FloatingActionButton callFab = getView().findViewById(R.id.callFab);
         FloatingActionButton alertFab = getView().findViewById(R.id.alertFab);
+
+        Button playButton = getView().findViewById(R.id.open_yt_button);
+        playButton.setText("Play");
+
+        youTubePlayerView = (YouTubePlayerView) view.findViewById(R.id.youtube_player_view);
+        onInitializedListener = new YouTubePlayer.OnInitializedListener() {
+            @Override
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+                youTubePlayer.loadVideo("a1sn_UlUOio");
+            }
+
+            @Override
+            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+                //TODO
+            }
+        };
+
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                youTubePlayerView.initialize(API_KEY,onInitializedListener);
+            }
+        });
 
 
         //VideoPlayer
@@ -90,8 +125,6 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
                                         }
                                     });
 
-        Button ytButton = getView().findViewById(R.id.open_yt_button);
-        ytButton.setText("Open in YouTube");
 
 
         callFab.setVisibility(View.INVISIBLE);
@@ -107,11 +140,11 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
             }
         });
 
-        ytButton.setOnClickListener((View v) -> {
-            Intent browserIntent =
-                    new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=a1sn_UlUOio"));
-            startActivity(browserIntent);
-        });
+//        playButton.setOnClickListener((View v) -> {
+//            Intent browserIntent =
+//                    new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=a1sn_UlUOio"));
+//            startActivity(browserIntent);
+//        });
     }
 
     private void showTimePickerDialog() {
@@ -129,6 +162,7 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
     }
+
 
 
 }
