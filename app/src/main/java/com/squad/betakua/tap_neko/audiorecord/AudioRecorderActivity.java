@@ -1,11 +1,14 @@
 package com.squad.betakua.tap_neko.audiorecord;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +32,8 @@ import com.squad.betakua.tap_neko.azure_speech.RecordWaveTask;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by sherryuan on 2019-01-26.
@@ -81,9 +86,39 @@ public class AudioRecorderActivity extends AppCompatActivity {
         // TODO: initialize with drug product code
         // ---------------------- Azure Speech Config ----------------------
         config = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
+        audioFileName = "azure_test2"; // TODO: replace with nfc code
+        String audioFileName2 = "azure_test2.wav"; // TODO: replace with nfc code
 
-        audioFileName = "azure_test"; // TODO: replace with nfc code
-        outputFile = new File(getFilesDir(), audioFileName + ".wav");
+        recordTask = (RecordWaveTask) getLastCustomNonConfigurationInstance();
+        if (recordTask == null) {
+            Log.e("RECORD TASK ", "awefawefawefwe");
+            recordTask = new RecordWaveTask();
+        }
+
+        // outputFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), audioFileName2);
+        outputFile = new File(getFilesDir(), audioFileName2);
+        // String newPath = FilePathURI.getFilePath(outputFile.getPath());
+        // Log.e("outputFile is ", outputFile + " " + outputFile.getAbsolutePath());
+
+
+        //the selected audio.
+        // Uri uri = data.getData();
+        //
+        // String path = getPath(uri);
+        // try {
+        //     speech(path);
+        //     // } catch (ExecutionException e) {
+        //     e.printStackTrace();
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
+
+
+        AudioConfig audioInput = AudioConfig.fromWavFileInput(outputFile.getAbsolutePath());
+        recognizerWav = new SpeechRecognizer(config, audioInput);
+
+        Log.e("RECORD TASK2222 ", "awefawefawefwe");
+
         outputText = this.findViewById(R.id.azure_speech_live_output);
         statusText = this.findViewById(R.id.azure_speech_status);
 
@@ -99,19 +134,17 @@ public class AudioRecorderActivity extends AppCompatActivity {
                     PERMISSION_RECORD_AUDIO);
             return;
         }
-        // if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-        //     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_CODE);
-        // } else {
-            initAzureService();
-            initAudioRecorder();
-            initRecordButton();
-            initStopButton();
-            initPlayButton();
-            initSaveButton();
-            stopButton.setEnabled(false);
-            playButton.setEnabled(false);
-            saveButton.setEnabled(false);
-        // }
+
+        initThread();
+        setupAudioWav();
+        initAudioRecorder();
+        initRecordButton();
+        initStopButton();
+        initPlayButton();
+        initSaveButton();
+        stopButton.setEnabled(false);
+        playButton.setEnabled(false);
+        saveButton.setEnabled(false);
     }
 
     private void initThread() {
@@ -132,17 +165,6 @@ public class AudioRecorderActivity extends AppCompatActivity {
                 }
             }
         };
-    }
-
-    private void initAzureService() {
-        // try {
-        //     AzureInterface.init(getApplicationContext());
-        // } catch (AzureInterfaceException e) {
-        //     Log.e("ERROR", e.toString());
-        // }
-
-        initThread();
-        setupAudioWav();
     }
 
     private void initAudioRecorder() {
@@ -247,11 +269,6 @@ public class AudioRecorderActivity extends AppCompatActivity {
     }
 
     public void setupAudioWav() {
-        recordTask = (RecordWaveTask) getLastCustomNonConfigurationInstance();
-        if (recordTask == null) {
-            recordTask = new RecordWaveTask();
-        }
-
         AudioConfig audioInput = AudioConfig.fromWavFileInput(outputFile.getAbsolutePath());
         recognizerWav = new SpeechRecognizer(config, audioInput);
 

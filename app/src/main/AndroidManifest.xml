@@ -44,6 +44,9 @@
             android:name=".audiorecord.AudioRecorderActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".audiorecord.AzureSpeechActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".barcode.BarcodeScannerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

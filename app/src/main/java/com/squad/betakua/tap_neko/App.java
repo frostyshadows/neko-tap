@@ -2,9 +2,6 @@ package com.squad.betakua.tap_neko;
 
 import android.app.Application;
 
-// import cafe.adriel.androidaudioconverter.AndroidAudioConverter;
-// import cafe.adriel.androidaudioconverter.callback.ILoadCallback;
-
 public class App extends Application {
 
     @Override

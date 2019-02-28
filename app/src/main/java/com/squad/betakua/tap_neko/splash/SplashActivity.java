@@ -10,9 +10,8 @@ import android.widget.Button;
 
 import com.squad.betakua.tap_neko.PharmacistActivity;
 import com.squad.betakua.tap_neko.R;
+import com.squad.betakua.tap_neko.audiorecord.AzureSpeechActivity;
 import com.squad.betakua.tap_neko.auth.AuthActivity;
-import com.squad.betakua.tap_neko.azure.AzureInterface;
-import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
 
 public class SplashActivity extends AppCompatActivity {
@@ -50,22 +49,25 @@ public class SplashActivity extends AppCompatActivity {
     public void onClick(View v) {
         int id = v.getId();
 
-        if (id == R.id.pharm_app) {
-            Intent pharmIntent = new Intent(getApplicationContext(), PharmacistActivity.class);
-            startActivity(pharmIntent);
-        } else if (id == R.id.splash_screen) {
-            if (isPatient) {
-                Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class); //NFCPatientActivity.class
-                startActivity(patientIntent);
-            } else {
-                if (bypassAuth) {
-                    Intent pharmIntent = new Intent(getApplicationContext(), PharmacistActivity.class);
-                    startActivity(pharmIntent);
-                } else {
-                    Intent authIntent = new Intent(getApplicationContext(), AuthActivity.class);
-                    startActivity(authIntent);
-                }
-            }
-        }
+        Intent apharmIntent = new Intent(getApplicationContext(), AzureSpeechActivity.class);
+        startActivity(apharmIntent);
+
+        // if (id == R.id.pharm_app) {
+        //     Intent pharmIntent = new Intent(getApplicationContext(), PharmacistActivity.class);
+        //     startActivity(pharmIntent);
+        // } else if (id == R.id.splash_screen) {
+        //     if (isPatient) {
+        //         Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class); //NFCPatientActivity.class
+        //         startActivity(patientIntent);
+        //     } else {
+        //         if (bypassAuth) {
+        //             Intent pharmIntent = new Intent(getApplicationContext(), PharmacistActivity.class);
+        //             startActivity(pharmIntent);
+        //         } else {
+        //             Intent authIntent = new Intent(getApplicationContext(), AuthActivity.class);
+        //             startActivity(authIntent);
+        //         }
+        //     }
+        // }
     }
 }

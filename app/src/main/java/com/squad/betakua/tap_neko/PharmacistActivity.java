@@ -3,7 +3,6 @@ package com.squad.betakua.tap_neko;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,14 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.squad.betakua.tap_neko.audiorecord.AudioRecorderActivity;
-import com.squad.betakua.tap_neko.azure.AzureInterface;
-import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
+import com.squad.betakua.tap_neko.audiorecord.AzureSpeechActivity;
 import com.squad.betakua.tap_neko.barcode.BarcodeScannerActivity;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_REQ_CODE;
@@ -117,7 +111,8 @@ public class PharmacistActivity extends AppCompatActivity {
     private void initAudioRecorderButton() {
         audioRecorderButton = findViewById(R.id.audio_recorder_button);
         audioRecorderButton.setOnClickListener((View view) -> {
-            Intent audioRecorderIntent = new Intent(getApplicationContext(), AudioRecorderActivity.class);
+            // Intent audioRecorderIntent = new Intent(getApplicationContext(), AudioRecorderActivity.class);
+            Intent audioRecorderIntent = new Intent(getApplicationContext(), AzureSpeechActivity.class);
             startActivityForResult(audioRecorderIntent, AUDIO_REQ_CODE);
         });
     }

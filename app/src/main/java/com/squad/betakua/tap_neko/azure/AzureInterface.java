@@ -7,6 +7,7 @@ import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.*;
 import com.microsoft.cognitiveservices.speech.*;
+import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import com.microsoft.cognitiveservices.speech.translation.SpeechTranslationConfig;
 import com.microsoft.cognitiveservices.speech.translation.TranslationRecognizer;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
@@ -194,8 +195,8 @@ public class AzureInterface {
      *
      * @return New speech recognizer
      */
-    public SpeechRecognizer getSpeechRecognizer() {
-        return new SpeechRecognizer(speechConfig);
+    public SpeechRecognizer getSpeechRecognizer(AudioConfig audioConfig) {
+        return new SpeechRecognizer(speechConfig, audioConfig);
     }
 
     /**
