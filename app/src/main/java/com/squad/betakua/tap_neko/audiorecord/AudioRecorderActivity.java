@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.microsoft.cognitiveservices.speech.CancellationReason;
 import com.microsoft.cognitiveservices.speech.ResultReason;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
+import com.microsoft.cognitiveservices.speech.SpeechRecognitionResult;
 import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import com.squad.betakua.tap_neko.BuildConfig;
@@ -45,6 +46,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     private Button saveButton;
 
     private static int REQUEST_CODE = 24;
+    private static final int PERMISSION_RECORD_AUDIO = 0;
     private MediaRecorder audioRecorder;
     private File outputFile;
 
@@ -90,10 +92,16 @@ public class AudioRecorderActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(AudioRecorderActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
             return;
         }
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_CODE);
-        } else {
+        if (ContextCompat.checkSelfPermission(AudioRecorderActivity.this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(AudioRecorderActivity.this,
+                    new String[] { Manifest.permission.RECORD_AUDIO },
+                    PERMISSION_RECORD_AUDIO);
+            return;
+        }
+        // if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+        //     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_CODE);
+        // } else {
             initAzureService();
             initAudioRecorder();
             initRecordButton();
@@ -103,7 +111,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
             stopButton.setEnabled(false);
             playButton.setEnabled(false);
             saveButton.setEnabled(false);
-        }
+        // }
     }
 
     private void initThread() {
