@@ -1,6 +1,7 @@
 package com.squad.betakua.tap_neko.azure;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.azure.storage.CloudStorageAccount;
@@ -28,10 +29,10 @@ public class AzureInterface {
     private static final String CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;" +
             "AccountName=%s;" +
             "AccountKey=%s";
-    private static final String STORAGE_ACCOUNT_NAME = BuildConfig.AzureStorageAccountName;
-    private static final String STORAGE_ACCOUNT_KEY = BuildConfig.AzureStorageAccountKey;
-    // private static final String SPEECH_SUB_KEY = BuildConfig.AzureSpeechSubscriptionKey;
     private static final String SPEECH_SUB_KEY = BuildConfig.azure_speech_key1;
+    private static final String STORAGE_ACCOUNT_NAME = BuildConfig.azure_storage_account_name;
+    private static final String STORAGE_ACCOUNT_KEY = BuildConfig.azure_storage_account_key;
+    private static final String STORAGE_CONTAINER_NAME = "azureaudiotest";
     private static final String SERVICE_REGION = "westus";
 
     private static AzureInterface AZURE_INTERFACE = null;
@@ -39,6 +40,9 @@ public class AzureInterface {
     private final MobileServiceTable<InfoItem> infoTable;
     private final MobileServiceTable<DrugInfoItem> drugInfoTable;
     private final SpeechConfig speechConfig;
+
+    private OnDownloadAudioFileListener downloadAudioFileListener;
+    private OnUploadAudioFileListener uploadAudioFileListener;
 
     /**
      * Initialize singleton instance of Azure interface
@@ -146,14 +150,17 @@ public class AzureInterface {
      * @param in         InputStream to read from
      * @param length     Length in bytes of file (or -1 if unknown)
      */
-    public void uploadAudio(final String audioTitle, final InputStream in, final long length) {
+    public void uploadAudio(final String audioTitle, final InputStream in, final long length, OnUploadAudioFileListener listener) {
+        uploadAudioFileListener = listener;
+
         new Thread(() -> {
             try {
                 final CloudBlobClient blobClient = this.storageAccount.createCloudBlobClient();
                 final CloudBlobContainer container =
-                        blobClient.getContainerReference("instructionaudio");
+                        blobClient.getContainerReference(STORAGE_CONTAINER_NAME);
                 final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
                 blockBlob.upload(in, length);
+                uploadAudioFileListener.onUploadComplete("SUCCESS");
             } catch (URISyntaxException | StorageException | IOException e) {
                 e.printStackTrace();
             }
@@ -166,14 +173,17 @@ public class AzureInterface {
      * @param audioTitle Title of audio clip in Azure Storage; note: should be `$NFCID_$LANG`
      * @param out        OutputStream to write to
      */
-    public void downloadAudio(final String audioTitle, final OutputStream out) {
+    public void downloadAudio(final String audioTitle, final OutputStream out, OnDownloadAudioFileListener listener) {
+        downloadAudioFileListener = listener;
+
         new Thread(() -> {
             try {
                 final CloudBlobClient blobClient = this.storageAccount.createCloudBlobClient();
                 final CloudBlobContainer container =
-                        blobClient.getContainerReference("instructionaudio");
+                        blobClient.getContainerReference(STORAGE_CONTAINER_NAME);
                 final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
                 blockBlob.download(out);
+                downloadAudioFileListener.onDownloadComplete("SUCCESS");
             } catch (URISyntaxException | StorageException e) {
                 try {
                     throw new AzureInterfaceException(e.getMessage());

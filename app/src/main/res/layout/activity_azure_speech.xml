@@ -8,78 +8,94 @@
 
     <TextView
         android:id="@+id/azure_speech_status"
-        android:layout_width="307dp"
-        android:layout_height="31dp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
-        android:text="Welcome to the Audio Services Demo"
-        app:layout_constraintHorizontal_bias="0.802"
+        android:text="Use the buttons below to record a message!"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/azure_speech_text_output"
-        android:layout_width="353dp"
-        android:layout_height="201dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="331dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Hello World!"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="4sp"
+        android:text=""
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/speech_button_wav_stop"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/azure_speech_status" />
 
     <Button
         android:id="@+id/speech_button_wav_start"
-        android:layout_width="114dp"
-        android:layout_height="44dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="108dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
         android:onClick="startAudioWav"
         android:text="start"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/speech_button_wav_process"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/speech_button_wav_stop"
-        android:layout_width="115dp"
-        android:layout_height="47dp"
+        android:layout_width="108dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:onClick="stopAudioWav"
         android:text="stop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/speech_button_wav_start" />
+        app:layout_constraintBottom_toTopOf="@+id/speech_button_wav_process"
+        app:layout_constraintEnd_toStartOf="@+id/speech_button_wav_play"
+        app:layout_constraintStart_toEndOf="@+id/speech_button_wav_start" />
 
     <Button
         android:id="@+id/speech_button_wav_play"
-        android:layout_width="115dp"
-        android:layout_height="47dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="108dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
         android:onClick="playAudioWav"
         android:text="play"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/speech_button_wav_stop" />
+        app:layout_constraintBottom_toTopOf="@+id/speech_button_wav_process"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/speech_button_wav_process"
-        android:layout_width="115dp"
+        android:layout_width="350dp"
         android:layout_height="47dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:onClick="processAudioWav"
-        android:text="process"
+        android:layout_marginStart="8dp"
+        android:onClick="uploadData"
+        android:text="submit"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/speech_button_wav_play" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/speech_button_wav_download"
-        android:layout_width="115dp"
-        android:layout_height="47dp"
-        android:layout_marginEnd="8dp"
-        android:onClick="downloadAudio"
-        android:text="download"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/speech_button_wav_process" />
+    <!--<Button-->
+        <!--android:id="@+id/speech_button_wav_download"-->
+        <!--android:layout_width="115dp"-->
+        <!--android:layout_height="47dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:onClick="downloadAudio"-->
+        <!--android:text="download"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/speech_button_wav_process" />-->
 
 </android.support.constraint.ConstraintLayout>

@@ -36,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:layout_marginStart="80dp"
+                app:lottie_loop="false"
                 app:lottie_fileName="checkbox.json"
                 app:lottie_imageAssetsFolder="images" />
         </TableRow>
@@ -63,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:layout_marginStart="80dp"
+                app:lottie_loop="false"
                 app:lottie_fileName="checkbox.json"
                 app:lottie_imageAssetsFolder="images" />
         </TableRow>
@@ -90,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:layout_marginStart="80dp"
+                app:lottie_loop="false"
                 app:lottie_fileName="checkbox.json"
                 app:lottie_imageAssetsFolder="images" />
         </TableRow>

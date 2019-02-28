@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,30 +16,29 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.microsoft.cognitiveservices.speech.CancellationReason;
 import com.microsoft.cognitiveservices.speech.ResultReason;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
-import com.microsoft.cognitiveservices.speech.SpeechRecognitionResult;
 import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import com.squad.betakua.tap_neko.BuildConfig;
 import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
-import com.squad.betakua.tap_neko.azure_speech.RecordWaveTask;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
+
+import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_REQ_KEY;
+import static com.squad.betakua.tap_neko.PharmacistActivity.BARCODE_KEY;
 
 /**
  * Created by sherryuan on 2019-01-26.
  */
 
 public class AudioRecorderActivity extends AppCompatActivity {
-    public static final String TRANSCRIPTION_STR_KEY = "transcribed string";
-    public static final String TRANSLATION_STR_KEY = "translated string";
     private static final String SPEECH_SUB_KEY = BuildConfig.azure_speech_key1;
     private static final String SERVICE_REGION = "westus";
 
@@ -91,7 +88,6 @@ public class AudioRecorderActivity extends AppCompatActivity {
 
         recordTask = (RecordWaveTask) getLastCustomNonConfigurationInstance();
         if (recordTask == null) {
-            Log.e("RECORD TASK ", "awefawefawefwe");
             recordTask = new RecordWaveTask();
         }
 
@@ -116,8 +112,6 @@ public class AudioRecorderActivity extends AppCompatActivity {
 
         AudioConfig audioInput = AudioConfig.fromWavFileInput(outputFile.getAbsolutePath());
         recognizerWav = new SpeechRecognizer(config, audioInput);
-
-        Log.e("RECORD TASK2222 ", "awefawefawefwe");
 
         outputText = this.findViewById(R.id.azure_speech_live_output);
         statusText = this.findViewById(R.id.azure_speech_status);
@@ -243,8 +237,8 @@ public class AudioRecorderActivity extends AppCompatActivity {
             FileInputStream fileInputStream;
             try {
                 fileInputStream = new FileInputStream(outputFile);
-                AzureInterface.getInstance().uploadAudio(audioFileName, fileInputStream, outputFile.length());
-                AzureInterface.getInstance().writeInfoItem(MOCK_NFC_ID, MOCK_PRODUCT_ID, recognizedText, MOCK_YOUTUBE_URL);
+                // AzureInterface.getInstance().uploadAudio(audioFileName, fileInputStream, outputFile.length());
+                // AzureInterface.getInstance().writeInfoItem(MOCK_NFC_ID, MOCK_PRODUCT_ID, recognizedText, MOCK_YOUTUBE_URL);
             } catch (Exception e) {
                 Log.e("ERROR", e.toString());
             }

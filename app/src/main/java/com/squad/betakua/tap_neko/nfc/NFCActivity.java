@@ -61,15 +61,6 @@ public class NFCActivity extends AppCompatActivity {
         checkAnimation = findViewById(R.id.lottie_nfc_success);
         checkAnimation.setVisibility(View.GONE);
 
-        // background gradient animation
-        RelativeLayout relativeLayout = findViewById(R.id.activity_nfc);
-        AnimationDrawable animationDrawable = (AnimationDrawable) relativeLayout.getBackground();
-        animationDrawable.setEnterFadeDuration(2000);
-        animationDrawable.setExitFadeDuration(4000);
-        animationDrawable.start();
-
-
-
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
             Toast.makeText(this, "No NFC", Toast.LENGTH_SHORT).show();

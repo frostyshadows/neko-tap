@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.MediaController;
@@ -23,6 +24,7 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.InfoItem;
+import com.squad.betakua.tap_neko.azure.OnDownloadAudioFileListener;
 import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideAudioPlayFragment;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideTextPanelFragment;
@@ -99,8 +101,18 @@ public class PatientActivity extends AppCompatActivity {
             });
             outputFile.createNewFile();
             audioStream = new FileOutputStream(outputFile, false);
-            AzureInterface.getInstance().downloadAudio(outputFilePath, audioStream);
-            audioStream.close();
+            AzureInterface.getInstance().downloadAudio(outputFilePath, audioStream, new OnDownloadAudioFileListener() {
+                @Override
+                public void onDownloadComplete(String response) {
+                    try {
+                        Log.e("loadData:", response);
+                        audioStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("ERROR in downloadAudio:", e.toString());
+                    }
+                }
+            });
         } catch (AzureInterfaceException | IOException e) {
             e.printStackTrace();
         }
@@ -171,7 +183,6 @@ public class PatientActivity extends AppCompatActivity {
         vidControl.setAnchorView(vidView);
         vidView.setMediaController(vidControl);
     }
-
 
     @Override
     public void onBackPressed() {

@@ -4,15 +4,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.squad.betakua.tap_neko.audiorecord.AzureSpeechActivity;
+import com.squad.betakua.tap_neko.azure.AzureInterface;
+import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.barcode.BarcodeScannerActivity;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
 
@@ -28,6 +30,7 @@ public class PharmacistActivity extends AppCompatActivity {
     public static final int BARCODE_REQ_CODE = 100;
     public static final String BARCODE_KEY = "barcode";
     public static final int AUDIO_REQ_CODE = 101;
+    public static final String AUDIO_REQ_KEY = "audio_record";
 
     private TableRow audioRecorderButton;
     private String outputFile;
@@ -68,6 +71,9 @@ public class PharmacistActivity extends AppCompatActivity {
         lottieBarcode = findViewById(R.id.check_barcode);
         lottieNFC = findViewById(R.id.check_nfc);
         lottieAudio = findViewById(R.id.check_audio);
+        lottieBarcode.setProgress(0f);
+        lottieNFC.setProgress(0f);
+        lottieAudio.setProgress(0f);
 
         outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
     }
@@ -82,18 +88,20 @@ public class PharmacistActivity extends AppCompatActivity {
             // change colors
             textBarcode.setTextColor(Color.parseColor("#FFFFFF"));
             barcodeScannerButton.setBackgroundColor(Color.parseColor("#6dcc5b"));
+            lottieBarcode.setMaxProgress(0.5f);
             lottieBarcode.playAnimation();
 
             refreshSubmitButton();
         } else if (requestCode == AUDIO_REQ_CODE && resultCode == RESULT_OK) {
             // get audio
             hasAudio = true;
-            Toast.makeText(this, "got audio", Toast.LENGTH_SHORT).show();
 
             // change colors
             textAudio.setTextColor(Color.parseColor("#FFFFFF"));
             audioRecorderButton.setBackgroundColor(Color.parseColor("#6dcc5b"));
+            lottieAudio.setMaxProgress(0.5f);
             lottieAudio.playAnimation();
+
             refreshSubmitButton();
         } else if (requestCode == NFC_REQ_CODE && resultCode == RESULT_OK) {
             // get NFC id
@@ -103,7 +111,9 @@ public class PharmacistActivity extends AppCompatActivity {
             // change colors
             textNFC.setTextColor(Color.parseColor("#FFFFFF"));
             nfcButton.setBackgroundColor(Color.parseColor("#6dcc5b"));
+            lottieNFC.setMaxProgress(0.5f);
             lottieNFC.playAnimation();
+
             refreshSubmitButton();
         }
     }
@@ -111,7 +121,6 @@ public class PharmacistActivity extends AppCompatActivity {
     private void initAudioRecorderButton() {
         audioRecorderButton = findViewById(R.id.audio_recorder_button);
         audioRecorderButton.setOnClickListener((View view) -> {
-            // Intent audioRecorderIntent = new Intent(getApplicationContext(), AudioRecorderActivity.class);
             Intent audioRecorderIntent = new Intent(getApplicationContext(), AzureSpeechActivity.class);
             startActivityForResult(audioRecorderIntent, AUDIO_REQ_CODE);
         });
@@ -127,20 +136,19 @@ public class PharmacistActivity extends AppCompatActivity {
 
     private void initSubmitButton() {
         submitButton = findViewById(R.id.submit_button);
-        // submitButton.setOnClickListener((View view) -> {
-        //     try {
-        //         final String translationID = nfcId + "_fr";
-        //         AzureInterface.getInstance().uploadAudio(nfcId, new FileInputStream(outputFile), -1);
-        //         AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "", "https://www.youtube.com/watch?v=uGkbreu169Q");
-        //
-        //         final Handler handler = new Handler();
-        //         handler.postDelayed(() -> {
-        //         }, 1500);
-        //
-        //     } catch (AzureInterfaceException | FileNotFoundException e) {
-        //         e.printStackTrace();
-        //     }
-        // });
+        submitButton.setOnClickListener((View view) -> {
+            try {
+                final String translationID = nfcId + "_fr";
+                AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "", "https://www.youtube.com/watch?v=uGkbreu169Q");
+
+                final Handler handler = new Handler();
+                handler.postDelayed(() -> {
+                }, 1500);
+
+            } catch (AzureInterfaceException e) {
+                e.printStackTrace();
+            }
+        });
 
     }
 

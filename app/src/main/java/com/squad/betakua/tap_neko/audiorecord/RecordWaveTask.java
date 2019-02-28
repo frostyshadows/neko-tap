@@ -22,7 +22,7 @@
  * Many thanks to Craig Stuart Sapp for his invaluable WAV specification:
  * http://soundfile.sapp.org/doc/WaveFormat/
  */
-package com.squad.betakua.tap_neko.azure_speech;
+package com.squad.betakua.tap_neko.audiorecord;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
