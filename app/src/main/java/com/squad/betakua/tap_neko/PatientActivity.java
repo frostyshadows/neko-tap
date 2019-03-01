@@ -1,12 +1,16 @@
 package com.squad.betakua.tap_neko;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +25,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.squad.betakua.tap_neko.audiorecord.AudioRecorderActivity;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.InfoItem;
@@ -29,11 +34,13 @@ import com.squad.betakua.tap_neko.patientListeners.TranscriptListener;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideAudioPlayFragment;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideTextPanelFragment;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideVideoPanelFragment;
+import com.squad.betakua.tap_neko.utils.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
 
 /**
@@ -42,28 +49,24 @@ import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
 
 public class PatientActivity extends AppCompatActivity {
 
-    private Button stopButton;
-    private Button playButton;
-
     //Pages in pagerView
     private static final int NUM_PAGES = 3;
     //Allows swiping between fragments
     private ViewPager mPager;
     //Provides the pages (fragments) to the ViewPager
     private PagerAdapter mPagerAdapter;
-    private TranscriptListener transcriptListener;
 
     VideoView vidView;
     MediaController vidControl;
 
     private boolean hasInfo = false;
     private String nfcId;
+    private String fileId;
     private String barcodeId;
+    private String transcript;
 
     private boolean hasAudio = false;
-    private MediaPlayer mediaPlayer = new MediaPlayer();
-    private String outputFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
-    private File outputFile = new File(outputFilePath);
+    private File audioFile;
     private FileOutputStream audioStream;
 
     @Override
@@ -71,50 +74,37 @@ public class PatientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient);
 
+        if (ContextCompat.checkSelfPermission(PatientActivity.this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(PatientActivity.this, new String[]{Manifest.permission.INTERNET}, REQUEST_CODE);
+            return;
+        }
+
         nfcId = getIntent().getStringExtra(NFC_ID_KEY);
-
-        loadData();
-
-        initAudioPlayer();
-        initPlayButton();
-        initStopButton();
-        initVideoPlayer();
+        fileId = Utils.nfcToFileName(nfcId);
+        retrieveProductInfo();
 
         mPager = findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
     }
 
-    private void loadData() {
+    public void retrieveProductInfo() {
         try {
-            ListenableFuture<MobileServiceList<InfoItem>> infoItemsFuture = AzureInterface.getInstance().readInfoItem(nfcId);
+            ListenableFuture<MobileServiceList<InfoItem>> infoItemsFuture = AzureInterface.getInstance().readInfoItem(fileId);
 
             Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
                 public void onSuccess(MobileServiceList<InfoItem> infoItems) {
                     hasInfo = true;
                     barcodeId = infoItems.get(0).getProductID();
+                    transcript = infoItems.get(0).getTranscript();
                 }
 
                 public void onFailure(Throwable t) {
                     t.printStackTrace();
                 }
             });
-            outputFile.createNewFile();
-            audioStream = new FileOutputStream(outputFile, false);
-            AzureInterface.getInstance().downloadAudio(outputFilePath, audioStream, new OnDownloadAudioFileListener() {
-                @Override
-                public void onDownloadComplete(String response) {
-                    try {
-                        Log.e("loadData:", response);
-                        audioStream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.e("ERROR in downloadAudio:", e.toString());
-                    }
-                }
-            });
-        } catch (AzureInterfaceException | IOException e) {
-            e.printStackTrace();
+        } catch (AzureInterfaceException e) {
+            Log.e("ERROR:", e.toString());
         }
     }
 
@@ -143,34 +133,6 @@ public class PatientActivity extends AppCompatActivity {
 //            }
 //        }
 //    }
-
-    private void initAudioPlayer() {
-        try {
-            mediaPlayer.setDataSource(outputFilePath);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-            Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            // make something
-            e.printStackTrace();
-        }
-    }
-
-    private void initPlayButton() {
-        playButton = findViewById(R.id.play_button);
-        playButton.setOnClickListener((View view) -> {
-            mediaPlayer.start();
-            Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
-        });
-    }
-
-    private void initStopButton() {
-        stopButton = findViewById(R.id.stop_button);
-        stopButton.setOnClickListener((View view) -> {
-            mediaPlayer.stop();
-        });
-    }
-
     private void initVideoPlayer() {
         vidView = findViewById(R.id.video);
 
@@ -196,6 +158,8 @@ public class PatientActivity extends AppCompatActivity {
         }
     }
 
+
+
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -205,11 +169,22 @@ public class PatientActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: {
-                    return new ScreenSlideAudioPlayFragment();
+                    Fragment audioFragment = new ScreenSlideAudioPlayFragment();
+                    Bundle args = new Bundle();
+                    audioFile = new File(getFilesDir(), fileId + ".wav");
+                    args.putString("audioFilePath", audioFile.getAbsolutePath());
+                    args.putString("productName", barcodeId);
+                    args.putString("nfcId", nfcId);
+                    audioFragment.setArguments(args);
+
+                    return audioFragment;
                 }
                 case 1: {
                     ScreenSlideTextPanelFragment screenSlideTextPanelFragment = new ScreenSlideTextPanelFragment();
-                    transcriptListener = screenSlideTextPanelFragment;
+                    Bundle args = new Bundle();
+                    args.putString("transcript", transcript);
+                    args.putString("nfcId", nfcId);
+                    screenSlideTextPanelFragment.setArguments(args);
                     return screenSlideTextPanelFragment;
                 }
                 case 2: {
@@ -224,6 +199,5 @@ public class PatientActivity extends AppCompatActivity {
         public int getCount() {
             return NUM_PAGES;
         }
-
     }
 }

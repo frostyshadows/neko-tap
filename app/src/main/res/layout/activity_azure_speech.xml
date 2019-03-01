@@ -87,15 +87,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!--<Button-->
-        <!--android:id="@+id/speech_button_wav_download"-->
-        <!--android:layout_width="115dp"-->
-        <!--android:layout_height="47dp"-->
-        <!--android:layout_marginEnd="16dp"-->
-        <!--android:layout_marginTop="4dp"-->
-        <!--android:onClick="downloadAudio"-->
-        <!--android:text="download"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/speech_button_wav_process" />-->
-
 </android.support.constraint.ConstraintLayout>

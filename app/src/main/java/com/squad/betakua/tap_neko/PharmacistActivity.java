@@ -3,9 +3,8 @@ package com.squad.betakua.tap_neko;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TableRow;
@@ -17,6 +16,7 @@ import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.barcode.BarcodeScannerActivity;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
+import com.squad.betakua.tap_neko.utils.Utils;
 
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_REQ_CODE;
@@ -31,9 +31,10 @@ public class PharmacistActivity extends AppCompatActivity {
     public static final String BARCODE_KEY = "barcode";
     public static final int AUDIO_REQ_CODE = 101;
     public static final String AUDIO_REQ_KEY = "audio_record";
+    public static final String AUDIO_TRANSCRIPT_KEY = "audio_transcript";
 
     private TableRow audioRecorderButton;
-    private String outputFile;
+    private String transcript;
     private boolean hasAudio = false;
 
     private TableRow barcodeScannerButton;
@@ -44,6 +45,7 @@ public class PharmacistActivity extends AppCompatActivity {
     private ImageButton submitButton;
 
     private String nfcId;
+    private String fileId;
     private boolean hasNfcId = false;
 
     private TextView textBarcode;
@@ -53,6 +55,10 @@ public class PharmacistActivity extends AppCompatActivity {
     private LottieAnimationView lottieBarcode;
     private LottieAnimationView lottieNFC;
     private LottieAnimationView lottieAudio;
+
+    private static final String MOCK_NFC_ID = "23233301";
+    private static final String MOCK_PRODUCT_ID = "99965666";
+    private static final String MOCK_YOUTUBE_URL = "https://www.youtube.com/watch?v=VYMDHaQMj_w";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +80,6 @@ public class PharmacistActivity extends AppCompatActivity {
         lottieBarcode.setProgress(0f);
         lottieNFC.setProgress(0f);
         lottieAudio.setProgress(0f);
-
-        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
     }
 
     @Override
@@ -93,7 +97,8 @@ public class PharmacistActivity extends AppCompatActivity {
 
             refreshSubmitButton();
         } else if (requestCode == AUDIO_REQ_CODE && resultCode == RESULT_OK) {
-            // get audio
+            // get audio transcript
+            transcript = data.getStringExtra(AUDIO_TRANSCRIPT_KEY);
             hasAudio = true;
 
             // change colors
@@ -106,6 +111,7 @@ public class PharmacistActivity extends AppCompatActivity {
         } else if (requestCode == NFC_REQ_CODE && resultCode == RESULT_OK) {
             // get NFC id
             nfcId = data.getStringExtra(NFC_ID_KEY);
+            fileId = Utils.nfcToFileName(nfcId);
             hasNfcId = true;
 
             // change colors
@@ -122,6 +128,7 @@ public class PharmacistActivity extends AppCompatActivity {
         audioRecorderButton = findViewById(R.id.audio_recorder_button);
         audioRecorderButton.setOnClickListener((View view) -> {
             Intent audioRecorderIntent = new Intent(getApplicationContext(), AzureSpeechActivity.class);
+            audioRecorderIntent.putExtra("nfcId", nfcId);
             startActivityForResult(audioRecorderIntent, AUDIO_REQ_CODE);
         });
     }
@@ -138,12 +145,9 @@ public class PharmacistActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.submit_button);
         submitButton.setOnClickListener((View view) -> {
             try {
-                final String translationID = nfcId + "_fr";
-                AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, "", "https://www.youtube.com/watch?v=uGkbreu169Q");
-
-                final Handler handler = new Handler();
-                handler.postDelayed(() -> {
-                }, 1500);
+                // final String translationID = nfcId + "_fr";
+                Log.e("--- transcript is ", transcript);
+                AzureInterface.getInstance().writeInfoItem(fileId, barcodeId, transcript, "https://www.youtube.com/watch?v=uGkbreu169Q");
 
             } catch (AzureInterfaceException e) {
                 e.printStackTrace();
@@ -167,5 +171,10 @@ public class PharmacistActivity extends AppCompatActivity {
             Intent intent = new Intent(PharmacistActivity.this, NFCActivity.class);
             startActivityForResult(intent, NFC_REQ_CODE);
         });
+    }
+
+    private void onFinishUpload() {
+        Log.e("FINISHED", "submitted");
+        // Toast.makeText(this, "Submitting...", Toast.LENGTH_SHORT).show();
     }
 }

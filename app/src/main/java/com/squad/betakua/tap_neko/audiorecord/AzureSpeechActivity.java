@@ -24,6 +24,7 @@ import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.OnDownloadAudioFileListener;
 import com.squad.betakua.tap_neko.azure.OnUploadAudioFileListener;
+import com.squad.betakua.tap_neko.utils.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,8 +32,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_REQ_KEY;
+import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_TRANSCRIPT_KEY;
 
 public class AzureSpeechActivity extends AppCompatActivity {
+    private static final int PERMISSION_RECORD_AUDIO = 0;
+
     private TextView outputText;
     private TextView statusText;
     private Thread textThread;
@@ -45,15 +49,11 @@ public class AzureSpeechActivity extends AppCompatActivity {
 
     // Audio Save to Wav
     private File outputFile;
-    private static final int PERMISSION_RECORD_AUDIO = 0;
-    private RecordWaveTask recordTask = null;
+    private RecordWaveTask recordTask;
     private SpeechRecognizer recognizerWav;
-
-    // AzureInterface
-    private static final String MOCK_NFC_ID = "23233301";
-    private static final String MOCK_PRODUCT_ID = "99965666";
-    private static final String MOCK_YOUTUBE_URL = "https://www.youtube.com/watch?v=VYMDHaQMj_w";
-    private static final String MOCK_AUDIO_TITLE = "azure_audio_test_1";
+    private String nfcId;
+    private String fileId;
+    private String audioFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,6 @@ public class AzureSpeechActivity extends AppCompatActivity {
             return;
         }
 
-        // ---------------------- Status Text ----------------------
         statusText = this.findViewById(R.id.azure_speech_status);
         startButton = this.findViewById(R.id.speech_button_wav_start);
         stopButton = this.findViewById(R.id.speech_button_wav_stop);
@@ -77,7 +76,12 @@ public class AzureSpeechActivity extends AppCompatActivity {
         processButton = this.findViewById(R.id.speech_button_wav_process);
         setButtonVisibilities(true, false, false, false);
 
-        // ---------------------- Output Text Thread ----------------------
+        initTextOutputThread();
+        initAudioRecorder();
+        initSpeechRecognizer();
+    }
+
+    private void initTextOutputThread() {
         outputText = this.findViewById(R.id.azure_speech_text_output);
         textThread = new Thread() {
             @Override
@@ -96,18 +100,17 @@ public class AzureSpeechActivity extends AppCompatActivity {
                 }
             }
         };
+    }
 
-        // ---------------------- Azure Interface ----------------------
-
-        try {
-            AzureInterface.init(getApplicationContext());
-        } catch (AzureInterfaceException e) {
-            Log.e("ERROR", e.toString());
+    private void initAudioRecorder() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            nfcId = extras.getString("nfcId", "");
+            fileId = Utils.nfcToFileName(nfcId);
+            audioFileName = Utils.nfcToFileName(nfcId) + ".wav";
         }
 
-        // ---------------------- Audio Save to Wav ----------------------
-        // Set default wav file
-        outputFile = new File(getFilesDir() + "/azure_test.wav");
+        outputFile = new File(getFilesDir() + audioFileName);
 
         // Create file if doesn't exist
         try {
@@ -124,9 +127,6 @@ public class AzureSpeechActivity extends AppCompatActivity {
         if (recordTask == null) {
             recordTask = new RecordWaveTask();
         }
-
-        // Setup recognizer event listeners
-        initSpeechRecognizer();
     }
 
     private void setButtonVisibilities(boolean start, boolean stop, boolean play, boolean process) {
@@ -154,7 +154,6 @@ public class AzureSpeechActivity extends AppCompatActivity {
                 }
         }
 
-        // statusText.setText("wav file saved at: " + outputFile.getAbsolutePath());
         recordTask.execute(outputFile);
         setButtonVisibilities(false, true, false, false);
     }
@@ -268,6 +267,11 @@ public class AzureSpeechActivity extends AppCompatActivity {
     }
 
     public void uploadData(View v) {
+        if (fileId == null) {
+            Toast.makeText(this, "Please tap an NFC tag first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         stopTextThreadIfAlive();
 
         FileInputStream fileInputStream;
@@ -275,15 +279,14 @@ public class AzureSpeechActivity extends AppCompatActivity {
         setButtonVisibilities(false, false, false, false);
         try {
             fileInputStream = new FileInputStream(outputFile);
-            AzureInterface.getInstance().uploadAudio(MOCK_AUDIO_TITLE, fileInputStream, outputFile.length(), new OnUploadAudioFileListener() {
+            AzureInterface.getInstance().uploadAudio(fileId, fileInputStream, outputFile.length(), new OnUploadAudioFileListener() {
                 @Override
                 public void onUploadComplete(String response) {
                     try {
-                        AzureInterface.getInstance().writeInfoItem(MOCK_NFC_ID, MOCK_PRODUCT_ID, recognizedText, MOCK_YOUTUBE_URL);
+                        // AzureInterface.getInstance().writeInfoItem(MOCK_NFC_ID, MOCK_PRODUCT_ID, recognizedText, MOCK_YOUTUBE_URL);
                         onFinishUpload();
-                    } catch (AzureInterfaceException e) {
+                    } catch (Exception e) {
                         setButtonVisibilities(true, false, false, false);
-                        // processButton.setText("Submit");
                     }
 
                 }
@@ -294,6 +297,13 @@ public class AzureSpeechActivity extends AppCompatActivity {
             Toast.makeText(this, "There was an error uploading the file...", Toast.LENGTH_SHORT).show();
         }
     }
+    public void onFinishUpload() {
+        Intent data = new Intent();
+        data.putExtra(AUDIO_TRANSCRIPT_KEY, recognizedText);
+
+        setResult(RESULT_OK, data);
+        finish();
+    }
 
     private void stopTextThreadIfAlive() {
         if (textThread.isAlive()) {
@@ -301,17 +311,8 @@ public class AzureSpeechActivity extends AppCompatActivity {
         }
     }
 
-    private void onFinishUpload() {
-        // TODO: have an "uploading" screen?
-        Intent data = new Intent();
-        data.putExtra(AUDIO_REQ_KEY, true);
-        setResult(RESULT_OK, data);
-        // Toast.makeText(this, "SUCCESS! Finished uploading!", Toast.LENGTH_SHORT).show();
-        finish();
-    }
-
     public void downloadAudio(View v) {
-        String downloadFileName = "azure_audio_download_1.wav";
+        String downloadFileName = "81_57_b0_7a_9b_5b_04.wav";
         File downloadFile = new File(getFilesDir(), downloadFileName);
 
         try {
@@ -327,12 +328,11 @@ public class AzureSpeechActivity extends AppCompatActivity {
             try {
                 FileOutputStream fileOutputStream;
                 fileOutputStream = new FileOutputStream(downloadFile);
-                AzureInterface.getInstance().downloadAudio(MOCK_AUDIO_TITLE, fileOutputStream, new OnDownloadAudioFileListener() {
+                AzureInterface.getInstance().downloadAudio(fileId, fileOutputStream, new OnDownloadAudioFileListener() {
                     @Override
                     public void onDownloadComplete(String response) {
                         MediaPlayer mediaPlayer = new MediaPlayer();
                         try {
-                            Log.e("downloadAudio", "Length of downloaded file is " + downloadFile.length());
                             mediaPlayer.setDataSource(downloadFile.getAbsolutePath());
                             mediaPlayer.prepare();
                             mediaPlayer.start();
@@ -340,7 +340,8 @@ public class AzureSpeechActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.e("ERROR in downloadAudio:", e.toString());
-                        }                    }
+                        }
+                    }
                 });
             } catch (Exception e) {
                 Log.e("ERROR", e.toString());

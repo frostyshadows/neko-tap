@@ -8,10 +8,11 @@
 
     <TextView
         android:id="@+id/transcriptView"
-        android:layout_margin="10dp"
         android:layout_width="358dp"
-        android:layout_height="417dp"
-        android:text="@string/dummyString"
+        android:layout_height="489dp"
+        android:layout_margin="10dp"
+        android:text="@string/patient_text_placeholder"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -60,44 +61,36 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="245dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/smallerFont"
             android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_button"
-            android:text="-"
+            android:layout_height="match_parent"
+            android:text="Smaller"
+            android:textSize="16sp"
             tools:layout_editor_absoluteX="184dp"
             tools:layout_editor_absoluteY="503dp" />
 
         <Button
             android:id="@+id/largerFont"
             android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_button"
-            android:text="+"
+            android:layout_height="match_parent"
+            android:text="Larger"
+            android:textSize="20sp"
+            android:textStyle="bold"
             tools:layout_editor_absoluteX="40dp"
             tools:layout_editor_absoluteY="481dp" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/translate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Translate"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="140dp" />
 
 
 </android.support.constraint.ConstraintLayout>

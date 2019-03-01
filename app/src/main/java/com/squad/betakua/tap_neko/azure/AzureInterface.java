@@ -161,6 +161,7 @@ public class AzureInterface {
                 final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
                 blockBlob.upload(in, length);
                 uploadAudioFileListener.onUploadComplete("SUCCESS");
+                Log.e("Azure uploadAudio: ", "uploaded with length: " + length + " key: " + audioTitle + " container: " + STORAGE_CONTAINER_NAME);
             } catch (URISyntaxException | StorageException | IOException e) {
                 e.printStackTrace();
             }
@@ -182,8 +183,10 @@ public class AzureInterface {
                 final CloudBlobContainer container =
                         blobClient.getContainerReference(STORAGE_CONTAINER_NAME);
                 final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
+                // blockBlob.download(out);
                 blockBlob.download(out);
                 downloadAudioFileListener.onDownloadComplete("SUCCESS");
+                Log.e("Azure downloadAudio: ", "downloaded reference" + audioTitle + " and container " + STORAGE_CONTAINER_NAME);
             } catch (URISyntaxException | StorageException e) {
                 try {
                     throw new AzureInterfaceException(e.getMessage());

@@ -27,6 +27,7 @@ import com.squad.betakua.tap_neko.BuildConfig;
 import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
+import com.squad.betakua.tap_neko.utils.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,6 +62,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     private RecordWaveTask recordTask;
     private SpeechRecognizer recognizerWav;
     private String audioFileName;
+    private String nfcId;
 
     // Mock values
     private static final String MOCK_NFC_ID = "23233301";
@@ -83,8 +85,12 @@ public class AudioRecorderActivity extends AppCompatActivity {
         // TODO: initialize with drug product code
         // ---------------------- Azure Speech Config ----------------------
         config = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
-        audioFileName = "azure_test2"; // TODO: replace with nfc code
-        String audioFileName2 = "azure_test2.wav"; // TODO: replace with nfc code
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            nfcId = extras.getString("nfcId");
+            audioFileName = Utils.nfcToFileName(nfcId) + ".wav";
+        }
+        // String audioFileName2 = "azure_test2.wav"; // TODO: replace with nfc code
 
         recordTask = (RecordWaveTask) getLastCustomNonConfigurationInstance();
         if (recordTask == null) {
@@ -92,7 +98,8 @@ public class AudioRecorderActivity extends AppCompatActivity {
         }
 
         // outputFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), audioFileName2);
-        outputFile = new File(getFilesDir(), audioFileName2);
+        outputFile = new File(getFilesDir(), audioFileName);
+        Log.e("Audio Recorder Activity: audioFileName is ", audioFileName);
         // String newPath = FilePathURI.getFilePath(outputFile.getPath());
         // Log.e("outputFile is ", outputFile + " " + outputFile.getAbsolutePath());
 
@@ -208,6 +215,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
         playButton = findViewById(R.id.play_button);
         playButton.setOnClickListener((View view) -> {
             if (outputFile == null) {
+                Log.e("Play Button: ", "outputFile is null");
                 statusText.setText("Cannot play audio, defaultWavFile is null");
                 return;
             }
