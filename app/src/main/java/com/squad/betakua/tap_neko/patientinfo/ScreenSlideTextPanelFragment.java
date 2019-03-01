@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,15 @@ import android.widget.TextView;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.microsoft.cognitiveservices.speech.translation.TranslationRecognizer;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.DrugInfoItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ScreenSlideTextPanelFragment extends Fragment {
@@ -30,6 +35,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
     private TextToSpeech mTts;
     private Button largerFont;
     private Button smallerFont;
+    private Button translateButton;
 
     private boolean hasInfo = false;
     private String nfcId;
@@ -64,6 +70,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         transcriptView = view.findViewById(R.id.transcriptView);
         largerFont = view.findViewById(R.id.largerFont);
         smallerFont = view.findViewById(R.id.smallerFont);
+        translateButton = view.findViewById(R.id.translate);
 
         nfcId = getArguments().getString("nfcId", "");
         productName = MOCK_PRODUCT_NAME + "\n" + getArguments().getString("productName", "");
@@ -95,7 +102,8 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         largerFont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                float size = transcriptView.getTextSize() - 1;
+                Log.e("Text size", " " + transcriptView.getTextSize());
+                float size = transcriptView.getTextSize() + 0.01f;
                 transcriptView.setTextSize(size);
             }
         });
@@ -103,10 +111,27 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         smallerFont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                float size = transcriptView.getTextSize() - 1;
+                float size = transcriptView.getTextSize() - 0.01f;
                 transcriptView.setTextSize(size);
             }
         });
+
+        // translateButton.setOnClickListener(new View.OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         List<String> languages = new ArrayList<String>();
+        //         languages.add("fr");
+        //         languages.add("zh-Hans");
+        //         languages.add("ko");
+        //
+        //         try {
+        //             TranslationRecognizer recognizer = AzureInterface.getInstance().getTranslationRecognizer(languages);
+        //             recognizer.
+        //         } catch (AzureInterfaceException e) {
+        //             Log.e("ERROR", e.toString());
+        //         }
+        //     }
+        // });
 
         // transcriptView.setOnClickListener(new View.OnClickListener() {
         //     @Override

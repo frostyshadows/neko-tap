@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">tap-neko</string>
+    <string name="app_name">nekoTap</string>
 
     <!-- Debug -->
     <string name="pharm_app">Pharmacists</string>

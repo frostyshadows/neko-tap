@@ -93,6 +93,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
+            android:id="@+id/translate"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:text="Translate"
+            android:textSize="20sp"
+            tools:layout_editor_absoluteX="40dp"
+            tools:layout_editor_absoluteY="481dp" />
+
+        <Button
             android:id="@+id/smallerFont"
             android:layout_width="120dp"
             android:layout_height="match_parent"
