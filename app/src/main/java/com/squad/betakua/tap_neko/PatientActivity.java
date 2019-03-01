@@ -182,6 +182,7 @@ public class PatientActivity extends AppCompatActivity {
                 case 1: {
                     ScreenSlideTextPanelFragment screenSlideTextPanelFragment = new ScreenSlideTextPanelFragment();
                     Bundle args = new Bundle();
+                    args.putString("productName", barcodeId);
                     args.putString("transcript", transcript);
                     args.putString("nfcId", nfcId);
                     screenSlideTextPanelFragment.setArguments(args);

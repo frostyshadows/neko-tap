@@ -37,13 +37,14 @@ public class ScreenSlideAudioPlayFragment extends Fragment {
     private File audioFile;
     private MediaPlayer mediaPlayer;
     private boolean audioIsReady;
+    private String MOCK_PRODUCT_NAME = "Doxycycline 100mg Tablets";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        productName = getArguments().getString("productName", "Doxycycline 100mg Tablets");
         audioFilePath = getArguments().getString("audioFilePath", "");
 
+        productName = MOCK_PRODUCT_NAME + "\n" + getArguments().getString("productName", "");
         nfcId = getArguments().getString("nfcId", "");
         fileId = Utils.nfcToFileName(nfcId);
         mediaPlayer = new MediaPlayer();

@@ -7,6 +7,7 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.squad.betakua.tap_neko.azure.DrugInfoItem;
 
 
 public class ScreenSlideTextPanelFragment extends Fragment {
+    private TextView transcriptTitle;
     private TextView transcriptView;
     private TextToSpeech mTts;
     private Button largerFont;
@@ -32,8 +34,10 @@ public class ScreenSlideTextPanelFragment extends Fragment {
     private boolean hasInfo = false;
     private String nfcId;
     private String fileId;
+    private String productName;
     private String transcript;
 
+    private String MOCK_PRODUCT_NAME = "Doxycycline 100mg Tablets";
     private String MOCK_TEXT = "[Placeholder Text] This medication is used to treat and prevent osteoporosis, a condition where the bones become thin, weak. It works by preventing bone breakdown and increasing bone density (thickness).\n" +
             "\n" +
             "Alendronate may not work properly and may damage the esophagus or cause sores in the mouth if it is not taken according to the following instructions. Tell your doctor if you do not understand these instructions.\n" +
@@ -56,13 +60,18 @@ public class ScreenSlideTextPanelFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        transcriptTitle = view.findViewById(R.id.patient_transcript_title);
         transcriptView = view.findViewById(R.id.transcriptView);
         largerFont = view.findViewById(R.id.largerFont);
         smallerFont = view.findViewById(R.id.smallerFont);
 
         nfcId = getArguments().getString("nfcId", "");
+        productName = MOCK_PRODUCT_NAME + "\n" + getArguments().getString("productName", "");
         transcript = getArguments().getString("transcript", MOCK_TEXT);
+        transcriptTitle.setText(productName);
+
         transcriptView.setText(transcript);
+        transcriptView.setMovementMethod(new ScrollingMovementMethod()); // make it scroll
 
         try {
             ListenableFuture<MobileServiceList<DrugInfoItem>> druginfoItemsFuture = AzureInterface.getInstance().readDrugInfoItem(nfcId);

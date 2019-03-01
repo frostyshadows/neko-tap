@@ -7,40 +7,61 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/patient_transcript_title"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Doxycycline 100mg Tablets"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:scrollbars = "vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/transcriptView"
         android:layout_width="358dp"
-        android:layout_height="489dp"
+        android:layout_height="0dp"
         android:layout_margin="10dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="8dp"
         android:text="@string/patient_text_placeholder"
         android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/patient_transcript_title" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/mainFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
         android:src="@drawable/ic_add_black_24dp"
         android:clickable="true"
+        android:focusable="true"
         android:scaleType="center"
-        app:backgroundTint="@color/zxing_transparent"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:backgroundTint="@color/greenSuccess"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/callFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/ic_call_black_24dp"
         android:clickable="true"
+        android:focusable="true"
         android:scaleType="center"
-        app:backgroundTint="@color/zxing_transparent"
+        app:backgroundTint="@color/greenSuccess"
         app:layout_constraintBottom_toTopOf="@+id/mainFab"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -48,12 +69,11 @@
         android:id="@+id/alertFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:clickable="true"
+        android:focusable="true"
         android:scaleType="center"
-        android:scaleX="1.2"
-        android:scaleY="1.2"
         android:src="@drawable/ic_notifications_none_black_24dp"
         app:backgroundTint="@color/greenSuccess"
         app:layout_constraintBottom_toTopOf="@+id/callFab"
@@ -63,7 +83,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:orientation="horizontal"
