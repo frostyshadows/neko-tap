@@ -3,4 +3,11 @@
     <dimen name="standard_55">55dp</dimen>
     <dimen name="standard_105">105dp</dimen>
     <dimen name="standard_155">155dp</dimen>
+
+    <!-- Patient Transcript View -->
+    <dimen name="patient_text_size_m">20sp</dimen>
+    <dimen name="patient_text_size_l">24sp</dimen>
+    <dimen name="patient_text_size_xl">28sp</dimen>
+    <dimen name="patient_text_size_xxl">32sp</dimen>
+    <dimen name="patient_text_size_xxxl">36sp</dimen>
 </resources>

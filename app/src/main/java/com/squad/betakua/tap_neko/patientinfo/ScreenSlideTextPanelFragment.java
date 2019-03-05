@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
     private TextToSpeech mTts;
     private Button largerFont;
     private Button smallerFont;
+    private Integer fontSize = 0;
     private Button translateButton;
 
     private boolean hasInfo = false;
@@ -102,22 +104,22 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         largerFont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("Text size", " " + transcriptView.getTextSize());
-                float size = transcriptView.getTextSize() + 0.01f;
-                transcriptView.setTextSize(size);
+                float newSize = adjustTextSize(true);
+                Log.e("Text size", " " + transcriptView.getTextSize() + " " + newSize);
+                transcriptView.setTextSize(TypedValue.COMPLEX_UNIT_SP, newSize);
             }
         });
 
         smallerFont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                float size = transcriptView.getTextSize() - 0.01f;
-                transcriptView.setTextSize(size);
+                float newSize = adjustTextSize(false);
+                transcriptView.setTextSize(TypedValue.COMPLEX_UNIT_SP, newSize);
             }
         });
 
         // translateButton.setOnClickListener(new View.OnClickListener() {
-        //     @Override
+        //     @Override›
         //     public void onClick(View view) {
         //         List<String> languages = new ArrayList<String>();
         //         languages.add("fr");
@@ -195,6 +197,39 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         //                 "早上起床后，你必须服用阿仑膦酸钠，然后才能吃或喝任何东西。不要在睡前服用阿仑膦酸钠。\n");
         //     }
         // });
+    }
+
+    private float adjustTextSize(boolean isIncreasing) {
+        float result;
+
+        if (isIncreasing && fontSize < 4) {
+            fontSize++;
+        } else if (!isIncreasing && fontSize > 0){
+            fontSize--;
+        }
+
+        switch(fontSize) {
+            case 0:
+                result = 20;
+                break;
+            case 1:
+                result = 24;
+                break;
+            case 2:
+                result = 28;
+                break;
+            case 3:
+                result = 32;
+                break;
+            case 4:
+                result = 36;
+                break;
+            default:
+                result = 20;
+                break;
+        }
+
+        return result;
     }
 
     // private void speak(String s){
