@@ -120,6 +120,27 @@ public class AzureInterface {
         return this.infoTable.insert(item);
     }
 
+    public ListenableFuture<InfoItem> checkIfInfoItemRowExists(String id) {
+        return this.infoTable.lookUp(id);
+    }
+
+    public ListenableFuture<InfoItem> updateInfoItem(String nfcID,
+                                    String productID,
+                                    String transcript,
+                                    String url) {
+        final InfoItem item = new InfoItem();
+        Log.e("UPDATING:", nfcID + " " + productID + " " + transcript + " " + url);
+
+        item.setId(nfcID);
+        item.setNfcID(nfcID);
+        item.setProductID(productID);
+        item.setTranscript(transcript);
+        item.setTranslationsID("123");
+        item.setURL(url);
+        return this.infoTable.update(item);
+    }
+
+
     /**
      * Look up an info item in Azure InfoTable by NFC ID
      *

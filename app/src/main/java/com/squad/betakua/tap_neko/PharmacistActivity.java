@@ -2,6 +2,7 @@ package com.squad.betakua.tap_neko;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -147,16 +148,19 @@ public class PharmacistActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.submit_button);
         submitButton.setOnClickListener((View view) -> {
             try {
-                ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, transcript, MOCK_YOUTUBE_URL);
+                ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance().checkIfInfoItemRowExists(nfcId);
 
                 Futures.addCallback(infoItemsFuture, new FutureCallback<InfoItem>() {
                     public void onSuccess(InfoItem infoItem) {
+                        // if row already exists, update it
+                        updateInfoItemToTable();
                         Log.e("HERE00", "SUCCESS");
                     }
 
                     public void onFailure(Throwable t) {
+                        // if row doesn't exist, add it
+                        insertInfoItemToTable();
                         Log.e("ERROR", t.toString());
-                        t.printStackTrace();
                     }
                 });
             } catch (AzureInterfaceException e) {
@@ -183,7 +187,42 @@ public class PharmacistActivity extends AppCompatActivity {
         });
     }
 
-    private void onFinishUpload() {
-        Log.e("FINISHED", "submitted");
+    private void insertInfoItemToTable() throws AzureInterfaceException {
+        try {
+            ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, transcript, MOCK_YOUTUBE_URL);
+
+            Futures.addCallback(infoItemsFuture, new FutureCallback<InfoItem>() {
+                public void onSuccess(InfoItem infoItem) {
+                    // TODO: signal success in UI
+                }
+
+                public void onFailure(Throwable t) {
+                    // TODO: signal failure in UI
+                    t.printStackTrace();
+                }
+            });
+        } catch (AzureInterfaceException e) {
+            Log.e("ERROR:", e.toString());
+        }
     }
+
+    private void updateInfoItemToTable() {
+        try {
+            ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance().updateInfoItem(nfcId, barcodeId, transcript, MOCK_YOUTUBE_URL);
+
+            Futures.addCallback(infoItemsFuture, new FutureCallback<InfoItem>() {
+                public void onSuccess(InfoItem infoItem) {
+                    // TODO: signal success in UI
+                }
+
+                public void onFailure(Throwable t) {
+                    // TODO: signal failure in UI
+                    t.printStackTrace();
+                }
+            });
+        } catch (AzureInterfaceException e) {
+            Log.e("ERROR:", e.toString());
+        }
+    }
+
 }
