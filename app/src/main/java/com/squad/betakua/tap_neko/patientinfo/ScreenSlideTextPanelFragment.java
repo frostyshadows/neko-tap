@@ -62,7 +62,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_text_panel, container, false);
-
+        Log.e("HERE3", transcript + "");
         return rootView;
     }
 
@@ -81,25 +81,6 @@ public class ScreenSlideTextPanelFragment extends Fragment {
 
         transcriptView.setText(transcript);
         transcriptView.setMovementMethod(new ScrollingMovementMethod()); // make it scroll
-
-        try {
-            ListenableFuture<MobileServiceList<DrugInfoItem>> druginfoItemsFuture = AzureInterface.getInstance().readDrugInfoItem(nfcId);
-
-            Futures.addCallback(druginfoItemsFuture, new FutureCallback<MobileServiceList<DrugInfoItem>>() {
-                public void onSuccess(MobileServiceList<DrugInfoItem> infoItems) {
-                    hasInfo = true;
-                    // transcriptListener.onTranscriptLoaded("dummy transcript");
-                    // transcriptListener.onTranscriptLoaded(infoItems.get(0).getText());
-                }
-
-                public void onFailure(Throwable t) {
-                    t.printStackTrace();
-                }
-            });
-
-        } catch (AzureInterfaceException e) {
-            e.printStackTrace();
-        }
 
         largerFont.setOnClickListener(new View.OnClickListener() {
             @Override

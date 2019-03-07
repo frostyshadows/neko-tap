@@ -36,13 +36,21 @@ public class AzureInterface {
     private static final String SERVICE_REGION = "westus";
 
     private static AzureInterface AZURE_INTERFACE = null;
-    private final CloudStorageAccount storageAccount;
-    private final MobileServiceTable<InfoItem> infoTable;
-    private final MobileServiceTable<DrugInfoItem> drugInfoTable;
     private final SpeechConfig speechConfig;
-
+    private final CloudStorageAccount storageAccount;
     private OnDownloadAudioFileListener downloadAudioFileListener;
     private OnUploadAudioFileListener uploadAudioFileListener;
+
+    // Mobile App Services
+    private static final String MOBILE_APP_SERVICES_URL = "https://tapthecat.azurewebsites.net";
+    private static final String INFO_TABLE_NAME = "info_table";
+    private static final String DRUG_INFO_TABLE_NAME = "DrugInfoTable";
+    private static final String TRANSLATIONS_TABLE_NAME = "translated_drug_info";
+    private final MobileServiceClient mClient;
+    private final MobileServiceTable<InfoItem> infoTable;
+    private final MobileServiceTable<DrugInfoItem> drugInfoTable;
+    private final MobileServiceTable<TranslationsItem> translationsTable;
+
 
     /**
      * Initialize singleton instance of Azure interface
@@ -77,10 +85,11 @@ public class AzureInterface {
                     STORAGE_ACCOUNT_NAME,
                     STORAGE_ACCOUNT_KEY);
             this.storageAccount = CloudStorageAccount.parse(connectionString);
-            final MobileServiceClient mobileServiceClient =
-                    new MobileServiceClient("https://neko-tap.azurewebsites.net", context);
-            this.infoTable = mobileServiceClient.getTable("InfoTable", InfoItem.class);
-            this.drugInfoTable = mobileServiceClient.getTable("DrugInfoTable", DrugInfoItem.class);
+            mClient = new MobileServiceClient(MOBILE_APP_SERVICES_URL, context);
+
+            this.infoTable = mClient.getTable(INFO_TABLE_NAME, InfoItem.class);
+            this.drugInfoTable = mClient.getTable(DRUG_INFO_TABLE_NAME, DrugInfoItem.class);
+            this.translationsTable = mClient.getTable(TRANSLATIONS_TABLE_NAME, TranslationsItem.class);
             this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
         } catch (URISyntaxException | InvalidKeyException | MalformedURLException e) {
             throw new AzureInterfaceException(e.getMessage());
@@ -93,18 +102,22 @@ public class AzureInterface {
      * @param nfcID      NFC ID
      * @param productID  Product ID
      * @param transcript Transcript of instruction audio
+     * @param url        URL of instruction video
      */
-    public void writeInfoItem(String nfcID,
-                              String productID,
-                              String transcript,
-                              String url) {
+    public ListenableFuture<InfoItem> writeInfoItem(String nfcID,
+                                  String productID,
+                                  String transcript,
+                                  String url) {
         final InfoItem item = new InfoItem();
-        item.setId(UUID.randomUUID().toString());
+        Log.e("writing... ", nfcID + " " + productID + " " + transcript + " " + url);
+
+        item.setId(nfcID);
         item.setNfcID(nfcID);
         item.setProductID(productID);
         item.setTranscript(transcript);
+        item.setTranslationsID("123");
         item.setURL(url);
-        this.infoTable.insert(item);
+        return this.infoTable.insert(item);
     }
 
     /**
@@ -114,13 +127,14 @@ public class AzureInterface {
      * @return Future for a list of matching InfoItems
      */
     public ListenableFuture<MobileServiceList<InfoItem>> readInfoItem(String nfcID) {
+        Log.e("trying to read id ", nfcID);
         return this.infoTable.where().field("nfcID").eq(nfcID).execute();
     }
 
     /**
      * Write a new drug info item to the Azure DrugInfoTable
      *
-     * @param nfcID NFC ID
+     * @param nfcID product ID
      * @param text Text of instructions
      * @param youtubeURL YouTube URL of how-to video
      */
@@ -135,11 +149,11 @@ public class AzureInterface {
 
     /**
      * Look up a drug info item in Azure DrugInfoTable by NFC ID
-     * @param nfcID NFC ID to look up
+     * @param productID ProductID ID to look up
      * @return Future for a list of matching InfoItems
      */
-    public ListenableFuture<MobileServiceList<DrugInfoItem>> readDrugInfoItem(String nfcID) {
-        return this.drugInfoTable.where().field("nfcID").eq(nfcID).execute();
+    public ListenableFuture<MobileServiceList<DrugInfoItem>> readDrugInfoItem(String productID) {
+        return this.drugInfoTable.where().field("productID").eq(productID).execute();
     }
 
     /**
@@ -183,7 +197,6 @@ public class AzureInterface {
                 final CloudBlobContainer container =
                         blobClient.getContainerReference(STORAGE_CONTAINER_NAME);
                 final CloudBlockBlob blockBlob = container.getBlockBlobReference(audioTitle);
-                // blockBlob.download(out);
                 blockBlob.download(out);
                 downloadAudioFileListener.onDownloadComplete("SUCCESS");
                 Log.e("Azure downloadAudio: ", "downloaded reference" + audioTitle + " and container " + STORAGE_CONTAINER_NAME);
@@ -232,4 +245,15 @@ public class AzureInterface {
         }
         return new TranslationRecognizer(config);
     }
+
+    /**
+     * Look up available translations
+     *
+     * @param translationsID translations ID to look up
+     * @return Future for a list of matching TranslationItems
+     */
+    public ListenableFuture<MobileServiceList<TranslationsItem>> readTranslationsItem(String translationsID) {
+        return this.translationsTable.where().field("id").eq(translationsID).execute();
+    }
+
 }

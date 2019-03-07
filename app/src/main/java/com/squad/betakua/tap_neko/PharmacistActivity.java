@@ -11,9 +11,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.squad.betakua.tap_neko.audiorecord.AzureSpeechActivity;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
+import com.squad.betakua.tap_neko.azure.InfoItem;
 import com.squad.betakua.tap_neko.barcode.BarcodeScannerActivity;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
 import com.squad.betakua.tap_neko.utils.Utils;
@@ -56,9 +60,7 @@ public class PharmacistActivity extends AppCompatActivity {
     private LottieAnimationView lottieNFC;
     private LottieAnimationView lottieAudio;
 
-    private static final String MOCK_NFC_ID = "23233301";
-    private static final String MOCK_PRODUCT_ID = "99965666";
-    private static final String MOCK_YOUTUBE_URL = "https://www.youtube.com/watch?v=VYMDHaQMj_w";
+    private static final String MOCK_YOUTUBE_URL = "https://www.youtube.com/watch?v=uGkbreu169Q";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,12 +147,20 @@ public class PharmacistActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.submit_button);
         submitButton.setOnClickListener((View view) -> {
             try {
-                // final String translationID = nfcId + "_fr";
-                Log.e("--- transcript is ", transcript);
-                AzureInterface.getInstance().writeInfoItem(fileId, barcodeId, transcript, "https://www.youtube.com/watch?v=uGkbreu169Q");
+                ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, transcript, MOCK_YOUTUBE_URL);
 
+                Futures.addCallback(infoItemsFuture, new FutureCallback<InfoItem>() {
+                    public void onSuccess(InfoItem infoItem) {
+                        Log.e("HERE00", "SUCCESS");
+                    }
+
+                    public void onFailure(Throwable t) {
+                        Log.e("ERROR", t.toString());
+                        t.printStackTrace();
+                    }
+                });
             } catch (AzureInterfaceException e) {
-                e.printStackTrace();
+                Log.e("ERROR:", e.toString());
             }
         });
 
@@ -175,6 +185,5 @@ public class PharmacistActivity extends AppCompatActivity {
 
     private void onFinishUpload() {
         Log.e("FINISHED", "submitted");
-        // Toast.makeText(this, "Submitting...", Toast.LENGTH_SHORT).show();
     }
 }

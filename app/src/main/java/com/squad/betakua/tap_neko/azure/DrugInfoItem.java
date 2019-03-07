@@ -1,8 +1,5 @@
 package com.squad.betakua.tap_neko.azure;
 
-import com.microsoft.cognitiveservices.speech.translation.SpeechTranslationConfig;
-import com.microsoft.windowsazure.mobileservices.table.DateTimeOffset;
-
 public class DrugInfoItem {
     @com.google.gson.annotations.SerializedName("id")
     private String id;
