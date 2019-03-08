@@ -29,7 +29,6 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.squad.betakua.tap_neko.PatientActivity;
 import com.squad.betakua.tap_neko.R;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -75,26 +74,26 @@ public class NFCPatientActivity extends AppCompatActivity {
                         .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
 
-        // text-to-speech: prompt user to tap
-        // TODO: replace with azure text-to-speech?
-        // mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-        //     @Override
-        //     public void onInit(int status) {
-        //         if (status == TextToSpeech.SUCCESS) {
-        //             int result = mTts.setLanguage(Locale.KOREA);
-        //             if (result == TextToSpeech.LANG_MISSING_DATA
-        //                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-        //                 Toast.makeText(getApplicationContext(), "This language is not supported", Toast.LENGTH_SHORT).show();
-        //             }
-        //             else{
-        //                 Log.v("TTS","onInit succeeded");
-        //                 speak("Tap your phone against the bottle cap or medical device tag");
-        //             }
-        //         } else {
-        //             Toast.makeText(getApplicationContext(), "Initialization failed", Toast.LENGTH_SHORT).show();
-        //         }
-        //     }
-        // });
+        mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    mTts.setSpeechRate(0.7f);
+
+                    int result = mTts.setLanguage(Locale.ENGLISH);
+                    if (result == TextToSpeech.LANG_MISSING_DATA
+                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Toast.makeText(getApplicationContext(), "This language is not supported", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Log.v("TTS","onInit succeeded");
+                        speak("Please tap your phone against your prescription bottle cap.");
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Initialization failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     void speak(String s){
