@@ -6,31 +6,17 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.microsoft.cognitiveservices.speech.translation.TranslationRecognizer;
-import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.squad.betakua.tap_neko.R;
-import com.squad.betakua.tap_neko.azure.AzureInterface;
-import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
-import com.squad.betakua.tap_neko.azure.DrugInfoItem;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class ScreenSlideTextPanelFragment extends Fragment {
