@@ -13,4 +13,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="ActionButton" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="colorButtonNormal">@color/disabledGrey</item>
+        <item name="colorAccent">@color/blueSuccess</item>
+    </style>
+
 </resources>

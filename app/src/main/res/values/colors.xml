@@ -4,9 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ff4081</color>
     <color name="white">#FFFFFF</color>
-
-
-
+    <color name="disabledGrey">#919191</color>
+    <color name="disabledBlueSuccess">#8cc0ff</color>
 
     <color name="greenSuccess">#6dcc5b</color>
+    <color name="blueSuccess">#0e7bff</color>
 </resources>

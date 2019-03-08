@@ -37,8 +37,7 @@
                 android:layout_column="1"
                 android:layout_marginStart="80dp"
                 app:lottie_loop="false"
-                app:lottie_fileName="checkbox.json"
-                app:lottie_imageAssetsFolder="images" />
+                app:lottie_fileName="checkbox.json" />
         </TableRow>
 
         <TableRow
@@ -65,8 +64,7 @@
                 android:layout_column="1"
                 android:layout_marginStart="80dp"
                 app:lottie_loop="false"
-                app:lottie_fileName="checkbox.json"
-                app:lottie_imageAssetsFolder="images" />
+                app:lottie_fileName="checkbox.json" />
         </TableRow>
 
         <TableRow
@@ -93,19 +91,34 @@
                 android:layout_column="1"
                 android:layout_marginStart="80dp"
                 app:lottie_loop="false"
-                app:lottie_fileName="checkbox.json"
-                app:lottie_imageAssetsFolder="images" />
+                app:lottie_fileName="checkbox.json" />
         </TableRow>
 
     </TableLayout>
 
-    <ImageButton
-        android:id="@+id/submit_button"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:src="@drawable/submit_button"
-        android:background="#ffffff"
-        android:contentDescription="submit" />
+        android:layout_height="100dp">
+        <Button
+            android:id="@+id/submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textAlignment="gravity"
+            android:textColor="@color/white"
+            android:text="@string/pharmacist_submit_button"
+            android:theme="@style/ActionButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/submit_button_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/blueSuccess"
+            app:lottie_loop="true"
+            app:lottie_fileName="loading_jumping_boxes.json" />
+    </RelativeLayout>
+
 </LinearLayout>

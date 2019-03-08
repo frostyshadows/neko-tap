@@ -2,16 +2,19 @@ package com.squad.betakua.tap_neko;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieProperty;
+import com.airbnb.lottie.model.KeyPath;
+import com.airbnb.lottie.value.LottieValueCallback;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -47,7 +50,8 @@ public class PharmacistActivity extends AppCompatActivity {
     private boolean hasBarcode = false;
 
     private TableRow nfcButton;
-    private ImageButton submitButton;
+    private Button submitButton;
+    private LottieAnimationView submitButtonProgress;
 
     private String nfcId;
     private String fileId;
@@ -71,18 +75,35 @@ public class PharmacistActivity extends AppCompatActivity {
         initBarcodeScannerButton();
         initNfcButton();
         initSubmitButton();
+        initCheckboxAnimations();
         refreshSubmitButton();
 
         textBarcode = findViewById(R.id.scan_text);
         textNFC = findViewById(R.id.nfc_text);
         textAudio = findViewById(R.id.audio_text);
+    }
 
+    private void initCheckboxAnimations() {
         lottieBarcode = findViewById(R.id.check_barcode);
         lottieNFC = findViewById(R.id.check_nfc);
         lottieAudio = findViewById(R.id.check_audio);
+
         lottieBarcode.setProgress(0f);
         lottieNFC.setProgress(0f);
         lottieAudio.setProgress(0f);
+
+        lottieBarcode.addValueCallback(
+                new KeyPath("**"),
+                LottieProperty.COLOR,
+                new LottieValueCallback<>(Color.WHITE));
+        lottieNFC.addValueCallback(
+                new KeyPath("**"),
+                LottieProperty.COLOR,
+                new LottieValueCallback<>(Color.WHITE));
+        lottieAudio.addValueCallback(
+                new KeyPath("**"),
+                LottieProperty.COLOR,
+                new LottieValueCallback<>(Color.WHITE));
     }
 
     @Override
@@ -145,8 +166,21 @@ public class PharmacistActivity extends AppCompatActivity {
     }
 
     private void initSubmitButton() {
+        submitButtonProgress = findViewById(R.id.submit_button_progress);
+        submitButtonProgress.setVisibility(View.INVISIBLE);
+        submitButtonProgress.playAnimation();
+        // change lottie color to white
+        submitButtonProgress.addValueCallback(
+                new KeyPath("**"),
+                LottieProperty.COLOR,
+                new LottieValueCallback<>(Color.WHITE));
+
         submitButton = findViewById(R.id.submit_button);
+        submitButton.setVisibility(View.VISIBLE);
+
         submitButton.setOnClickListener((View view) -> {
+            onSubmitProgress();
+
             try {
                 ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance().checkIfInfoItemRowExists(nfcId);
 
@@ -154,17 +188,16 @@ public class PharmacistActivity extends AppCompatActivity {
                     public void onSuccess(InfoItem infoItem) {
                         // if row already exists, update it
                         updateInfoItemToTable();
-                        Log.e("HERE00", "SUCCESS");
                     }
 
                     public void onFailure(Throwable t) {
                         // if row doesn't exist, add it
                         insertInfoItemToTable();
-                        Log.e("ERROR", t.toString());
                     }
                 });
             } catch (AzureInterfaceException e) {
-                Log.e("ERROR:", e.toString());
+                onSubmitError();
+                e.printStackTrace();
             }
         });
 
@@ -187,22 +220,23 @@ public class PharmacistActivity extends AppCompatActivity {
         });
     }
 
-    private void insertInfoItemToTable() throws AzureInterfaceException {
+    private void insertInfoItemToTable() {
         try {
             ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, transcript, MOCK_YOUTUBE_URL);
 
             Futures.addCallback(infoItemsFuture, new FutureCallback<InfoItem>() {
                 public void onSuccess(InfoItem infoItem) {
-                    // TODO: signal success in UI
+                    onSubmitSuccess();
                 }
 
                 public void onFailure(Throwable t) {
-                    // TODO: signal failure in UI
+                    onSubmitError();
                     t.printStackTrace();
                 }
             });
         } catch (AzureInterfaceException e) {
-            Log.e("ERROR:", e.toString());
+            onSubmitError();
+            e.printStackTrace();
         }
     }
 
@@ -212,17 +246,40 @@ public class PharmacistActivity extends AppCompatActivity {
 
             Futures.addCallback(infoItemsFuture, new FutureCallback<InfoItem>() {
                 public void onSuccess(InfoItem infoItem) {
-                    // TODO: signal success in UI
+                    onSubmitSuccess();
                 }
 
                 public void onFailure(Throwable t) {
-                    // TODO: signal failure in UI
+                    onSubmitError();
                     t.printStackTrace();
                 }
             });
         } catch (AzureInterfaceException e) {
-            Log.e("ERROR:", e.toString());
+            onSubmitError();
+            e.printStackTrace();
         }
     }
 
+    private void onSubmitProgress() {
+        submitButton.setText(R.string.pharmacist_submit_button_submitting);
+        submitButton.setEnabled(false);
+        submitButton.setVisibility(View.INVISIBLE);
+        submitButtonProgress.setVisibility(View.VISIBLE);
+    }
+
+    private void onSubmitSuccess() {
+        submitButton.setText(R.string.pharmacist_submit_button);
+        submitButton.setEnabled(true);
+        submitButton.setVisibility(View.VISIBLE);
+        submitButtonProgress.setVisibility(View.INVISIBLE);
+        Toast.makeText(this, R.string.pharmacist_submit_button_success, Toast.LENGTH_SHORT).show();
+    }
+
+    private void onSubmitError() {
+        submitButton.setText(R.string.pharmacist_submit_button);
+        submitButton.setEnabled(true);
+        submitButton.setVisibility(View.VISIBLE);
+        submitButtonProgress.setVisibility(View.INVISIBLE);
+        Toast.makeText(this, R.string.pharmacist_submit_button_error, Toast.LENGTH_SHORT).show();
+    }
 }

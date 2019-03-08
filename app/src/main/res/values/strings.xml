@@ -15,6 +15,12 @@
     <string name="audio_recorder_azure_status_message">Services are connected</string>
     <string name="azure_speech_live_output_placeholder">Start recording a message</string>
 
+    <!-- Pharmacists Activity -->
+    <string name="pharmacist_submit_button">Submit</string>
+    <string name="pharmacist_submit_button_submitting">Submitting&#8230;</string>
+    <string name="pharmacist_submit_button_success">Successfully Submitted!</string>
+    <string name="pharmacist_submit_button_error">There was an error submitting. Please try again.</string>
+
     <!-- Patient Text -->
     <string name="patient_text_placeholder">Transcribed message goes here</string>
 
