@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_REQ_KEY;
 import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_TRANSCRIPT_KEY;
@@ -40,7 +41,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
     private TextView outputText;
     private TextView statusText;
     private Thread textThread;
-    private String recognizedText = "Output Text";
+    private String recognizedText = "";
 
     private Button startButton;
     private Button stopButton;
@@ -219,7 +220,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
 
         recognizerWav.recognized.addEventListener((s, e) -> {
             if (e.getResult().getReason() == ResultReason.RecognizedSpeech) {
-                recognizedText = e.getResult().getText();
+                recognizedText = recognizedText + e.getResult().getText();
                 System.out.println("RECOGNIZED: Text=" + e.getResult().getText());
             }
             else if (e.getResult().getReason() == ResultReason.NoMatch) {

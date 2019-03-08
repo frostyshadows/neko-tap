@@ -7,16 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<VideoView-->
-        <!--android:id="@+id/videoView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="354dp"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/alertFab"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="1.0"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_height="wrap_content"
@@ -43,18 +33,56 @@
 
     <LinearLayout
         android:layout_weight="1"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp">
+        <TextView
+            android:text="MORE RESOURCES"
+            android:layout_marginTop="36dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/panelGreenDark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <Button
             android:id="@+id/open_yt_button"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="161dp"
-            android:layout_marginTop="485dp"
-            android:layout_marginEnd="162dp"
-            android:layout_marginBottom="198dp"
-            android:text="Button" />
+            android:text="Watch Video" />
+
+        <Button
+            android:id="@+id/open_web_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Read More" />
+
+        <TextView
+            android:text="PHARMACY DETAILS"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/panelGreenDark"
+            android:layout_marginTop="36dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/pharmacy_name"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/pharmacy_phone"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/pharmacist"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout

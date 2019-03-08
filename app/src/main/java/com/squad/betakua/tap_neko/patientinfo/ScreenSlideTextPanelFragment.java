@@ -27,6 +27,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
     private ImageButton smallerFont;
     private ImageButton translateButton;
     private Integer fontSize = 0;
+    private boolean isTranslated;
 
     // Navigation Bar
     private ImageButton navButtonLeft;
@@ -38,6 +39,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
     private String fileId;
     private String productName;
     private String transcript;
+    private String translated;
 
     private String MOCK_PRODUCT_NAME = "Doxycycline 100mg Tablets";
     private String MOCK_TEXT = "[Placeholder Text] This medication is used to treat and prevent osteoporosis, a condition where the bones become thin, weak. It works by preventing bone breakdown and increasing bone density (thickness).\n" +
@@ -49,7 +51,11 @@ public class ScreenSlideTextPanelFragment extends Fragment {
             "Swallow alendronate tablets with a full glass of plain water. Never take alendronate tablets or solution with any liquid other than plain water.\n" +
             "\n" +
             "After you take alendronate, do not eat, drink, or take any other medications for at least 30 minutes. Do not lie down for at least 30 minutes after you take alendronate. Sit upright or stand upright until at least 30 minutes have passed and you have eaten your meal of the day.";
-
+    private String MOCK_TRANSLATED = "这种药物用于治疗和预防骨质疏松症，骨质疏松，骨骼变薄，变弱。它通过防止骨质破坏和增加骨密度（厚度）起作用。\\n\" +\n" +
+            "\"\\n\" +\n" +
+            "\"如果不按照以下说明服用，阿仑膦酸盐可能无法正常工作，可能会损坏食道或导致口腔溃疡。如果您不理解这些说明，请告诉您的医生。\\n\" +\n" +
+            "\"\\n\" +\n" +
+            "\"早上起床后，你必须服用阿仑膦酸钠，然后才能吃或喝任何东西。不要在睡前服用阿仑膦酸钠。\\n";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +63,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_text_panel, container, false);
 
+        // Navigation buttons
         navButtonLeft = rootView.findViewById(R.id.patient_view_audio_button);
         navButtonRight = rootView.findViewById(R.id.patient_view_video);
         navButtonLeft.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +79,22 @@ public class ScreenSlideTextPanelFragment extends Fragment {
             }
         });
 
+        // Translations button
+        isTranslated = false;
+        translateButton = rootView.findViewById(R.id.translate);
+        translateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isTranslated) {
+                    transcriptView.setText(transcript);
+                    isTranslated = false;
+                } else {
+                    transcriptView.setText(translated);
+                    isTranslated = true;
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -84,11 +107,15 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         translateButton = view.findViewById(R.id.translate);
 
         nfcId = getArguments().getString("nfcId", "");
-        productName = MOCK_PRODUCT_NAME + "\n" + getArguments().getString("productName", "");
-        transcript = getArguments().getString("transcript", MOCK_TEXT);
+        translated = getArguments().getString("translated", MOCK_TRANSLATED);
+        productName = getArguments().getString("productName", "Aerochamber (Child)") + "\n" + getArguments().getString("productID", "80092323");
         transcriptTitle.setText(productName);
 
-        transcriptView.setText(transcript);
+        transcript = getArguments().getString("transcript", MOCK_TEXT);
+        Log.e("transcript2 is ", transcript);
+        String formattedTranscript = transcript.replaceAll("\\.", ".\n\n");
+        transcriptView.setText(formattedTranscript);
+
         transcriptView.setMovementMethod(new ScrollingMovementMethod()); // make it scroll
 
         largerFont.setOnClickListener(new View.OnClickListener() {

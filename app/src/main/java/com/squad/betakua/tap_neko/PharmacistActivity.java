@@ -220,8 +220,29 @@ public class PharmacistActivity extends AppCompatActivity {
     }
 
     private void insertInfoItemToTable() {
+        String productName = demoGenerateProductName();
+        String url = demoGenerateUrl();
+        String webUrl = demoGenerateWebUrl();
+        String pharmacyPhone = "1-800-867-1389";
+        String pharmacyName = "Shoppers Drug Mart #2323";
+        String pharmacist = "John Lee";
+        String translated = demoGenerateTranslated();
+        String reminder = "";
+
         try {
-            ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance().writeInfoItem(nfcId, barcodeId, transcript, MOCK_YOUTUBE_URL);
+            ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance()
+                    .writeInfoItem(nfcId,
+                            barcodeId,
+                            productName,
+                            transcript,
+                            url,
+                            webUrl,
+                            pharmacyPhone,
+                            pharmacyName,
+                            pharmacist,
+                            translated,
+                            reminder
+                    );
 
             Futures.addCallback(infoItemsFuture, new FutureCallback<InfoItem>() {
                 public void onSuccess(InfoItem infoItem) {
@@ -240,8 +261,29 @@ public class PharmacistActivity extends AppCompatActivity {
     }
 
     private void updateInfoItemToTable() {
+        String productName = demoGenerateProductName();
+        String url = demoGenerateUrl();
+        String webUrl = demoGenerateWebUrl();
+        String pharmacyPhone = "1-800-867-1389";
+        String pharmacyName = "Shoppers Drug Mart #2323";
+        String pharmacist = "John Lee";
+        String translated = demoGenerateTranslated();
+        String reminder = "";
+
         try {
-            ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance().updateInfoItem(nfcId, barcodeId, transcript, MOCK_YOUTUBE_URL);
+            ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance()
+                    .updateInfoItem(nfcId,
+                            barcodeId,
+                            productName,
+                            transcript,
+                            url,
+                            webUrl,
+                            pharmacyPhone,
+                            pharmacyName,
+                            pharmacist,
+                            translated,
+                            reminder
+                    );
 
             Futures.addCallback(infoItemsFuture, new FutureCallback<InfoItem>() {
                 public void onSuccess(InfoItem infoItem) {
@@ -281,4 +323,103 @@ public class PharmacistActivity extends AppCompatActivity {
         submitButtonProgress.setVisibility(View.INVISIBLE);
         Toast.makeText(this, R.string.pharmacist_submit_button_error, Toast.LENGTH_SHORT).show();
     }
+
+    private String demoGenerateProductName() {
+        if (barcodeId == null || barcodeId.equals("")) {
+            return "Aerochamber (Child)";
+        }
+
+        Integer id = Character.getNumericValue(barcodeId.charAt(0));
+
+        switch (id) {
+            case 0:
+            case 1:
+                // Methotrexate
+                return "Methotrexate 2.5mg Tablets";
+            case 2:
+            case 3:
+                // Humira
+                return "Humira 40mg/0.8mL Injection";
+            case 4:
+            case 5:
+                // Spiriva
+                return "Spiriva Respimat Inhaler 2.5mcg (60 puffs)";
+            case 6:
+            case 7:
+                // Accucheck
+                return "Accucheck Nano Blood Glucose Monitoring Device";
+            default:
+                // Spacer
+                return "Aerochamber (Child)";
+        }
+    }
+
+    private String demoGenerateUrl() {
+        if (barcodeId == null || barcodeId.equals("")) {
+            return "ma_cmlU9DxU";
+        }
+
+        Integer id = Character.getNumericValue(barcodeId.charAt(0));
+
+        switch (id) {
+            case 0:
+            case 1:
+                // Methotrexate
+                return "I07EGu4Z9TU";
+            case 2:
+            case 3:
+                // Humira
+                return "e8cS2lwwgeA";
+            case 4:
+            case 5:
+                // Spiriva
+                return "ln6zmUHVdfE";
+            case 6:
+            case 7:
+                // Accucheck
+                return "pxgyAvKkoc4";
+            default:
+                // Spacer
+                return "ma_cmlU9DxU";
+        }
+    }
+
+    private String demoGenerateWebUrl() {
+        if (barcodeId == null || barcodeId.equals("")) {
+            return "https://www.aerochambervhc.com/instructions-for-use/";
+        }
+
+        Integer id = Character.getNumericValue(barcodeId.charAt(0));
+
+        switch (id) {
+            case 0:
+            case 1:
+                // Methotrexate
+                return "https://www.mayoclinic.org/drugs-supplements/methotrexate-oral-route/proper-use/drg-20084837";
+            case 2:
+            case 3:
+                // Humira
+                return "https://www.humira.com/humira-complete/injection";
+            case 4:
+            case 5:
+                // Spiriva
+                return "https://www.spiriva.com/asthma/how-to-use";
+            case 6:
+            case 7:
+                // Accucheck
+                return "https://www.accu-chek.ca/en/diabetescare/when-why-how-test";
+            default:
+                // Spacer
+                return "https://www.aerochambervhc.com/instructions-for-use/";
+        }
+    }
+
+    private String demoGenerateTranslated() {
+
+        // alendronate
+        return "\"这种药物用于治疗和预防骨质疏松症，骨质疏松，骨骼变薄，变弱。它通过防止骨质破坏和增加骨密度（厚度）起作用。\n\n" +
+                "如果不按照以下说明服用，阿仑膦酸盐可能无法正常工作，可能会损坏食道或导致口腔溃疡。如果您不理解这些说明，请告诉您的医生。\n\n" +
+                "早上起床后，你必须服用阿仑膦酸钠，然后才能吃或喝任何东西。不要在睡前服用阿仑膦酸钠。\n\n";
+    }
+
 }

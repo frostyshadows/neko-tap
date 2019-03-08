@@ -3,7 +3,6 @@ package com.squad.betakua.tap_neko;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -15,8 +14,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.MediaController;
-import android.widget.VideoView;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -54,13 +51,19 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
     //Provides the pages (fragments) to the ViewPager
     private PagerAdapter mPagerAdapter;
 
-    VideoView vidView;
-    MediaController vidControl;
-
     private String nfcId;
     private String fileId;
     private String barcodeId;
+    private String productName;
     private String transcript;
+    private String url;
+    private String webUrl;
+    private String pharmacyPhone;
+    private String pharmacyName;
+    private String pharmacist;
+    private String translated;
+    private String reminder;
+    private String audioHash;
 
     private File audioFile;
 
@@ -85,7 +88,18 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
             Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
                 public void onSuccess(MobileServiceList<InfoItem> infoItems) {
                     barcodeId = infoItems.get(0).getProductID();
+                    productName = infoItems.get(0).getProductName();
                     transcript = infoItems.get(0).getTranscript();
+                    url = infoItems.get(0).getURL();
+                    webUrl = infoItems.get(0).getWebURL();
+                    pharmacyPhone = infoItems.get(0).getPharmacyPhone();
+                    pharmacyName = infoItems.get(0).getPharmacyName();
+                    pharmacist = infoItems.get(0).getPharmacist();
+                    translated = infoItems.get(0).getTranslated();
+                    reminder = infoItems.get(0).getReminder();
+
+                    audioHash = infoItems.get(0).getTranslationsID(); // TODO: workaround: using translations ID for now
+
                     mPager = findViewById(R.id.pager);
                     mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
                     mPager.setAdapter(mPagerAdapter);
@@ -99,19 +113,6 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
         } catch (AzureInterfaceException e) {
             Log.e("ERROR:", e.toString());
         }
-    }
-
-    private void initVideoPlayer() {
-        vidView = findViewById(R.id.video);
-
-        String vidAddress = "https://archive.org/download/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4";
-        Uri vidUri = Uri.parse(vidAddress);
-        vidView.setVideoURI(vidUri);
-        // vidView.start();
-
-        vidControl = new MediaController(this);
-        vidControl.setAnchorView(vidView);
-        vidView.setMediaController(vidControl);
     }
 
     @Override
@@ -137,9 +138,9 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
                 case 0: {
                     Fragment audioFragment = new ScreenSlideAudioPlayFragment();
                     Bundle args = new Bundle();
-                    audioFile = new File(getFilesDir(), fileId + ".wav");
+                    audioFile = new File(getFilesDir(), fileId + "_" + audioHash + ".wav");
                     args.putString("audioFilePath", audioFile.getAbsolutePath());
-                    args.putString("productName", barcodeId);
+                    args.putString("productName", productName);
                     args.putString("nfcId", nfcId);
                     audioFragment.setArguments(args);
 
@@ -148,16 +149,24 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
                 case 1: {
                     ScreenSlideTextPanelFragment screenSlideTextPanelFragment = new ScreenSlideTextPanelFragment();
                     Bundle args = new Bundle();
-                    args.putString("productName", barcodeId);
+                    args.putString("productName", productName);
                     args.putString("transcript", transcript);
                     args.putString("nfcId", nfcId);
+                    args.putString("translated", translated);
                     screenSlideTextPanelFragment.setArguments(args);
                     return screenSlideTextPanelFragment;
                 }
                 case 2: {
                     ScreenSlideVideoPanelFragment videoFragment = new ScreenSlideVideoPanelFragment();
                     Bundle args = new Bundle();
-                    args.putString("productName", barcodeId);
+                    args.putString("productID", barcodeId);
+                    args.putString("productName", productName);
+                    args.putString("url", url);
+                    args.putString("webUrl", webUrl);
+                    args.putString("pharmacyPhone", pharmacyPhone);
+                    args.putString("pharmacyName", pharmacyName);
+                    args.putString("pharmacist", pharmacist);
+                    args.putString("reminder", reminder);
                     videoFragment.setArguments(args);
                     return videoFragment;
                 }

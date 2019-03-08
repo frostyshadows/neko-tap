@@ -20,6 +20,17 @@ android {
         buildConfigField "String", "azure_speech_key2", AndroidTest2_AzureSpeechTestKey2
         buildConfigField "String", "azure_storage_account_name", AndroidTest2_AzureStorageAccountName
         buildConfigField "String", "azure_storage_account_key", AndroidTest2_AzureStorageAccountKey
+
+        // Sophie's Keys
+        buildConfigField "String", "youtube_api_key", NekoTap_YouTubeKey
+        resValue "string", "nekotap_speech_key1", NekoTap_SpeechKey1
+        resValue "string", "nekotap_speech_key2", NekoTap_SpeechKey2
+        buildConfigField 'String', "nekotap_speech_key1", NekoTap_SpeechKey1
+        buildConfigField 'String', "nekotap_speech_key2", NekoTap_SpeechKey2
+        buildConfigField "String", "azure_blob_storage_account_name", NekoTap_BlobStorageAccountName
+        buildConfigField 'String', "nekotap_blob_key1", NekoTap_BlobKey1
+        buildConfigField 'String', "nekotap_blob_key2", NekoTap_BlobKey2
+
     }
 
     repositories {
@@ -57,28 +68,21 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
     // NFC
     api 'com.google.guava:guava:23.0'
-
     // Lottie
     implementation 'com.airbnb.android:lottie:2.7.0'
     implementation 'com.android.support:design:28.0.0'
-
     //pageIndicatorView
     implementation 'com.romandanylyk:pageindicatorview:1.0.3'
-
-//    implementation 'com.github.adrielcafe:AndroidAudioConverter:0.0.8'
+    //    implementation 'com.github.adrielcafe:AndroidAudioConverter:0.0.8'
     // Azure Speech
     implementation 'com.microsoft.cognitiveservices.speech:client-sdk:1.2.0'
-
-//        implementation 'com.microsoft.azure:azure-mobile-android:3.4.0@aar'
+    //        implementation 'com.microsoft.azure:azure-mobile-android:3.4.0@aar'
     // Azure Mobile Services
-    implementation ('com.microsoft.azure:azure-mobile-android:3.4.0') {
+    implementation('com.microsoft.azure:azure-mobile-android:3.4.0') {
         exclude group: 'com.android.support'
     }
     // Azure Cloud Storage
     implementation 'com.microsoft.azure.android:azure-storage-android:2.0.0@aar'
-
-
 }

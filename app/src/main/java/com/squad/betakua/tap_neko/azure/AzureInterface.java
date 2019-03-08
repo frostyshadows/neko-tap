@@ -29,10 +29,14 @@ public class AzureInterface {
     private static final String CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;" +
             "AccountName=%s;" +
             "AccountKey=%s";
-    private static final String SPEECH_SUB_KEY = BuildConfig.azure_speech_key1;
-    private static final String STORAGE_ACCOUNT_NAME = BuildConfig.azure_storage_account_name;
-    private static final String STORAGE_ACCOUNT_KEY = BuildConfig.azure_storage_account_key;
-    private static final String STORAGE_CONTAINER_NAME = "azureaudiotest";
+    // private static final String SPEECH_SUB_KEY = BuildConfig.azure_speech_key1; // TODO: azure credits expired
+    // private static final String STORAGE_ACCOUNT_NAME = BuildConfig.azure_storage_account_name; // TODO: azure credits expired
+    // private static final String STORAGE_ACCOUNT_KEY = BuildConfig.azure_storage_account_key; // TODO: azure credits expired
+    // private static final String STORAGE_CONTAINER_NAME = "azureaudiotest"; // TODO: azure credits expired
+    private static final String SPEECH_SUB_KEY = BuildConfig.nekotap_speech_key1;
+    private static final String STORAGE_ACCOUNT_NAME = BuildConfig.azure_blob_storage_account_name;
+    private static final String STORAGE_ACCOUNT_KEY = BuildConfig.nekotap_blob_key1;
+    private static final String STORAGE_CONTAINER_NAME = "nekotapstoragecontainer";
     private static final String SERVICE_REGION = "westus";
 
     private static AzureInterface AZURE_INTERFACE = null;
@@ -42,7 +46,8 @@ public class AzureInterface {
     private OnUploadAudioFileListener uploadAudioFileListener;
 
     // Mobile App Services
-    private static final String MOBILE_APP_SERVICES_URL = "https://tapthecat.azurewebsites.net";
+    // private static final String MOBILE_APP_SERVICES_URL = "https://tapthecat.azurewebsites.net"; // TODO: azure credits expired
+    private static final String MOBILE_APP_SERVICES_URL = "https://nekotapmobile.azurewebsites.net";
     private static final String INFO_TABLE_NAME = "info_table";
     private static final String DRUG_INFO_TABLE_NAME = "DrugInfoTable";
     private static final String TRANSLATIONS_TABLE_NAME = "translated_drug_info";
@@ -105,18 +110,32 @@ public class AzureInterface {
      * @param url        URL of instruction video
      */
     public ListenableFuture<InfoItem> writeInfoItem(String nfcID,
-                                  String productID,
-                                  String transcript,
-                                  String url) {
-        final InfoItem item = new InfoItem();
+                                                    String productID,
+                                                    String productName,
+                                                    String transcript,
+                                                    String url,
+                                                    String webUrl,
+                                                    String pharmacyPhone,
+                                                    String pharmacyName,
+                                                    String pharmacist,
+                                                    String translated,
+                                                    String reminder) {
+            final InfoItem item = new InfoItem();
         Log.e("writing... ", nfcID + " " + productID + " " + transcript + " " + url);
 
         item.setId(nfcID);
         item.setNfcID(nfcID);
         item.setProductID(productID);
+        item.setProductName(productName);
         item.setTranscript(transcript);
-        item.setTranslationsID("123");
+        item.setTranslationsID(UUID.randomUUID().toString());
         item.setURL(url);
+        item.setWebURL(webUrl);
+        item.setPharmacyName(pharmacyName);
+        item.setPharmacyPhone(pharmacyPhone);
+        item.setPharmacist(pharmacist);
+        item.setTranslated(translated);
+        item.setReminder(reminder);
         return this.infoTable.insert(item);
     }
 
@@ -125,18 +144,32 @@ public class AzureInterface {
     }
 
     public ListenableFuture<InfoItem> updateInfoItem(String nfcID,
-                                    String productID,
-                                    String transcript,
-                                    String url) {
+                                                     String productID,
+                                                     String productName,
+                                                     String transcript,
+                                                     String url,
+                                                     String webUrl,
+                                                     String pharmacyPhone,
+                                                     String pharmacyName,
+                                                     String pharmacist,
+                                                     String translated,
+                                                     String reminder) {
         final InfoItem item = new InfoItem();
         Log.e("UPDATING:", nfcID + " " + productID + " " + transcript + " " + url);
 
         item.setId(nfcID);
         item.setNfcID(nfcID);
         item.setProductID(productID);
+        item.setProductName(productName);
         item.setTranscript(transcript);
-        item.setTranslationsID("123");
+        item.setTranslationsID(UUID.randomUUID().toString());
         item.setURL(url);
+        item.setWebURL(webUrl);
+        item.setPharmacyName(pharmacyName);
+        item.setPharmacyPhone(pharmacyPhone);
+        item.setPharmacist(pharmacist);
+        item.setTranslated(translated);
+        item.setReminder(reminder);
         return this.infoTable.update(item);
     }
 

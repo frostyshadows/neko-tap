@@ -40,7 +40,8 @@ import static com.squad.betakua.tap_neko.PharmacistActivity.BARCODE_KEY;
  */
 
 public class AudioRecorderActivity extends AppCompatActivity {
-    private static final String SPEECH_SUB_KEY = BuildConfig.azure_speech_key1;
+    // private static final String SPEECH_SUB_KEY = BuildConfig.azure_speech_key1; // TODO: azure credits expired
+    private static final String SPEECH_SUB_KEY = BuildConfig.nekotap_speech_key1;
     private static final String SERVICE_REGION = "westus";
 
     private Button recordButton;

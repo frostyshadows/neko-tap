@@ -57,7 +57,7 @@ public class ScreenSlideAudioPlayFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_audio_panel, container, false);
 
         audioFilePath = getArguments().getString("audioFilePath", "");
-        productName = MOCK_PRODUCT_NAME + "\n" + getArguments().getString("productName", "");
+        productName = getArguments().getString("productName", "Aerochamber (Child)") + "\n" + getArguments().getString("productID", "80092323");
         nfcId = getArguments().getString("nfcId", "");
         fileId = Utils.nfcToFileName(nfcId);
         mediaPlayer = new MediaPlayer();
