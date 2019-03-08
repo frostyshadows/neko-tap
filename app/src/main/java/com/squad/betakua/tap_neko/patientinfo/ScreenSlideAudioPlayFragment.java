@@ -132,6 +132,14 @@ public class ScreenSlideAudioPlayFragment extends Fragment {
     }
 
     private void loadData() {
+        // if file already exists, just use it
+        audioFile = new File(audioFilePath);
+        if (audioFile.exists()) {
+            initMediaPlayer();
+            audioIsReady = true;
+            return;
+        }
+
         try {
             audioFile = new File(audioFilePath);
             createFileIfNotExists(audioFile);

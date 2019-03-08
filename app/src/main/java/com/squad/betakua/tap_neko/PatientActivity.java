@@ -82,7 +82,6 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
     public void retrieveProductInfo() {
         try {
             ListenableFuture<MobileServiceList<InfoItem>> infoItemsFuture = AzureInterface.getInstance().readInfoItem(nfcId);
-
             Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
                 public void onSuccess(MobileServiceList<InfoItem> infoItems) {
                     barcodeId = infoItems.get(0).getProductID();
