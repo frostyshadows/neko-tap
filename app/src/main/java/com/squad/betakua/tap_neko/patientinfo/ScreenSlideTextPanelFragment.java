@@ -1,5 +1,6 @@
 package com.squad.betakua.tap_neko.patientinfo;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import android.speech.tts.TextToSpeech;
@@ -7,6 +8,7 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.common.util.concurrent.FutureCallback;
@@ -34,10 +37,15 @@ public class ScreenSlideTextPanelFragment extends Fragment {
     private TextView transcriptTitle;
     private TextView transcriptView;
     private TextToSpeech mTts;
-    private Button largerFont;
-    private Button smallerFont;
+    private ImageButton largerFont;
+    private ImageButton smallerFont;
+    private ImageButton translateButton;
     private Integer fontSize = 0;
-    private Button translateButton;
+
+    // Navigation Bar
+    private ImageButton navButtonLeft;
+    private ImageButton navButtonRight;
+    private OnButtonClickListener navButtonListener;
 
     private boolean hasInfo = false;
     private String nfcId;
@@ -62,7 +70,22 @@ public class ScreenSlideTextPanelFragment extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_text_panel, container, false);
-        Log.e("HERE3", transcript + "");
+
+        navButtonLeft = rootView.findViewById(R.id.patient_view_audio_button);
+        navButtonRight = rootView.findViewById(R.id.patient_view_video);
+        navButtonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navButtonListener.onButtonClicked(v);
+            }
+        });
+        navButtonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navButtonListener.onButtonClicked(v);
+            }
+        });
+
         return rootView;
     }
 
@@ -70,8 +93,8 @@ public class ScreenSlideTextPanelFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         transcriptTitle = view.findViewById(R.id.patient_transcript_title);
         transcriptView = view.findViewById(R.id.transcriptView);
-        largerFont = view.findViewById(R.id.largerFont);
-        smallerFont = view.findViewById(R.id.smallerFont);
+        largerFont = view.findViewById(R.id.zoom_in);
+        smallerFont = view.findViewById(R.id.zoom_out);
         translateButton = view.findViewById(R.id.translate);
 
         nfcId = getArguments().getString("nfcId", "");
@@ -147,27 +170,6 @@ public class ScreenSlideTextPanelFragment extends Fragment {
         //     }
         // });
 
-        FloatingActionButton mainFab = view.findViewById(R.id.mainFab);
-        FloatingActionButton callFab = view.findViewById(R.id.callFab);
-        FloatingActionButton alertFab = view.findViewById(R.id.alertFab);
-        // Button translate = view.findViewById(R.id.translate);
-
-        callFab.setVisibility(View.INVISIBLE);
-        alertFab.setVisibility(View.INVISIBLE);
-
-        mainFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (callFab.getVisibility() == View.VISIBLE) {
-                    callFab.setVisibility(View.INVISIBLE);
-                    alertFab.setVisibility(View.INVISIBLE);
-                } else {
-                    callFab.setVisibility(View.VISIBLE);
-                    alertFab.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
         // translate.setOnClickListener(new View.OnClickListener() {
         //     @Override
         //     public void onClick(View view) {
@@ -239,7 +241,14 @@ public class ScreenSlideTextPanelFragment extends Fragment {
     //                 "After you take alendronate, do not eat, drink, or take any other medications for at least 30 minutes. Do not lie down for at least 30 minutes after you take alendronate. Sit upright or stand upright until at least 30 minutes have passed and you have eaten your meal of the day.");
     //     }
     // }
+    // Enabling buttons to switch between fragments
+    // https://stackoverflow.com/questions/23631975/viewpager-how-to-navigate-from-one-page-to-another-using-a-button
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        navButtonListener = (OnButtonClickListener) context;
+    }
 }
 
 

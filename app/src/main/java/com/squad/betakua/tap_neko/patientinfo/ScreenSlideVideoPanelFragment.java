@@ -1,6 +1,7 @@
 package com.squad.betakua.tap_neko.patientinfo;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.app.TimePickerDialog;
@@ -17,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import java.net.MalformedURLException;
@@ -38,7 +41,15 @@ import java.util.Calendar;
 
 public class ScreenSlideVideoPanelFragment extends Fragment {
 
+    private TextView videoTitle;
 
+    // Navigation Bar
+    private ImageButton navButtonLeft;
+    private ImageButton navButtonRight;
+    private OnButtonClickListener navButtonListener;
+
+    private String productName;
+    private String MOCK_PRODUCT_NAME = "Doxycycline 100mg Tablets";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,17 +57,29 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_video_panel, container, false);
 
+        navButtonLeft = rootView.findViewById(R.id.patient_view_text_button);
+        navButtonRight = rootView.findViewById(R.id.patient_tap_again_icon);
+        navButtonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navButtonListener.onButtonClicked(v);
+            }
+        });
+        navButtonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navButtonListener.onButtonClicked(v);
+            }
+        });
 
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
-        FloatingActionButton mainFab = getView().findViewById(R.id.mainFab);
-        FloatingActionButton callFab = getView().findViewById(R.id.callFab);
-        FloatingActionButton alertFab = getView().findViewById(R.id.alertFab);
-
+        videoTitle = view.findViewById(R.id.patient_video_title);
+        productName = MOCK_PRODUCT_NAME + "\n" + getArguments().getString("productName", "");
+        videoTitle.setText(productName);
 
         //VideoPlayer
         // VideoView videoView = getView().findViewById(R.id.videoView);
@@ -83,29 +106,9 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
         //     });
         // }
 
-        alertFab.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            showTimePickerDialog();
-                                        }
-                                    });
-
         Button ytButton = getView().findViewById(R.id.open_yt_button);
         ytButton.setText("Open in YouTube");
 
-
-        callFab.setVisibility(View.INVISIBLE);
-        alertFab.setVisibility(View.INVISIBLE);
-
-        mainFab.setOnClickListener((View v) -> {
-            if (callFab.getVisibility() == View.VISIBLE) {
-                callFab.setVisibility(View.INVISIBLE);
-                alertFab.setVisibility(View.INVISIBLE);
-            } else {
-                callFab.setVisibility(View.VISIBLE);
-                alertFab.setVisibility(View.VISIBLE);
-            }
-        });
 
         ytButton.setOnClickListener((View v) -> {
             Intent browserIntent =
@@ -130,5 +133,9 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
         mTimePicker.show();
     }
 
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        navButtonListener = (OnButtonClickListener) context;
+    }
 }

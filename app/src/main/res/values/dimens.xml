@@ -10,4 +10,7 @@
     <dimen name="patient_text_size_xl">28sp</dimen>
     <dimen name="patient_text_size_xxl">32sp</dimen>
     <dimen name="patient_text_size_xxxl">36sp</dimen>
+
+    <dimen name="activity_horizontal_margin">0dp</dimen>
+    <dimen name="activity_vertical_margin">0dp</dimen>
 </resources>

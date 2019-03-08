@@ -1,7 +1,9 @@
 package com.squad.betakua.tap_neko.patientinfo;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -23,14 +26,23 @@ import com.squad.betakua.tap_neko.utils.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 
 public class ScreenSlideAudioPlayFragment extends Fragment {
+    // Header
     private TextView title;
+    private String productName;
+
+    // Navigation Bar
+    private ImageButton navButtonLeft;
+    private ImageButton navButtonRight;
+    private OnButtonClickListener navButtonListener;
+
+    // Audio
     private LottieAnimationView lottiePlayToPause;
     private LottieAnimationView lottiePauseToPlay;
     private String audioFilePath;
-    private String productName;
 
     private String nfcId;
     private String fileId;
@@ -42,15 +54,28 @@ public class ScreenSlideAudioPlayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        audioFilePath = getArguments().getString("audioFilePath", "");
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_audio_panel, container, false);
 
+        audioFilePath = getArguments().getString("audioFilePath", "");
         productName = MOCK_PRODUCT_NAME + "\n" + getArguments().getString("productName", "");
         nfcId = getArguments().getString("nfcId", "");
         fileId = Utils.nfcToFileName(nfcId);
         mediaPlayer = new MediaPlayer();
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_audio_panel, container, false);
+        navButtonLeft = rootView.findViewById(R.id.patient_tap_again_icon);
+        navButtonRight = rootView.findViewById(R.id.patient_view_text_button);
+        navButtonLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navButtonListener.onButtonClicked(v);
+            }
+        });
+        navButtonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navButtonListener.onButtonClicked(v);
+            }
+        });
 
         return rootView;
     }
@@ -119,8 +144,7 @@ public class ScreenSlideAudioPlayFragment extends Fragment {
                         @Override
                         public void onDownloadComplete(String response) {
                             try {
-                                mediaPlayer.setDataSource(audioFile.getAbsolutePath());
-                                mediaPlayer.prepare();
+                                initMediaPlayer();
                                 fileOutputStream.close();
                                 audioIsReady = true;
                             } catch (Exception e) {
@@ -151,6 +175,27 @@ public class ScreenSlideAudioPlayFragment extends Fragment {
         }
     }
 
+    public void initMediaPlayer() {
+        try {
+            mediaPlayer.setDataSource(audioFile.getAbsolutePath());
+            mediaPlayer.prepare();
+            mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    lottiePlayToPause.setVisibility(View.INVISIBLE);
+                    lottiePlayToPause.setEnabled(false);
+
+                    lottiePauseToPlay.setVisibility(View.VISIBLE);
+                    lottiePauseToPlay.setEnabled(true);
+                    lottiePauseToPlay.setProgress(0.0f);
+                    lottiePauseToPlay.playAnimation();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void showTimePickerDialog() {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -165,5 +210,13 @@ public class ScreenSlideAudioPlayFragment extends Fragment {
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
+    }
+
+    // Enabling buttons to switch between fragments
+    // https://stackoverflow.com/questions/23631975/viewpager-how-to-navigate-from-one-page-to-another-using-a-button
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        navButtonListener = (OnButtonClickListener) context;
     }
 }

@@ -1,6 +1,7 @@
 package com.squad.betakua.tap_neko;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -23,6 +25,8 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.InfoItem;
+import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
+import com.squad.betakua.tap_neko.patientinfo.OnButtonClickListener;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideAudioPlayFragment;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideTextPanelFragment;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideVideoPanelFragment;
@@ -37,10 +41,14 @@ import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
  * Created by sherryuan on 2019-01-26.
  */
 
-public class PatientActivity extends AppCompatActivity {
+public class PatientActivity extends AppCompatActivity implements OnButtonClickListener {
 
     //Pages in pagerView
     private static final int NUM_PAGES = 3;
+    public static final int INDEX_AUDIO_PAGE = 0;
+    public static final int INDEX_TEXT_PAGE = 1;
+    public static final int INDEX_VIDEO_PAGE = 2;
+
     //Allows swiping between fragments
     private ViewPager mPager;
     //Provides the pages (fragments) to the ViewPager
@@ -82,7 +90,6 @@ public class PatientActivity extends AppCompatActivity {
                     mPager = findViewById(R.id.pager);
                     mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
                     mPager.setAdapter(mPagerAdapter);
-                    Log.e("HERE1", transcript);
                 }
 
                 public void onFailure(Throwable t) {
@@ -120,8 +127,6 @@ public class PatientActivity extends AppCompatActivity {
         }
     }
 
-
-
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -151,7 +156,11 @@ public class PatientActivity extends AppCompatActivity {
                     return screenSlideTextPanelFragment;
                 }
                 case 2: {
-                    return new ScreenSlideVideoPanelFragment();
+                    ScreenSlideVideoPanelFragment videoFragment = new ScreenSlideVideoPanelFragment();
+                    Bundle args = new Bundle();
+                    args.putString("productName", barcodeId);
+                    videoFragment.setArguments(args);
+                    return videoFragment;
                 }
             }
 
@@ -161,6 +170,27 @@ public class PatientActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return NUM_PAGES;
+        }
+    }
+
+    @Override
+    public void onButtonClicked(View view){
+        int currPos = mPager.getCurrentItem();
+
+        switch(view.getId()) {
+            case R.id.patient_view_text_button:
+                mPager.setCurrentItem(INDEX_TEXT_PAGE);
+                break;
+            case R.id.patient_view_audio_button:
+                mPager.setCurrentItem(INDEX_AUDIO_PAGE);
+                break;
+            case R.id.patient_view_video:
+                mPager.setCurrentItem(INDEX_VIDEO_PAGE);
+                break;
+            case R.id.patient_tap_again_icon:
+                Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class);
+                startActivity(patientIntent);
+                break;
         }
     }
 }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,58 +17,84 @@
         <!--app:layout_constraintStart_toStartOf="parent"-->
         <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/mainFab"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="5dp"
-        android:src="@drawable/ic_add_black_24dp"
-        android:clickable="true"
-        android:scaleType="fitCenter"
-        app:backgroundTint="@color/zxing_transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_width="match_parent"
+        android:background="@color/panelGreenDark"
+        >
+        <TextView
+            android:id="@+id/patient_video_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="36dp"
+            android:paddingBottom="16dp"
+            android:text="@string/patient_video_title_text_placeholder"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/callFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_call_black_24dp"
-        android:clickable="true"
-        android:scaleType="center"
-        app:backgroundTint="@color/zxing_transparent"
-        app:layout_constraintBottom_toTopOf="@+id/mainFab"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/open_yt_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="161dp"
+            android:layout_marginTop="485dp"
+            android:layout_marginEnd="162dp"
+            android:layout_marginBottom="198dp"
+            android:text="Button" />
+    </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/alertFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_notifications_none_black_24dp"
-        android:clickable="true"
-        android:scaleType="center"
-        app:backgroundTint="@color/zxing_transparent"
-        app:layout_constraintBottom_toTopOf="@+id/callFab"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:layout_margin="0dp"
+        android:background="@color/panelGreenDark">
 
-    <Button
-        android:id="@+id/open_yt_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="485dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginBottom="198dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <!-- Icons made by Freepik from www.flaticon.com is licensed by CC 3.0 BY -->
+        <ImageButton
+            android:id="@+id/patient_view_text_button"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:background="@color/zxing_transparent"
+            android:contentDescription="@string/patient_translate_nav_text"
+            android:src="@drawable/ic_text_btn_left"
+            />
+        <View
+            android:layout_width="4dp"
+            android:layout_height="fill_parent"
+            android:background="@color/white" />
+        <!-- Icons made by Freepik from www.flaticon.com is licensed by CC 3.0 BY -->
+        <ImageButton
+            android:id="@+id/patient_tap_again_icon"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:background="@color/zxing_transparent"
+            android:contentDescription="@string/patient_audio_tap_again"
+            android:src="@drawable/ic_logo_white_icon"
+            />
+    </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

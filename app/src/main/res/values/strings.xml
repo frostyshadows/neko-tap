@@ -4,10 +4,16 @@
     <!-- Debug -->
     <string name="pharm_app">Pharmacists</string>
 
-    <!-- NFC -->
+    <!-- Pharmacists Main Screen -->
+    <string name="pharmacist_submit_button">Submit</string>
+    <string name="pharmacist_submit_button_submitting">Submitting&#8230;</string>
+    <string name="pharmacist_submit_button_success">Successfully Submitted!</string>
+    <string name="pharmacist_submit_button_error">There was an error submitting. Please try again.</string>
+
+    <!-- Pharmacist NFC Screen -->
     <string name="nfc_activity">NFC Activity</string>
 
-    <!-- Audio Recorder -->
+    <!-- Pharmacist Audio Screen -->
     <string name="audio_recorder_record">Record</string>
     <string name="audio_recorder_stop">Stop</string>
     <string name="audio_recorder_play">Play</string>
@@ -15,14 +21,26 @@
     <string name="audio_recorder_azure_status_message">Services are connected</string>
     <string name="azure_speech_live_output_placeholder">Start recording a message</string>
 
-    <!-- Pharmacists Activity -->
-    <string name="pharmacist_submit_button">Submit</string>
-    <string name="pharmacist_submit_button_submitting">Submitting&#8230;</string>
-    <string name="pharmacist_submit_button_success">Successfully Submitted!</string>
-    <string name="pharmacist_submit_button_error">There was an error submitting. Please try again.</string>
+    <!-- Patient Audio Screen -->
+    <string name="patient_audio_instructions">Tap the button below to listen to a counselling message!</string>
+    <string name="patient_audio_drug_label_placeholder">Doxycycline 100mg Tablets</string>
+    <string name="patient_audio_tap_again">Try again</string>
+    <string name="patient_audio_view_text">View Text</string>
+    <string name="patient_translate_nav_audio">Listen to Audio</string>
 
-    <!-- Patient Text -->
+    <!-- Patient Text Screen -->
     <string name="patient_text_placeholder">Transcribed message goes here</string>
+    <string name="patient_translate_nav_text">View Translations</string>
+    <string name="patient_translate_text_big">Bigger</string>
+    <string name="patient_translate_text_small">Smaller</string>
+    <string name="patient_translate_translate">Translate</string>
+    <string name="patient_translate_zoom_in">Zoom In</string>
+    <string name="patient_translate_zoom_out">Zoom Out</string>
+
+    <!-- Patient Video Screen -->
+    <string name="patient_video_title_text_placeholder">Doxycycline 100mg Tablets</string>
+    <string name="patient_video_nav_text">View Video</string>
+
 
     <!-- Languages Spinner -->
     <string-array name="languages">

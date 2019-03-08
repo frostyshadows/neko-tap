@@ -9,4 +9,16 @@
 
     <color name="greenSuccess">#6dcc5b</color>
     <color name="blueSuccess">#0e7bff</color>
+
+    <!-- Patient Audio Screen -->
+    <color name="panelBlueDark">#09a9de</color>
+    <color name="panelBlueLight">#81d9e9</color>
+
+    <!-- Patient Translate Screen -->
+    <color name="panelOrangeDark">#e97101</color>
+    <color name="panelOrangeLight">#ec9544</color>
+
+    <!-- Patient Video Screen -->
+    <color name="panelGreenDark">#00c914</color>
+    <color name="panelGreenLight">#5cc166</color>
 </resources>
