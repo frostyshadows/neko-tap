@@ -141,6 +141,7 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
                     audioFile = new File(getFilesDir(), fileId + "_" + audioHash + ".wav");
                     args.putString("audioFilePath", audioFile.getAbsolutePath());
                     args.putString("productName", productName);
+                    args.putString("productID", barcodeId);
                     args.putString("nfcId", nfcId);
                     audioFragment.setArguments(args);
 
@@ -150,6 +151,7 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
                     ScreenSlideTextPanelFragment screenSlideTextPanelFragment = new ScreenSlideTextPanelFragment();
                     Bundle args = new Bundle();
                     args.putString("productName", productName);
+                    args.putString("productID", barcodeId);
                     args.putString("transcript", transcript);
                     args.putString("nfcId", nfcId);
                     args.putString("translated", translated);

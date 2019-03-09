@@ -30,6 +30,7 @@ android {
         buildConfigField "String", "azure_blob_storage_account_name", NekoTap_BlobStorageAccountName
         buildConfigField 'String', "nekotap_blob_key1", NekoTap_BlobKey1
         buildConfigField 'String', "nekotap_blob_key2", NekoTap_BlobKey2
+        buildConfigField 'String', "nekotap_translate_1", NekoTap_Translate_1
 
     }
 

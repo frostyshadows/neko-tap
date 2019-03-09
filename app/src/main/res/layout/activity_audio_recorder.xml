@@ -57,17 +57,54 @@
         android:text="@string/audio_recorder_save"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/azure_speech_live_output"
-        android:layout_width="342dp"
-        android:layout_height="289dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="13dp"
-        android:text="@string/azure_speech_live_output_placeholder"
-        app:layout_constraintHorizontal_bias="0.802"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/azure_speech_live_output"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".50"
+            android:text="@string/azure_speech_live_output_placeholder"
+            app:layout_constraintHorizontal_bias="0.802"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_height="4dp"
+            android:layout_width="fill_parent"
+            android:background="@color/disabledGrey" />
+
+        <EditText
+            android:id="@+id/azure_speech_translated_output"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".50"
+            android:background="@null"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:overScrollMode="always"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:minLines="6"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:scrollHorizontally="false" />
+
+        <!--<EditText-->
+            <!--android:id="@+id/azure_speech_translated_output"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight=".50"-->
+            <!--android:padd-->
+            <!--android:layout_marginBottom="13dp"-->
+            <!--android:text="@string/azure_speech_live_output_placeholder"-->
+            <!--app:layout_constraintHorizontal_bias="0.802"-->
+            <!--app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--app:layout_constraintRight_toRightOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+    </LinearLayout>
+
 
 </RelativeLayout>

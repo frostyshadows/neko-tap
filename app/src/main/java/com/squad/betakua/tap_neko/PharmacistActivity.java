@@ -39,9 +39,11 @@ public class PharmacistActivity extends AppCompatActivity {
     public static final int AUDIO_REQ_CODE = 101;
     public static final String AUDIO_REQ_KEY = "audio_record";
     public static final String AUDIO_TRANSCRIPT_KEY = "audio_transcript";
+    public static final String AUDIO_TRANSLATE_KEY = "audio_translate";
 
     private TableRow audioRecorderButton;
     private String transcript;
+    private String translation;
     private boolean hasAudio = false;
 
     private TableRow barcodeScannerButton;
@@ -122,6 +124,7 @@ public class PharmacistActivity extends AppCompatActivity {
         } else if (requestCode == AUDIO_REQ_CODE && resultCode == RESULT_OK) {
             // get audio transcript
             transcript = data.getStringExtra(AUDIO_TRANSCRIPT_KEY);
+            translation = data.getStringExtra(AUDIO_TRANSLATE_KEY);
             hasAudio = true;
 
             // change colors
@@ -415,11 +418,11 @@ public class PharmacistActivity extends AppCompatActivity {
     }
 
     private String demoGenerateTranslated() {
-
+        return translation;
         // alendronate
-        return "\"这种药物用于治疗和预防骨质疏松症，骨质疏松，骨骼变薄，变弱。它通过防止骨质破坏和增加骨密度（厚度）起作用。\n\n" +
-                "如果不按照以下说明服用，阿仑膦酸盐可能无法正常工作，可能会损坏食道或导致口腔溃疡。如果您不理解这些说明，请告诉您的医生。\n\n" +
-                "早上起床后，你必须服用阿仑膦酸钠，然后才能吃或喝任何东西。不要在睡前服用阿仑膦酸钠。\n\n";
+        // return "\"这种药物用于治疗和预防骨质疏松症，骨质疏松，骨骼变薄，变弱。它通过防止骨质破坏和增加骨密度（厚度）起作用。\n\n" +
+        //         "如果不按照以下说明服用，阿仑膦酸盐可能无法正常工作，可能会损坏食道或导致口腔溃疡。如果您不理解这些说明，请告诉您的医生。\n\n" +
+        //         "早上起床后，你必须服用阿仑膦酸钠，然后才能吃或喝任何东西。不要在睡前服用阿仑膦酸钠。\n\n";
     }
 
 }

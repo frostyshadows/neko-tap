@@ -108,7 +108,7 @@ public class ScreenSlideTextPanelFragment extends Fragment {
 
         nfcId = getArguments().getString("nfcId", "");
         translated = getArguments().getString("translated", MOCK_TRANSLATED);
-        productName = getArguments().getString("productName", "Aerochamber (Child)") + "\n" + getArguments().getString("productID", "80092323");
+        productName = getArguments().getString("productName", "Aerochamber (Child)") + "\nProduct ID: " + getArguments().getString("productID", "80092323");
         transcriptTitle.setText(productName);
 
         transcript = getArguments().getString("transcript", MOCK_TEXT);

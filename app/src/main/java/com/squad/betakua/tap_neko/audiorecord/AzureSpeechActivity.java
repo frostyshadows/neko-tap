@@ -12,19 +12,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.microsoft.cognitiveservices.speech.CancellationReason;
 import com.microsoft.cognitiveservices.speech.ResultReason;
 import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
+import com.squad.betakua.tap_neko.BuildConfig;
 import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.OnDownloadAudioFileListener;
 import com.squad.betakua.tap_neko.azure.OnUploadAudioFileListener;
 import com.squad.betakua.tap_neko.utils.Utils;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,14 +46,18 @@ import java.util.UUID;
 
 import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_REQ_KEY;
 import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_TRANSCRIPT_KEY;
+import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_TRANSLATE_KEY;
 
 public class AzureSpeechActivity extends AppCompatActivity {
     private static final int PERMISSION_RECORD_AUDIO = 0;
+    private String TRANSLATE_KEY;
 
     private TextView outputText;
     private TextView statusText;
     private Thread textThread;
     private String recognizedText = "";
+    private String translation = "";
+    private EditText translationsText;
 
     private Button startButton;
     private Button stopButton;
@@ -69,6 +85,11 @@ public class AzureSpeechActivity extends AppCompatActivity {
                     PERMISSION_RECORD_AUDIO);
             return;
         }
+
+        // Translate
+        TRANSLATE_KEY = BuildConfig.nekotap_translate_1;
+        translationsText = findViewById(R.id.azure_speech_translated_output);
+        translationsText.setFocusable(false);
 
         statusText = this.findViewById(R.id.azure_speech_status);
         startButton = this.findViewById(R.id.speech_button_wav_start);
@@ -190,10 +211,10 @@ public class AzureSpeechActivity extends AppCompatActivity {
         if (recordTask.isCancelled() && !(recordTask.getStatus() == AsyncTask.Status.RUNNING)) {
             MediaPlayer mediaPlayer = new MediaPlayer();
             try {
+                Toast.makeText(AzureSpeechActivity.this, "Playing Audio", Toast.LENGTH_SHORT).show();
                 mediaPlayer.setDataSource(outputFilePath);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
-                Toast.makeText(AzureSpeechActivity.this, "Playing Audio", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e("ERROR at playAudioWav:", e.toString());
@@ -202,6 +223,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
             Toast.makeText(AzureSpeechActivity.this, "Busy", Toast.LENGTH_SHORT).show();
         }
         setButtonVisibilities(true, false, true, true);
+
     }
 
     public void initSpeechRecognizer() {
@@ -230,6 +252,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
 
         recognizerWav.canceled.addEventListener((s, e) -> {
             System.out.println("CANCELED: Reason=" + e.getReason());
+            new LongOperation().execute(recognizedText);
 
             if (e.getReason() == CancellationReason.Error) {
                 System.out.println("CANCELED: ErrorCode=" + e.getErrorCode());
@@ -248,6 +271,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
             try {
                 recognizerWav.stopContinuousRecognitionAsync().get();
                 textThread.interrupt();
+                Log.e("ERRRORR ", "AWEFLIAWEJFLAWIUFH");
             } catch (Exception ex) {
                 Log.e("ERROR processAudioWav", ex.toString());
                 setButtonVisibilities(true, false, false, false);
@@ -300,7 +324,10 @@ public class AzureSpeechActivity extends AppCompatActivity {
     }
     public void onFinishUpload() {
         Intent data = new Intent();
+        translation = translationsText.getText().toString();
+
         data.putExtra(AUDIO_TRANSCRIPT_KEY, recognizedText);
+        data.putExtra(AUDIO_TRANSLATE_KEY, translation);
 
         setResult(RESULT_OK, data);
         finish();
@@ -312,41 +339,87 @@ public class AzureSpeechActivity extends AppCompatActivity {
         }
     }
 
-    public void downloadAudio(View v) {
-        String downloadFileName = "81_57_b0_7a_9b_5b_04.wav";
-        File downloadFile = new File(getFilesDir(), downloadFileName);
+    private class LongOperation extends AsyncTask<String, Void, String> {
 
-        try {
-            if (!downloadFile.exists()) {
-                boolean success = downloadFile.createNewFile();
-                Log.e("File download: ", "result is " + success);
+        @Override
+        protected String doInBackground(String... params) {
+            Log.e("ARG IS ", params[0]);
+            try {
+                String response = Post(params[0]);
+                return prettify(response);
+            } catch (Exception e) {
+                //
             }
-        } catch (Exception e) {
-            Log.e("ERROR", e.toString());
+            return "";
         }
 
+        @Override
+        protected void onPostExecute(String result) {
+            Log.e("RESULT IS S S S ", result);
+            translationsText.setText(result);
+            translationsText.setFocusable(true);
+            // into onPostExecute() but that is upto you
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
+    }
+
+    public void executeTranslation(String text) {
         new Thread(() -> {
             try {
-                FileOutputStream fileOutputStream;
-                fileOutputStream = new FileOutputStream(downloadFile);
-                AzureInterface.getInstance().downloadAudio(fileId, fileOutputStream, new OnDownloadAudioFileListener() {
-                    @Override
-                    public void onDownloadComplete(String response) {
-                        MediaPlayer mediaPlayer = new MediaPlayer();
-                        try {
-                            mediaPlayer.setDataSource(downloadFile.getAbsolutePath());
-                            mediaPlayer.prepare();
-                            mediaPlayer.start();
-                            fileOutputStream.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Log.e("ERROR in downloadAudio:", e.toString());
-                        }
-                    }
-                });
-            } catch (Exception e) {
+
+                Log.e("ERROR", "hehehe");
+
+                try {
+                    String response = Post(text);
+                    Log.e("RESPONSE ", prettify(response));
+
+                } catch (Exception e) {
+                    Log.e("ERROR", e.toString());
+                }            } catch (Exception e) {
                 Log.e("ERROR", e.toString());
             }
         }).start();
+    }
+
+
+    // This function performs a POST request.
+    public String Post(String text) throws IOException {
+        String url = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=ko,it";
+        // String url = "https://api.cognitive.microsoft.com/sts/v1.0/" + TRANSLATE_KEY;
+
+        OkHttpClient client = new OkHttpClient();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType,
+                "[{\n\t\"Text\": \"" + text + "\"\n}]");
+        Request request = new Request.Builder()
+                .url(url).post(body)
+                .addHeader("Ocp-Apim-Subscription-Key", TRANSLATE_KEY)
+                .addHeader("Content-type", "application/json").build();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
+
+    // This function prettifies the json response.
+    public String prettify(String json_text) {
+        JsonParser parser = new JsonParser();
+        JsonElement json = parser.parse(json_text);
+        JsonArray js = json.getAsJsonArray();
+
+        translation = js.get(0).getAsJsonObject().get("translations").getAsJsonArray().get(0).getAsJsonObject().get("text").toString();
+        // updateTranslate();
+
+        return translation;
+        // Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        // return gson.toJson(json);
+    }
+
+    public void updateTranslate() {
+        translationsText.setText(translation);
+        translationsText.setFocusable(true);
     }
 }

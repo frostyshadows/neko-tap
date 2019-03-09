@@ -18,7 +18,7 @@ import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private boolean IS_DEV_MODE = true;
+    private boolean IS_DEV_MODE = false;
     private boolean isPatient = true;
     // private boolean isPatient = true;
     private boolean bypassAuth = true;

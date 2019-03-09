@@ -69,7 +69,7 @@ public class ScreenSlideVideoPanelFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         videoTitle = view.findViewById(R.id.patient_video_title);
-        productName = getArguments().getString("productName", "Aerochamber (Child)") + "\n" + getArguments().getString("productID", "80092323");
+        productName = getArguments().getString("productName", "Aerochamber (Child)") + "\nProduct ID: " + getArguments().getString("productID", "80092323");
         url = getArguments().getString("url", MOCK_YOUTUBE_CODE);
         webUrl = getArguments().getString("webUrl", "https://www.aerochambervhc.com/instructions-for-use/");
         pharmacyPhone = getArguments().getString("pharmacyPhone", "1-800-867-1389");
