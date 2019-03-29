@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -26,6 +27,7 @@ import com.microsoft.cognitiveservices.speech.ResultReason;
 import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import com.squad.betakua.tap_neko.BuildConfig;
+import com.squad.betakua.tap_neko.Constants;
 import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
@@ -78,12 +80,12 @@ public class AzureSpeechActivity extends AppCompatActivity {
         setContentView(R.layout.activity_azure_speech);
 
         // ---------------------- Permissions ----------------------
-        if (ContextCompat.checkSelfPermission(AzureSpeechActivity.this, Manifest.permission.RECORD_AUDIO)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(AzureSpeechActivity.this,
+            ActivityCompat.requestPermissions(this,
                     new String[] { Manifest.permission.RECORD_AUDIO },
                     PERMISSION_RECORD_AUDIO);
-            return;
+            // return;
         }
 
         // Translate
@@ -127,7 +129,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
     private void initAudioRecorder() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            nfcId = extras.getString("nfcId", "");
+            nfcId = extras.getString("nfcId", Constants.DEMO_NFC_CODE.toString());
             fileId = Utils.nfcToFileName(nfcId);
             audioFileName = Utils.nfcToFileName(nfcId) + ".wav";
         }
@@ -271,7 +273,6 @@ public class AzureSpeechActivity extends AppCompatActivity {
             try {
                 recognizerWav.stopContinuousRecognitionAsync().get();
                 textThread.interrupt();
-                Log.e("ERRRORR ", "AWEFLIAWEJFLAWIUFH");
             } catch (Exception ex) {
                 Log.e("ERROR processAudioWav", ex.toString());
                 setButtonVisibilities(true, false, false, false);
@@ -343,22 +344,18 @@ public class AzureSpeechActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            Log.e("ARG IS ", params[0]);
             try {
                 String response = Post(params[0]);
                 return prettify(response);
             } catch (Exception e) {
-                //
             }
             return "";
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Log.e("RESULT IS S S S ", result);
             translationsText.setText(result);
             translationsText.setFocusable(true);
-            // into onPostExecute() but that is upto you
         }
 
         @Override
@@ -367,25 +364,6 @@ public class AzureSpeechActivity extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(Void... values) {}
     }
-
-    public void executeTranslation(String text) {
-        new Thread(() -> {
-            try {
-
-                Log.e("ERROR", "hehehe");
-
-                try {
-                    String response = Post(text);
-                    Log.e("RESPONSE ", prettify(response));
-
-                } catch (Exception e) {
-                    Log.e("ERROR", e.toString());
-                }            } catch (Exception e) {
-                Log.e("ERROR", e.toString());
-            }
-        }).start();
-    }
-
 
     // This function performs a POST request.
     public String Post(String text) throws IOException {
@@ -410,16 +388,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
         JsonElement json = parser.parse(json_text);
         JsonArray js = json.getAsJsonArray();
 
-        translation = js.get(0).getAsJsonObject().get("translations").getAsJsonArray().get(0).getAsJsonObject().get("text").toString();
-        // updateTranslate();
-
+        translation = js.get(0).getAsJsonObject().get("translations").getAsJsonArray().get(0).getAsJsonObject().get("text").toString().replace("\"", "");
         return translation;
-        // Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        // return gson.toJson(json);
-    }
-
-    public void updateTranslate() {
-        translationsText.setText(translation);
-        translationsText.setFocusable(true);
     }
 }

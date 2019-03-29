@@ -1,8 +1,12 @@
 package com.squad.betakua.tap_neko;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +37,6 @@ import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_REQ_CODE;
  */
 
 public class PharmacistActivity extends AppCompatActivity {
-
     public static final int BARCODE_REQ_CODE = 100;
     public static final String BARCODE_KEY = "barcode";
     public static final int AUDIO_REQ_CODE = 101;
@@ -72,6 +75,13 @@ public class PharmacistActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pharmacist);
+        barcodeScannerButton = findViewById(R.id.barcode_scanner_button);
+        nfcButton = findViewById(R.id.nfc_button);
+        audioRecorderButton = findViewById(R.id.audio_recorder_button);
+        textBarcode = findViewById(R.id.scan_text);
+        textNFC = findViewById(R.id.nfc_text);
+        textAudio = findViewById(R.id.audio_text);
+
         initAudioRecorderButton();
         initBarcodeScannerButton();
         initNfcButton();
@@ -79,9 +89,10 @@ public class PharmacistActivity extends AppCompatActivity {
         initCheckboxAnimations();
         refreshSubmitButton();
 
-        textBarcode = findViewById(R.id.scan_text);
-        textNFC = findViewById(R.id.nfc_text);
-        textAudio = findViewById(R.id.audio_text);
+        nfcButton.setEnabled(false);
+        audioRecorderButton.setEnabled(false);
+        nfcButton.setBackgroundColor(getResources().getColor(R.color.superLightGrey));
+        audioRecorderButton.setBackgroundColor(getResources().getColor(R.color.superLightGrey));
     }
 
     private void initCheckboxAnimations() {
@@ -120,6 +131,9 @@ public class PharmacistActivity extends AppCompatActivity {
             lottieBarcode.setMaxProgress(0.5f);
             lottieBarcode.playAnimation();
 
+            nfcButton.setEnabled(true);
+            nfcButton.setBackgroundColor(getResources().getColor(R.color.white));
+
             refreshSubmitButton();
         } else if (requestCode == AUDIO_REQ_CODE && resultCode == RESULT_OK) {
             // get audio transcript
@@ -146,12 +160,14 @@ public class PharmacistActivity extends AppCompatActivity {
             lottieNFC.setMaxProgress(0.5f);
             lottieNFC.playAnimation();
 
+            audioRecorderButton.setEnabled(true);
+            audioRecorderButton.setBackgroundColor(getResources().getColor(R.color.white));
+
             refreshSubmitButton();
         }
     }
 
     private void initAudioRecorderButton() {
-        audioRecorderButton = findViewById(R.id.audio_recorder_button);
         audioRecorderButton.setOnClickListener((View view) -> {
             Intent audioRecorderIntent = new Intent(getApplicationContext(), AzureSpeechActivity.class);
             audioRecorderIntent.putExtra("nfcId", nfcId);
@@ -160,7 +176,6 @@ public class PharmacistActivity extends AppCompatActivity {
     }
 
     private void initBarcodeScannerButton() {
-        barcodeScannerButton = findViewById(R.id.barcode_scanner_button);
         barcodeScannerButton.setOnClickListener((View view) -> {
             Intent barcodeScannerIntent = new Intent(getApplicationContext(), BarcodeScannerActivity.class);
             startActivityForResult(barcodeScannerIntent, BARCODE_REQ_CODE);
@@ -215,7 +230,6 @@ public class PharmacistActivity extends AppCompatActivity {
     }
 
     public void initNfcButton() {
-        nfcButton = findViewById(R.id.nfc_button);
         nfcButton.setOnClickListener((View view) -> {
             Intent intent = new Intent(PharmacistActivity.this, NFCActivity.class);
             startActivityForResult(intent, NFC_REQ_CODE);

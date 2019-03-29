@@ -10,7 +10,6 @@ import android.widget.Button;
 
 import com.squad.betakua.tap_neko.PharmacistActivity;
 import com.squad.betakua.tap_neko.R;
-import com.squad.betakua.tap_neko.audiorecord.AzureSpeechActivity;
 import com.squad.betakua.tap_neko.auth.AuthActivity;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
@@ -18,7 +17,7 @@ import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private boolean IS_DEV_MODE = false;
+    private boolean IS_DEV_MODE = false; // add button to access pharmacist interface
     private boolean isPatient = true;
     // private boolean isPatient = true;
     private boolean bypassAuth = true;

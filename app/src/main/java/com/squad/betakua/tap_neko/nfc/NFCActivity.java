@@ -24,11 +24,13 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.squad.betakua.tap_neko.Constants;
 import com.squad.betakua.tap_neko.R;
 
 import java.util.HashMap;
@@ -37,6 +39,7 @@ import java.util.Locale;
 public class NFCActivity extends AppCompatActivity {
     public static final int NFC_REQ_CODE = 123;
     public static final String NFC_ID_KEY = "nfc_id";
+    Button nfcDemoBtn;
 
     TextView text;
     TextView textSuccess;
@@ -60,6 +63,18 @@ public class NFCActivity extends AppCompatActivity {
         nfcAnimation = findViewById(R.id.lottie_nfc);
         checkAnimation = findViewById(R.id.lottie_nfc_success);
         checkAnimation.setVisibility(View.GONE);
+
+        // DEMO
+        nfcDemoBtn = findViewById(R.id.nfc_demo_btn);
+        nfcDemoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                demoNFCCallback();
+            }
+        });
+        if (Constants.IS_DEMO) {
+            nfcDemoBtn.setVisibility(View.VISIBLE);
+        }
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
@@ -191,6 +206,13 @@ public class NFCActivity extends AppCompatActivity {
         resolveIntent(intent);
     }
 
+    private void demoNFCCallback() {
+        Intent data = new Intent();
+        data.putExtra(NFC_ID_KEY, Constants.DEMO_NFC_CODE.toString());
+        setResult(RESULT_OK, data);
+        displaySuccessAnimation();
+    }
+
     private void resolveIntent(Intent intent) {
         String action = intent.getAction();
 
@@ -268,7 +290,7 @@ public class NFCActivity extends AppCompatActivity {
             public void run() {
                 finish();
             }
-        }, 2500);
+        }, 2000);
     }
 
 }

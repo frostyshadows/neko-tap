@@ -22,10 +22,12 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.squad.betakua.tap_neko.Constants;
 import com.squad.betakua.tap_neko.PatientActivity;
 import com.squad.betakua.tap_neko.R;
 
@@ -35,7 +37,7 @@ import java.util.Locale;
 public class NFCPatientActivity extends AppCompatActivity {
     public static final int NFC_REQ_CODE = 123;
     public static final String NFC_ID_KEY = "nfc_id";
-
+    Button nfcDemoBtn;
     String nfcId;
     TextView text;
     TextView textSuccess;
@@ -59,6 +61,18 @@ public class NFCPatientActivity extends AppCompatActivity {
         nfcAnimation = findViewById(R.id.lottie_nfc);
         checkAnimation = findViewById(R.id.lottie_nfc_success);
         checkAnimation.setVisibility(View.GONE);
+
+        // DEMO
+        nfcDemoBtn = findViewById(R.id.nfc_demo_btn);
+        nfcDemoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                demoNFCCallback();
+            }
+        });
+        if (Constants.IS_DEMO) {
+            nfcDemoBtn.setVisibility(View.VISIBLE);
+        }
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
@@ -212,6 +226,14 @@ public class NFCPatientActivity extends AppCompatActivity {
         resolveIntent(intent);
     }
 
+    private void demoNFCCallback() {
+        nfcId = Constants.DEMO_NFC_CODE.toString();
+        // Intent data = new Intent();
+        // data.putExtra(NFC_ID_KEY, Constants.DEMO_NFC_CODE);
+        // setResult(RESULT_OK, data);
+        displaySuccessAnimation();
+    }
+
     private void resolveIntent(Intent intent) {
         String action = intent.getAction();
 
@@ -250,16 +272,6 @@ public class NFCPatientActivity extends AppCompatActivity {
         if (msgs == null || msgs.length == 0)
             return;
 
-        // StringBuilder builder = new StringBuilder();
-        // List<ParsedNdefRecord> records = NdefMessageParser.parse(msgs[0]);
-        // final int size = records.size();
-        //
-        // for (int i = 0; i < size; i++) {
-        //     ParsedNdefRecord record = records.get(i);
-        //     String str = record.str();
-        //     builder.append(str).append("\n");
-        // }
-
         // Play a noise
         ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, ToneGenerator.MAX_VOLUME);
         toneG.startTone(ToneGenerator.TONE_CDMA_ANSWER, 200); //200 is duration in ms
@@ -292,7 +304,9 @@ public class NFCPatientActivity extends AppCompatActivity {
                 patientIntent.putExtra(NFC_ID_KEY, nfcId);
                 startActivity(patientIntent);
             }
-        }, 2500);
+        }, 2000);
     }
+
+
 
 }
