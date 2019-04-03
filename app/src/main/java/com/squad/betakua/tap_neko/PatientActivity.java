@@ -46,9 +46,9 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
     public static final int INDEX_TEXT_PAGE = 1;
     public static final int INDEX_VIDEO_PAGE = 2;
 
-    //Allows swiping between fragments
+    // Allows swiping between fragments
     private ViewPager mPager;
-    //Provides the pages (fragments) to the ViewPager
+    // Provides the pages (fragments) to the ViewPager
     private PagerAdapter mPagerAdapter;
 
     private String nfcId;
