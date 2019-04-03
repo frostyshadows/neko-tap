@@ -22,7 +22,7 @@ public class UriRecord implements ParsedNdefRecord {
 
     /**
      * NFC Forum "URI Record Type Definition"
-     *
+     * <p>
      * This is a mapping of "URI Identifier Codes" to URI string prefixes,
      * per section 3.2.2 of the NFC Forum URI Record Type Definition document.
      */
@@ -84,7 +84,7 @@ public class UriRecord implements ParsedNdefRecord {
      * This will handle both TNF_WELL_KNOWN / RTD_URI and TNF_ABSOLUTE_URI.
      *
      * @throws IllegalArgumentException if the NdefRecord is not a record
-     *         containing a URI.
+     *                                  containing a URI.
      */
     public static UriRecord parse(NdefRecord record) {
         short tnf = record.getTnf();
@@ -96,14 +96,18 @@ public class UriRecord implements ParsedNdefRecord {
         throw new IllegalArgumentException("Unknown TNF " + tnf);
     }
 
-    /** Parse and absolute URI record */
+    /**
+     * Parse and absolute URI record
+     */
     private static UriRecord parseAbsolute(NdefRecord record) {
         byte[] payload = record.getPayload();
         Uri uri = Uri.parse(new String(payload, Charset.forName("UTF-8")));
         return new UriRecord(uri);
     }
 
-    /** Parse an well known URI record */
+    /**
+     * Parse an well known URI record
+     */
     private static UriRecord parseWellKnown(NdefRecord record) {
         Preconditions.checkArgument(Arrays.equals(record.getType(), NdefRecord.RTD_URI));
         byte[] payload = record.getPayload();

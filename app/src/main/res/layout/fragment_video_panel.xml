@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,8 +9,8 @@
         android:orientation="vertical"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:background="@color/panelGreenDark"
-        >
+        android:background="@color/panelGreenDark">
+
         <TextView
             android:id="@+id/patient_video_title"
             android:layout_width="match_parent"
@@ -38,6 +36,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp">
+
         <TextView
             android:text="MORE RESOURCES"
             android:layout_marginTop="36dp"
@@ -46,6 +45,7 @@
             android:textColor="@color/panelGreenDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/open_yt_button"
             android:layout_marginTop="8dp"
@@ -67,17 +67,20 @@
             android:layout_marginTop="36dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/pharmacy_name"
             android:textSize="20sp"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/pharmacy_phone"
             android:textSize="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/pharmacist"
             android:textSize="20sp"
@@ -104,8 +107,8 @@
             android:padding="10dp"
             android:background="@color/zxing_transparent"
             android:contentDescription="@string/patient_translate_nav_text"
-            android:src="@drawable/ic_text_btn_left"
-            />
+            android:src="@drawable/ic_text_btn_left" />
+
         <View
             android:layout_width="4dp"
             android:layout_height="fill_parent"
@@ -120,8 +123,7 @@
             android:padding="10dp"
             android:background="@color/zxing_transparent"
             android:contentDescription="@string/patient_audio_tap_again"
-            android:src="@drawable/ic_logo_white_icon"
-            />
+            android:src="@drawable/ic_logo_white_icon" />
     </LinearLayout>
 
 

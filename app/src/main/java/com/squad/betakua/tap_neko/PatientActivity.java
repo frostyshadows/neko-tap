@@ -184,10 +184,10 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
     }
 
     @Override
-    public void onButtonClicked(View view){
+    public void onButtonClicked(View view) {
         int currPos = mPager.getCurrentItem();
 
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.patient_view_text_button:
                 mPager.setCurrentItem(INDEX_TEXT_PAGE);
                 break;

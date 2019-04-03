@@ -212,7 +212,7 @@ public class ScreenSlideAudioPlayFragment extends Fragment {
         mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                NotificationScheduler.setReminder(getContext(),AlarmReceiver.class,
+                NotificationScheduler.setReminder(getContext(), AlarmReceiver.class,
                         selectedHour, selectedMinute, "Doxycycline", "1 tablet");
             }
         }, hour, minute, true);//Yes 24 hour time

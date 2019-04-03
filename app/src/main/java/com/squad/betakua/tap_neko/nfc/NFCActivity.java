@@ -3,7 +3,6 @@ package com.squad.betakua.tap_neko.nfc;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.nfc.NdefMessage;
@@ -20,12 +19,10 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +31,6 @@ import com.squad.betakua.tap_neko.Constants;
 import com.squad.betakua.tap_neko.R;
 
 import java.util.HashMap;
-import java.util.Locale;
 
 public class NFCActivity extends AppCompatActivity {
     public static final int NFC_REQ_CODE = 123;
@@ -91,7 +87,7 @@ public class NFCActivity extends AppCompatActivity {
                         .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
     }
 
-    void speak(String s){
+    void speak(String s) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Log.v(TAG, "Speak new API");
             Bundle bundle = new Bundle();
@@ -235,8 +231,8 @@ public class NFCActivity extends AppCompatActivity {
                 Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 byte[] payload = dumpTagData(tag).getBytes();
                 NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
-                NdefMessage msg = new NdefMessage(new NdefRecord[] {record});
-                msgs = new NdefMessage[] {msg};
+                NdefMessage msg = new NdefMessage(new NdefRecord[]{record});
+                msgs = new NdefMessage[]{msg};
                 Intent data = new Intent();
                 data.putExtra(NFC_ID_KEY, Utils.toHex(id));
                 setResult(RESULT_OK, data);

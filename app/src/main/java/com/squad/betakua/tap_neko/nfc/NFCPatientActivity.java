@@ -98,9 +98,8 @@ public class NFCPatientActivity extends AppCompatActivity {
                     if (result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Toast.makeText(getApplicationContext(), "This language is not supported", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        Log.v("TTS","onInit succeeded");
+                    } else {
+                        Log.v("TTS", "onInit succeeded");
                         speak("Please tap your phone against your prescription bottle cap.");
                     }
                 } else {
@@ -110,7 +109,7 @@ public class NFCPatientActivity extends AppCompatActivity {
         });
     }
 
-    void speak(String s){
+    void speak(String s) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Log.v(TAG, "Speak new API");
             Bundle bundle = new Bundle();
@@ -257,8 +256,8 @@ public class NFCPatientActivity extends AppCompatActivity {
                 Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 byte[] payload = dumpTagData(tag).getBytes();
                 NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
-                NdefMessage msg = new NdefMessage(new NdefRecord[] {record});
-                msgs = new NdefMessage[] {msg};
+                NdefMessage msg = new NdefMessage(new NdefRecord[]{record});
+                msgs = new NdefMessage[]{msg};
                 Intent data = new Intent();
                 data.putExtra(NFC_ID_KEY, nfcId);
                 setResult(NFC_REQ_CODE, data);
@@ -306,7 +305,6 @@ public class NFCPatientActivity extends AppCompatActivity {
             }
         }, 2000);
     }
-
 
 
 }

@@ -1,12 +1,7 @@
 package com.squad.betakua.tap_neko.nfc;
 
 
-import android.app.Activity;
 import android.nfc.NdefRecord;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.common.base.Preconditions;
 
@@ -18,7 +13,9 @@ import java.util.Arrays;
  */
 public class TextRecord implements ParsedNdefRecord {
 
-    /** ISO/IANA language code */
+    /**
+     * ISO/IANA language code
+     */
     private final String mLanguageCode;
 
     private final String mText;
