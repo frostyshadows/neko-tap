@@ -2,8 +2,6 @@ package com.squad.betakua.tap_neko.language;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.squad.betakua.tap_neko.R;
 
@@ -21,7 +19,7 @@ public class LanguageActivity extends AppCompatActivity {
     }
 
     private static HashMap<String, String> createMap() {
-        HashMap<String,String> langs = new HashMap<String, String>();
+        HashMap<String, String> langs = new HashMap<String, String>();
         langs.put("English", "en");
         langs.put("Français", "fr");
         langs.put("國語", "zh-Hans");

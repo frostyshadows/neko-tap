@@ -2,9 +2,7 @@ package com.squad.betakua.tap_neko.patientinfo;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import android.speech.tts.TextToSpeech;
-
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
@@ -200,11 +198,11 @@ public class ScreenSlideTextPanelFragment extends Fragment {
 
         if (isIncreasing && fontSize < 4) {
             fontSize++;
-        } else if (!isIncreasing && fontSize > 0){
+        } else if (!isIncreasing && fontSize > 0) {
             fontSize--;
         }
 
-        switch(fontSize) {
+        switch (fontSize) {
             case 0:
                 result = 20;
                 break;

@@ -51,7 +51,8 @@ public class RecordWaveTask extends AsyncTask<File, Void, Object[]> {
 
     private static final int BUFFER_SIZE = 2 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_MASK, ENCODING);
 
-    public RecordWaveTask() { }
+    public RecordWaveTask() {
+    }
 
     /**
      * Opens up the given file, writes the header, and keeps filling it with raw PCM bytes from

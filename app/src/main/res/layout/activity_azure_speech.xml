@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,6 +25,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/azure_speech_text_output"
             android:layout_width="match_parent"
@@ -45,10 +45,12 @@
             app:layout_constraintHorizontal_bias="0.513"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/azure_speech_status" />
+
         <View
             android:layout_height="4dp"
             android:layout_width="fill_parent"
             android:background="@color/disabledGrey" />
+
         <EditText
             android:id="@+id/azure_speech_translated_output"
             android:layout_width="match_parent"
@@ -63,7 +65,8 @@
             android:minLines="6"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:scrollHorizontally="false" />
-        </LinearLayout>
+    </LinearLayout>
+
     <Button
         android:id="@+id/speech_button_wav_start"
         android:layout_width="108dp"

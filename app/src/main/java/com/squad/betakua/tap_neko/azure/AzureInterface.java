@@ -6,8 +6,11 @@ import android.util.Log;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.*;
-import com.microsoft.cognitiveservices.speech.*;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import com.microsoft.cognitiveservices.speech.SpeechConfig;
+import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import com.microsoft.cognitiveservices.speech.translation.SpeechTranslationConfig;
 import com.microsoft.cognitiveservices.speech.translation.TranslationRecognizer;
@@ -120,7 +123,7 @@ public class AzureInterface {
                                                     String pharmacist,
                                                     String translated,
                                                     String reminder) {
-            final InfoItem item = new InfoItem();
+        final InfoItem item = new InfoItem();
         Log.e("writing... ", nfcID + " " + productID + " " + transcript + " " + url);
 
         item.setId(nfcID);
@@ -188,8 +191,8 @@ public class AzureInterface {
     /**
      * Write a new drug info item to the Azure DrugInfoTable
      *
-     * @param nfcID product ID
-     * @param text Text of instructions
+     * @param nfcID      product ID
+     * @param text       Text of instructions
      * @param youtubeURL YouTube URL of how-to video
      */
     public void writeDrugInfoItem(String nfcID, String text, String youtubeURL) {
@@ -203,6 +206,7 @@ public class AzureInterface {
 
     /**
      * Look up a drug info item in Azure DrugInfoTable by NFC ID
+     *
      * @param productID ProductID ID to look up
      * @return Future for a list of matching InfoItems
      */

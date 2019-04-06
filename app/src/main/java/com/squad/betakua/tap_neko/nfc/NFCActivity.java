@@ -3,38 +3,25 @@ package com.squad.betakua.tap_neko.nfc;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.nfc.tech.MifareClassic;
-import android.nfc.tech.MifareUltralight;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.squad.betakua.tap_neko.Constants;
 import com.squad.betakua.tap_neko.R;
-
-import java.util.HashMap;
-import java.util.Locale;
 
 public class NFCActivity extends AppCompatActivity {
     public static final int NFC_REQ_CODE = 123;
@@ -91,20 +78,6 @@ public class NFCActivity extends AppCompatActivity {
                         .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
     }
 
-    void speak(String s){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Log.v(TAG, "Speak new API");
-            Bundle bundle = new Bundle();
-            bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
-            mTts.speak(s, TextToSpeech.QUEUE_FLUSH, bundle, null);
-        } else {
-            Log.v(TAG, "Speak old API");
-            HashMap<String, String> param = new HashMap<>();
-            param.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_MUSIC));
-            mTts.speak(s, TextToSpeech.QUEUE_FLUSH, param);
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -121,83 +94,6 @@ public class NFCActivity extends AppCompatActivity {
         Toast.makeText(this, "You need to enable NFC", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
         startActivity(intent);
-    }
-
-    private String dumpTagData(Tag tag) {
-        StringBuilder sb = new StringBuilder();
-        byte[] id = tag.getId();
-
-        // TODO: Here, we transmit the ID to the callback
-        sb.append("ID (hex): ").append(Utils.toHex(id)).append('\n');
-        sb.append("ID (reversed hex): ").append(Utils.toReversedHex(id)).append('\n');
-        sb.append("ID (dec): ").append(Utils.toDec(id)).append('\n');
-        sb.append("ID (reversed dec): ").append(Utils.toReversedDec(id)).append('\n');
-
-        String prefix = "android.nfc.tech.";
-        sb.append("Technologies: ");
-        for (String tech : tag.getTechList()) {
-            sb.append(tech.substring(prefix.length()));
-            sb.append(", ");
-        }
-
-        sb.delete(sb.length() - 2, sb.length());
-
-        for (String tech : tag.getTechList()) {
-            if (tech.equals(MifareClassic.class.getName())) {
-                sb.append('\n');
-                String type = "Unknown";
-
-                try {
-                    MifareClassic mifareTag = MifareClassic.get(tag);
-
-                    switch (mifareTag.getType()) {
-                        case MifareClassic.TYPE_CLASSIC:
-                            type = "Classic";
-                            break;
-                        case MifareClassic.TYPE_PLUS:
-                            type = "Plus";
-                            break;
-                        case MifareClassic.TYPE_PRO:
-                            type = "Pro";
-                            break;
-                    }
-                    sb.append("Mifare Classic type: ");
-                    sb.append(type);
-                    sb.append('\n');
-
-                    sb.append("Mifare size: ");
-                    sb.append(mifareTag.getSize() + " bytes");
-                    sb.append('\n');
-
-                    sb.append("Mifare sectors: ");
-                    sb.append(mifareTag.getSectorCount());
-                    sb.append('\n');
-
-                    sb.append("Mifare blocks: ");
-                    sb.append(mifareTag.getBlockCount());
-                } catch (Exception e) {
-                    sb.append("Mifare classic error: " + e.getMessage());
-                }
-            }
-
-            if (tech.equals(MifareUltralight.class.getName())) {
-                sb.append('\n');
-                MifareUltralight mifareUlTag = MifareUltralight.get(tag);
-                String type = "Unknown";
-                switch (mifareUlTag.getType()) {
-                    case MifareUltralight.TYPE_ULTRALIGHT:
-                        type = "Ultralight";
-                        break;
-                    case MifareUltralight.TYPE_ULTRALIGHT_C:
-                        type = "Ultralight C";
-                        break;
-                }
-                sb.append("Mifare Ultralight type: ");
-                sb.append(type);
-            }
-        }
-
-        return sb.toString();
     }
 
     @Override
@@ -219,47 +115,15 @@ public class NFCActivity extends AppCompatActivity {
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            NdefMessage[] msgs;
-
-            if (rawMsgs != null) {
-                msgs = new NdefMessage[rawMsgs.length];
-
-                for (int i = 0; i < rawMsgs.length; i++) {
-                    msgs[i] = (NdefMessage) rawMsgs[i];
-                }
-
-            } else {
-                byte[] empty = new byte[0];
-                byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
-                Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                byte[] payload = dumpTagData(tag).getBytes();
-                NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
-                NdefMessage msg = new NdefMessage(new NdefRecord[] {record});
-                msgs = new NdefMessage[] {msg};
-                Intent data = new Intent();
-                data.putExtra(NFC_ID_KEY, Utils.toHex(id));
-                setResult(RESULT_OK, data);
-            }
-
-            displayMsgs(msgs);
+            byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
+            Intent data = new Intent();
+            data.putExtra(NFC_ID_KEY, Utils.toHex(id));
+            setResult(RESULT_OK, data);
+            displayMsgs();
         }
     }
 
-    private void displayMsgs(NdefMessage[] msgs) {
-        if (msgs == null || msgs.length == 0)
-            return;
-
-        // StringBuilder builder = new StringBuilder();
-        // List<ParsedNdefRecord> records = NdefMessageParser.parse(msgs[0]);
-        // final int size = records.size();
-        //
-        // for (int i = 0; i < size; i++) {
-        //     ParsedNdefRecord record = records.get(i);
-        //     String str = record.str();
-        //     builder.append(str).append("\n");
-        // }
-
+    private void displayMsgs() {
         // Play a noise
         ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, ToneGenerator.MAX_VOLUME);
         toneG.startTone(ToneGenerator.TONE_CDMA_ANSWER, 200); //200 is duration in ms

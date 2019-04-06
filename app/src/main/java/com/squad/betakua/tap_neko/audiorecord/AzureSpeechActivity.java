@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -17,8 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -31,7 +28,6 @@ import com.squad.betakua.tap_neko.Constants;
 import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
-import com.squad.betakua.tap_neko.azure.OnDownloadAudioFileListener;
 import com.squad.betakua.tap_neko.azure.OnUploadAudioFileListener;
 import com.squad.betakua.tap_neko.utils.Utils;
 import com.squareup.okhttp.MediaType;
@@ -42,11 +38,8 @@ import com.squareup.okhttp.Response;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.UUID;
 
-import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_REQ_KEY;
 import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_TRANSCRIPT_KEY;
 import static com.squad.betakua.tap_neko.PharmacistActivity.AUDIO_TRANSLATE_KEY;
 
@@ -83,7 +76,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[] { Manifest.permission.RECORD_AUDIO },
+                    new String[]{Manifest.permission.RECORD_AUDIO},
                     PERMISSION_RECORD_AUDIO);
             // return;
         }
@@ -138,7 +131,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
 
         // Create file if doesn't exist
         try {
-            if(!outputFile.exists()) {
+            if (!outputFile.exists()) {
                 boolean result = outputFile.createNewFile();
                 Log.e("LOG RESULT", " " + result);
             }
@@ -246,8 +239,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
             if (e.getResult().getReason() == ResultReason.RecognizedSpeech) {
                 recognizedText = recognizedText + e.getResult().getText();
                 System.out.println("RECOGNIZED: Text=" + e.getResult().getText());
-            }
-            else if (e.getResult().getReason() == ResultReason.NoMatch) {
+            } else if (e.getResult().getReason() == ResultReason.NoMatch) {
                 System.out.println("NOMATCH: Speech could not be recognized.");
             }
         });
@@ -323,6 +315,7 @@ public class AzureSpeechActivity extends AppCompatActivity {
             Toast.makeText(this, "There was an error uploading the file...", Toast.LENGTH_SHORT).show();
         }
     }
+
     public void onFinishUpload() {
         Intent data = new Intent();
         translation = translationsText.getText().toString();
@@ -359,10 +352,12 @@ public class AzureSpeechActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPreExecute() {}
+        protected void onPreExecute() {
+        }
 
         @Override
-        protected void onProgressUpdate(Void... values) {}
+        protected void onProgressUpdate(Void... values) {
+        }
     }
 
     // This function performs a POST request.

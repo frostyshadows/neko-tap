@@ -6,11 +6,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.nfc.tech.MifareClassic;
-import android.nfc.tech.MifareUltralight;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,7 +27,6 @@ import com.squad.betakua.tap_neko.Constants;
 import com.squad.betakua.tap_neko.PatientActivity;
 import com.squad.betakua.tap_neko.R;
 
-import java.util.HashMap;
 import java.util.Locale;
 
 public class NFCPatientActivity extends AppCompatActivity {
@@ -43,7 +38,6 @@ public class NFCPatientActivity extends AppCompatActivity {
     TextView textSuccess;
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
-    static final String TAG = "TTS";
     TextToSpeech mTts;
     LottieAnimationView nfcAnimation;
     LottieAnimationView checkAnimation;
@@ -98,9 +92,8 @@ public class NFCPatientActivity extends AppCompatActivity {
                     if (result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Toast.makeText(getApplicationContext(), "This language is not supported", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        Log.v("TTS","onInit succeeded");
+                    } else {
+                        Log.v("TTS", "onInit succeeded");
                         speak("Please tap your phone against your prescription bottle cap.");
                     }
                 } else {
@@ -110,18 +103,10 @@ public class NFCPatientActivity extends AppCompatActivity {
         });
     }
 
-    void speak(String s){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Log.v(TAG, "Speak new API");
-            Bundle bundle = new Bundle();
-            bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
-            mTts.speak(s, TextToSpeech.QUEUE_FLUSH, bundle, null);
-        } else {
-            Log.v(TAG, "Speak old API");
-            HashMap<String, String> param = new HashMap<>();
-            param.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_MUSIC));
-            mTts.speak(s, TextToSpeech.QUEUE_FLUSH, param);
-        }
+    void speak(String s) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
+        mTts.speak(s, TextToSpeech.QUEUE_FLUSH, bundle, null);
     }
 
     @Override
@@ -140,84 +125,6 @@ public class NFCPatientActivity extends AppCompatActivity {
         Toast.makeText(this, "You need to enable NFC", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
         startActivity(intent);
-    }
-
-    private String dumpTagData(Tag tag) {
-        StringBuilder sb = new StringBuilder();
-        byte[] id = tag.getId();
-        nfcId = Utils.toHex(id);
-
-        // TODO: Here, we transmit the ID to the callback
-        sb.append("ID (hex): ").append(Utils.toHex(id)).append('\n');
-        sb.append("ID (reversed hex): ").append(Utils.toReversedHex(id)).append('\n');
-        sb.append("ID (dec): ").append(Utils.toDec(id)).append('\n');
-        sb.append("ID (reversed dec): ").append(Utils.toReversedDec(id)).append('\n');
-
-        String prefix = "android.nfc.tech.";
-        sb.append("Technologies: ");
-        for (String tech : tag.getTechList()) {
-            sb.append(tech.substring(prefix.length()));
-            sb.append(", ");
-        }
-
-        sb.delete(sb.length() - 2, sb.length());
-
-        for (String tech : tag.getTechList()) {
-            if (tech.equals(MifareClassic.class.getName())) {
-                sb.append('\n');
-                String type = "Unknown";
-
-                try {
-                    MifareClassic mifareTag = MifareClassic.get(tag);
-
-                    switch (mifareTag.getType()) {
-                        case MifareClassic.TYPE_CLASSIC:
-                            type = "Classic";
-                            break;
-                        case MifareClassic.TYPE_PLUS:
-                            type = "Plus";
-                            break;
-                        case MifareClassic.TYPE_PRO:
-                            type = "Pro";
-                            break;
-                    }
-                    sb.append("Mifare Classic type: ");
-                    sb.append(type);
-                    sb.append('\n');
-
-                    sb.append("Mifare size: ");
-                    sb.append(mifareTag.getSize() + " bytes");
-                    sb.append('\n');
-
-                    sb.append("Mifare sectors: ");
-                    sb.append(mifareTag.getSectorCount());
-                    sb.append('\n');
-
-                    sb.append("Mifare blocks: ");
-                    sb.append(mifareTag.getBlockCount());
-                } catch (Exception e) {
-                    sb.append("Mifare classic error: " + e.getMessage());
-                }
-            }
-
-            if (tech.equals(MifareUltralight.class.getName())) {
-                sb.append('\n');
-                MifareUltralight mifareUlTag = MifareUltralight.get(tag);
-                String type = "Unknown";
-                switch (mifareUlTag.getType()) {
-                    case MifareUltralight.TYPE_ULTRALIGHT:
-                        type = "Ultralight";
-                        break;
-                    case MifareUltralight.TYPE_ULTRALIGHT_C:
-                        type = "Ultralight C";
-                        break;
-                }
-                sb.append("Mifare Ultralight type: ");
-                sb.append(type);
-            }
-        }
-
-        return sb.toString();
     }
 
     @Override
@@ -251,27 +158,23 @@ public class NFCPatientActivity extends AppCompatActivity {
                 }
 
             } else {
-                byte[] empty = new byte[0];
                 byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
-                nfcId = Utils.toHex(id);
-                Tag tag = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                byte[] payload = dumpTagData(tag).getBytes();
-                NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
-                NdefMessage msg = new NdefMessage(new NdefRecord[] {record});
-                msgs = new NdefMessage[] {msg};
                 Intent data = new Intent();
+
+                // TODO: check with Azure if the nfcID exists
+                // if so, then proceed as usual
+                // otherwise, display a message like "nfc tag unrecognized" and try again
+
+                nfcId = Utils.toHex(id);
                 data.putExtra(NFC_ID_KEY, nfcId);
                 setResult(NFC_REQ_CODE, data);
             }
 
-            displayMsgs(msgs);
+            displayMsgs();
         }
     }
 
-    private void displayMsgs(NdefMessage[] msgs) {
-        if (msgs == null || msgs.length == 0)
-            return;
-
+    private void displayMsgs() {
         // Play a noise
         ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, ToneGenerator.MAX_VOLUME);
         toneG.startTone(ToneGenerator.TONE_CDMA_ANSWER, 200); //200 is duration in ms
@@ -306,7 +209,6 @@ public class NFCPatientActivity extends AppCompatActivity {
             }
         }, 2000);
     }
-
 
 
 }

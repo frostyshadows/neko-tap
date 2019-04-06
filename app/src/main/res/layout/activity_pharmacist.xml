@@ -99,6 +99,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="100dp">
+
         <Button
             android:id="@+id/submit_button"
             android:layout_width="match_parent"
@@ -109,8 +110,7 @@
             android:textColor="@color/white"
             android:text="@string/pharmacist_submit_button"
             android:theme="@style/ActionButton"
-            style="@style/Widget.AppCompat.Button.Colored"
-            />
+            style="@style/Widget.AppCompat.Button.Colored" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/submit_button_progress"

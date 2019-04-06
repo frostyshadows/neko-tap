@@ -2,9 +2,8 @@ package com.squad.betakua.tap_neko.splash;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -49,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
     public void onClick(View v) {
         int id = v.getId();
 
-            // Intent apharmIntent = new Intent(getApplicationContext(), AzureSpeechActivity.class);
+        // Intent apharmIntent = new Intent(getApplicationContext(), AzureSpeechActivity.class);
         // startActivity(apharmIntent);
 
         if (id == R.id.pharm_app) {
