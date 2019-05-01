@@ -358,6 +358,7 @@ public class PharmacistActivity extends AppCompatActivity {
                 // Spiriva
                 return "Spiriva Respimat Inhaler 2.5mcg (60 puffs)";
             case 6:
+                return "Ritalin LA Extended-Release Capsules 20mg";
             case 7:
                 // Accucheck
                 return "Accucheck Nano Blood Glucose Monitoring Device";
@@ -388,6 +389,8 @@ public class PharmacistActivity extends AppCompatActivity {
                 // Spiriva
                 return "ln6zmUHVdfE";
             case 6:
+                // Ritalin LA
+                return "pIqeXj6ubbg";
             case 7:
                 // Accucheck
                 return "pxgyAvKkoc4";
@@ -418,6 +421,8 @@ public class PharmacistActivity extends AppCompatActivity {
                 // Spiriva
                 return "https://www.spiriva.com/asthma/how-to-use";
             case 6:
+                // Ritalin LA
+                return "https://www.mayoclinic.org/drugs-supplements/methylphenidate-oral-route/description/drg-20068297";
             case 7:
                 // Accucheck
                 return "https://www.accu-chek.ca/en/diabetescare/when-why-how-test";
