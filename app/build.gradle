@@ -14,6 +14,7 @@ android {
         buildConfigField 'String', "nekotap_speech_key1", NekoTap_AzureSpeechKey1
         buildConfigField 'String', "nekotap_speech_key2", NekoTap_AzureSpeechKey2
         buildConfigField 'String', "azure_blob_storage_account_name", NekoTap_AzureStorageAccountName
+        buildConfigField 'String', "azure_blob_storage_blob_container_name", NekoTap_AzureStorageBlobContainerName
         buildConfigField 'String', "nekotap_blob_key1", NekoTap_AzureStorageBlobKey1
         buildConfigField 'String', "nekotap_blob_key2", NekoTap_AzureStorageBlobKey1
         buildConfigField 'String', "nekotap_translate_1", NekoTap_AzureTranslateKey1

@@ -106,7 +106,7 @@ public class NFCPatientActivity extends AppCompatActivity {
     void speak(String s) {
         Bundle bundle = new Bundle();
         bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
-        mTts.speak(s, TextToSpeech.QUEUE_FLUSH, bundle, null);
+        // mTts.speak(s, TextToSpeech.QUEUE_FLUSH, bundle, null);
     }
 
     @Override

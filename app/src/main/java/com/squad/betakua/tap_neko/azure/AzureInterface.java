@@ -32,14 +32,10 @@ public class AzureInterface {
     private static final String CONNECTION_STRING_TEMPLATE = "DefaultEndpointsProtocol=https;" +
             "AccountName=%s;" +
             "AccountKey=%s";
-    // private static final String SPEECH_SUB_KEY = BuildConfig.azure_speech_key1; // TODO: azure credits expired
-    // private static final String STORAGE_ACCOUNT_NAME = BuildConfig.azure_storage_account_name; // TODO: azure credits expired
-    // private static final String STORAGE_ACCOUNT_KEY = BuildConfig.azure_storage_account_key; // TODO: azure credits expired
-    // private static final String STORAGE_CONTAINER_NAME = "azureaudiotest"; // TODO: azure credits expired
     private static final String SPEECH_SUB_KEY = BuildConfig.nekotap_speech_key1;
     private static final String STORAGE_ACCOUNT_NAME = BuildConfig.azure_blob_storage_account_name;
     private static final String STORAGE_ACCOUNT_KEY = BuildConfig.nekotap_blob_key1;
-    private static final String STORAGE_CONTAINER_NAME = "nekotapstoragecontainer";
+    private static final String STORAGE_CONTAINER_NAME = BuildConfig.azure_blob_storage_blob_container_name;
     private static final String SERVICE_REGION = "westus";
 
     private static AzureInterface AZURE_INTERFACE = null;
@@ -49,12 +45,13 @@ public class AzureInterface {
     private OnUploadAudioFileListener uploadAudioFileListener;
 
     // Mobile App Services
-    // private static final String MOBILE_APP_SERVICES_URL = "https://tapthecat.azurewebsites.net"; // TODO: azure credits expired
-    private static final String MOBILE_APP_SERVICES_URL = "https://nekotapmobile.azurewebsites.net";
-    private static final String INFO_TABLE_NAME = "info_table";
-    private static final String DRUG_INFO_TABLE_NAME = "DrugInfoTable";
+    private static final String MOBILE_APP_SERVICES_URL = "https://nekotap.azurewebsites.net";
+    private static final String DEBUG_TABLE_NAME = "debug_item_table";
+    private static final String INFO_TABLE_NAME = "info_item_table";
+    private static final String DRUG_INFO_TABLE_NAME = "drug_info_item";
     private static final String TRANSLATIONS_TABLE_NAME = "translated_drug_info";
     private final MobileServiceClient mClient;
+    private final MobileServiceTable<DebugItem> debugTable;
     private final MobileServiceTable<InfoItem> infoTable;
     private final MobileServiceTable<DrugInfoItem> drugInfoTable;
     private final MobileServiceTable<TranslationsItem> translationsTable;
@@ -96,6 +93,7 @@ public class AzureInterface {
             mClient = new MobileServiceClient(MOBILE_APP_SERVICES_URL, context);
 
             this.infoTable = mClient.getTable(INFO_TABLE_NAME, InfoItem.class);
+            this.debugTable = mClient.getTable(DEBUG_TABLE_NAME, DebugItem.class);
             this.drugInfoTable = mClient.getTable(DRUG_INFO_TABLE_NAME, DrugInfoItem.class);
             this.translationsTable = mClient.getTable(TRANSLATIONS_TABLE_NAME, TranslationsItem.class);
             this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
@@ -124,9 +122,11 @@ public class AzureInterface {
                                                     String translated,
                                                     String reminder) {
         final InfoItem item = new InfoItem();
-        Log.e("writing... ", nfcID + " " + productID + " " + transcript + " " + url);
+        // Log.e("writing... ", nfcID + " " + productID + " " + productName + " " + transcript);
+        // Log.e("writing... ", url + " " + webUrl + " " + pharmacyPhone + " " + pharmacyName);
+        // Log.e("writing... ", pharmacist + " " + translated + " " + reminder);
 
-        item.setId(nfcID);
+        // item.setId(nfcID);
         item.setNfcID(nfcID);
         item.setProductID(productID);
         item.setProductName(productName);
@@ -134,11 +134,12 @@ public class AzureInterface {
         item.setTranslationsID(UUID.randomUUID().toString());
         item.setURL(url);
         item.setWebURL(webUrl);
-        item.setPharmacyName(pharmacyName);
         item.setPharmacyPhone(pharmacyPhone);
+        item.setPharmacyName(pharmacyName);
         item.setPharmacist(pharmacist);
         item.setTranslated(translated);
         item.setReminder(reminder);
+
         return this.infoTable.insert(item);
     }
 
@@ -224,7 +225,6 @@ public class AzureInterface {
      */
     public void uploadAudio(final String audioTitle, final InputStream in, final long length, OnUploadAudioFileListener listener) {
         uploadAudioFileListener = listener;
-
         new Thread(() -> {
             try {
                 final CloudBlobClient blobClient = this.storageAccount.createCloudBlobClient();
