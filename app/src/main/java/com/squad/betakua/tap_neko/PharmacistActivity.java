@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.InfoItem;
 import com.squad.betakua.tap_neko.barcode.BarcodeScannerActivity;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
+import com.squad.betakua.tap_neko.pharmacistsettings.PharmacistSettingsActivity;
 import com.squad.betakua.tap_neko.utils.Utils;
 
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
@@ -39,6 +41,8 @@ public class PharmacistActivity extends AppCompatActivity {
     public static final String AUDIO_REQ_KEY = "audio_record";
     public static final String AUDIO_TRANSCRIPT_KEY = "audio_transcript";
     public static final String AUDIO_TRANSLATE_KEY = "audio_translate";
+
+    private ImageButton settingsButton;
 
     private TableRow audioRecorderButton;
     private String transcript;
@@ -65,19 +69,20 @@ public class PharmacistActivity extends AppCompatActivity {
     private LottieAnimationView lottieNFC;
     private LottieAnimationView lottieAudio;
 
-    private static final String MOCK_YOUTUBE_URL = "https://www.youtube.com/watch?v=uGkbreu169Q";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pharmacist);
+
+        audioRecorderButton = findViewById(R.id.audio_recorder_button);
         barcodeScannerButton = findViewById(R.id.barcode_scanner_button);
         nfcButton = findViewById(R.id.nfc_button);
-        audioRecorderButton = findViewById(R.id.audio_recorder_button);
+
         textBarcode = findViewById(R.id.scan_text);
         textNFC = findViewById(R.id.nfc_text);
         textAudio = findViewById(R.id.audio_text);
 
+        initSettingsButton();
         initAudioRecorderButton();
         initBarcodeScannerButton();
         initNfcButton();
@@ -89,6 +94,15 @@ public class PharmacistActivity extends AppCompatActivity {
         audioRecorderButton.setEnabled(false);
         nfcButton.setBackgroundColor(getResources().getColor(R.color.superLightGrey));
         audioRecorderButton.setBackgroundColor(getResources().getColor(R.color.superLightGrey));
+    }
+
+    private void initSettingsButton() {
+        settingsButton = findViewById(R.id.settings_button);
+
+        settingsButton.setOnClickListener((View view) -> {
+            Intent settingsIntent = new Intent(getApplicationContext(), PharmacistSettingsActivity.class);
+            startActivity(settingsIntent);
+        });
     }
 
     private void initCheckboxAnimations() {

@@ -11,6 +11,12 @@
     <string name="pharmacist_submit_button_success">Successfully Submitted!</string>
     <string name="pharmacist_submit_button_error">There was an error submitting. Please try again.</string>
 
+    <!-- Pharmacist Settings Screen -->
+    <string name="pharmacist_settings_title">Pharmacist Settings</string>
+    <string name="pharmacist_settings_database">Initialize Database</string>
+    <string name="pharmacist_settings_database_description">Re-populates azure drug_info table with mock records</string>
+    <string name="pharmacist_settings_database_button">Init Database</string>
+
     <!-- Pharmacist NFC Screen -->
     <string name="nfc_activity">NFC Activity</string>
 

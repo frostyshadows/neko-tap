@@ -6,6 +6,21 @@
     android:layout_width="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <ImageButton
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/settings_button"
+            android:src="@drawable/ic_settings"
+            android:tint="@color/white"
+            android:background="@color/zxing_transparent"/>
+
+    </LinearLayout>
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
