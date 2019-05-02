@@ -83,6 +83,7 @@ public class PharmacistActivity extends AppCompatActivity {
         barcodeScannerButton = findViewById(R.id.barcode_scanner_button);
         nfcButton = findViewById(R.id.nfc_button);
         audioRecorderButton = findViewById(R.id.audio_recorder_button);
+        refillButton = findViewById(R.id.refill_reminder_button);
         textBarcode = findViewById(R.id.scan_text);
         textNFC = findViewById(R.id.nfc_text);
         textAudio = findViewById(R.id.audio_text);
@@ -109,10 +110,12 @@ public class PharmacistActivity extends AppCompatActivity {
         lottieBarcode = findViewById(R.id.check_barcode);
         lottieNFC = findViewById(R.id.check_nfc);
         lottieAudio = findViewById(R.id.check_audio);
+        lottieRefill = findViewById(R.id.check_refill);
 
         lottieBarcode.setProgress(0f);
         lottieNFC.setProgress(0f);
         lottieAudio.setProgress(0f);
+        lottieRefill.setProgress(0f);
 
         lottieBarcode.addValueCallback(
                 new KeyPath("**"),
@@ -123,6 +126,10 @@ public class PharmacistActivity extends AppCompatActivity {
                 LottieProperty.COLOR,
                 new LottieValueCallback<>(Color.WHITE));
         lottieAudio.addValueCallback(
+                new KeyPath("**"),
+                LottieProperty.COLOR,
+                new LottieValueCallback<>(Color.WHITE));
+        lottieRefill.addValueCallback(
                 new KeyPath("**"),
                 LottieProperty.COLOR,
                 new LottieValueCallback<>(Color.WHITE));
@@ -249,7 +256,7 @@ public class PharmacistActivity extends AppCompatActivity {
 
     // submit button should only be enabled if both audio, barcode, and NFC have been prepared
     private void refreshSubmitButton() {
-        if (hasAudio && hasBarcode && hasNfcId) {
+        if (hasAudio && hasBarcode && hasNfcId && hasReminder) {
             submitButton.setEnabled(true);
         } else {
             submitButton.setEnabled(false);
