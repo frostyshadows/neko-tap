@@ -9,29 +9,16 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField 'String', "AzureStorageAccountName", NekoTap_AzureStorageAccountName
-        buildConfigField 'String', "AzureStorageAccountKey", NekoTap_AzureStorageAccountKey
-        buildConfigField 'String', "AzureSpeechSubscriptionKey", NekoTap_AzureSpeechSubscriptionKey
 
-        // John's Keys
-        resValue "string", "azure_speech_key1", AndroidTest2_AzureSpeechTestKey1
-        resValue "string", "azure_speech_key2", AndroidTest2_AzureSpeechTestKey2
-        buildConfigField "String", "azure_speech_key1", AndroidTest2_AzureSpeechTestKey1
-        buildConfigField "String", "azure_speech_key2", AndroidTest2_AzureSpeechTestKey2
-        buildConfigField "String", "azure_storage_account_name", AndroidTest2_AzureStorageAccountName
-        buildConfigField "String", "azure_storage_account_key", AndroidTest2_AzureStorageAccountKey
-
-        // Sophie's Keys
-        buildConfigField "String", "youtube_api_key", NekoTap_YouTubeKey
-        resValue "string", "nekotap_speech_key1", NekoTap_SpeechKey1
-        resValue "string", "nekotap_speech_key2", NekoTap_SpeechKey2
-        buildConfigField 'String', "nekotap_speech_key1", NekoTap_SpeechKey1
-        buildConfigField 'String', "nekotap_speech_key2", NekoTap_SpeechKey2
-        buildConfigField "String", "azure_blob_storage_account_name", NekoTap_BlobStorageAccountName
-        buildConfigField 'String', "nekotap_blob_key1", NekoTap_BlobKey1
-        buildConfigField 'String', "nekotap_blob_key2", NekoTap_BlobKey2
-        buildConfigField 'String', "nekotap_translate_1", NekoTap_Translate_1
-
+        // Imagine Cup Keys (John's Account)
+        buildConfigField 'String', "nekotap_speech_key1", NekoTap_AzureSpeechKey1
+        buildConfigField 'String', "nekotap_speech_key2", NekoTap_AzureSpeechKey2
+        buildConfigField 'String', "azure_blob_storage_account_name", NekoTap_AzureStorageAccountName
+        buildConfigField 'String', "azure_blob_storage_blob_container_name", NekoTap_AzureStorageBlobContainerName
+        buildConfigField 'String', "nekotap_blob_key1", NekoTap_AzureStorageBlobKey1
+        buildConfigField 'String', "nekotap_blob_key2", NekoTap_AzureStorageBlobKey1
+        buildConfigField 'String', "nekotap_translate_1", NekoTap_AzureTranslateKey1
+        buildConfigField 'String', "nekotap_translate_2", NekoTap_AzureTranslateKey2
     }
 
     repositories {

@@ -15,7 +15,7 @@ public class InfoItem {
     public String translationsID;
     @com.google.gson.annotations.SerializedName("url")
     public String url;
-    @com.google.gson.annotations.SerializedName("weburl")
+    @com.google.gson.annotations.SerializedName("webUrl")
     public String webUrl;
     @com.google.gson.annotations.SerializedName("pharmacyPhone")
     public String pharmacyPhone;
