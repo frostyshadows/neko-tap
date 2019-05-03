@@ -1,6 +1,7 @@
 package com.squad.betakua.tap_neko.patientmedrecord;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +16,13 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.squad.betakua.tap_neko.PatientActivity;
 import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.DrugRecord;
+import com.squad.betakua.tap_neko.nfc.NFCActivity;
 import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
+import com.squad.betakua.tap_neko.patientinfo.ScreenSlideAudioPlayFragment;
 
 import static android.view.View.VISIBLE;
 
@@ -26,6 +30,7 @@ public class MedRecordActivity extends AppCompatActivity {
     Button addMedRecordBtn;
     LinearLayout emptyStatePanel;
     LinearLayout medListRoot;
+    Button viewInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +40,14 @@ public class MedRecordActivity extends AppCompatActivity {
         addMedRecordBtn = findViewById(R.id.med_record_add_med_btn);
         emptyStatePanel = findViewById(R.id.empty_state_panel);
         medListRoot = findViewById(R.id.med_record_list);
+        viewInfo = findViewById(R.id.viewButton);
+
 
         addMedRecordBtn.setOnClickListener((View view) -> {
-            Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class); //NFCPatientActivity.class
-            startActivity(patientIntent);
+            Intent drugIntent = new Intent(getApplicationContext(), NFCPatientActivity.class);
+            startActivity(drugIntent);
         });
+
         emptyStatePanel.setVisibility(VISIBLE);
 
         checkForExistingRecords();
@@ -105,11 +113,19 @@ public class MedRecordActivity extends AppCompatActivity {
                     row1.addView(label);
 
                     // assemble row 2
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    LinearLayout row2 = new LinearLayout(getApplicationContext());
+                    row2.setLayoutParams(layoutParams);
+                    row1.setOrientation(LinearLayout.HORIZONTAL);
+                    Button viewInfo = new Button(getApplicationContext());
+                    viewInfo.setText("view drug");
+                    row2.addView(viewInfo);
 
                     // assemble row 3
 
                     // finally, add the row to the med list
                     medicationRow.addView(row1);
+                    medicationRow.addView(row2);
                     medListRoot.addView(medicationRow);
 
                     removeEmptyRecordState();
