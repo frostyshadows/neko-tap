@@ -20,8 +20,9 @@ public class PharmacistSettingsActivity extends AppCompatActivity {
 
         initDatabaseBtn = findViewById(R.id.pharmacist_settings_database_button);
         initDatabaseBtn.setOnClickListener((View view) -> {
-            onInitDatabaseClick();
             initDatabaseBtn.setEnabled(false);
+            onInitDatabaseClick();
+            initDatabaseBtn.setEnabled(true);
         });
     }
 
@@ -29,6 +30,5 @@ public class PharmacistSettingsActivity extends AppCompatActivity {
         Context ctx = getApplicationContext();
         MockDatabase db = new MockDatabase();
         db.initMockDatabase(ctx);
-        initDatabaseBtn.setEnabled(true);
     }
 }

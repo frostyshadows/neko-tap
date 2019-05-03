@@ -13,5 +13,11 @@
   "doseUnit": "",
 
   "url": "",
-  "webUrl": ""
+  "webUrl": "",
+
+  "monograph_description": "",
+  "monograph_instructions": "",
+  "monograph_side_effects": "",
+  "monograph_warnings": "",
+  "monograph_interactions": ""
 }
