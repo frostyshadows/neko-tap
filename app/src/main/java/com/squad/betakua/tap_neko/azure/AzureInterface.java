@@ -15,9 +15,11 @@ import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import com.microsoft.cognitiveservices.speech.translation.SpeechTranslationConfig;
 import com.microsoft.cognitiveservices.speech.translation.TranslationRecognizer;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceException;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.squad.betakua.tap_neko.BuildConfig;
+import com.squad.betakua.tap_neko.patientmedrecord.PatientMedRecord;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,6 +55,7 @@ public class AzureInterface {
     private static final String DEVICE_RECORD_TABLE_NAME = "device_record_table";
     private static final String PHRASE_ITEM_TABLE_NAME = "phrase_table";
     private static final String TRANSLATIONS_TABLE_NAME = "translated_drug_info";
+    private static final String PATIENT_MED_RECORD_TABLE_NAME = "patient_med_record";
     private final MobileServiceClient mClient;
     private final MobileServiceTable<DebugItem> debugTable;
     private final MobileServiceTable<InfoItem> infoTable;
@@ -61,6 +64,7 @@ public class AzureInterface {
     private final MobileServiceTable<DeviceRecord> deviceRecordTable;
     private final MobileServiceTable<PhraseItem> phraseItemTable;
     private final MobileServiceTable<TranslationsItem> translationsTable;
+    private final MobileServiceTable<PatientMedRecord> patientMedRecordTable;
 
 
     /**
@@ -105,6 +109,7 @@ public class AzureInterface {
             this.deviceRecordTable = mClient.getTable(DEVICE_RECORD_TABLE_NAME, DeviceRecord.class);
             this.phraseItemTable = mClient.getTable(PHRASE_ITEM_TABLE_NAME, PhraseItem.class);
             this.translationsTable = mClient.getTable(TRANSLATIONS_TABLE_NAME, TranslationsItem.class);
+            this.patientMedRecordTable = mClient.getTable(PATIENT_MED_RECORD_TABLE_NAME, PatientMedRecord.class);
             this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
         } catch (URISyntaxException | InvalidKeyException | MalformedURLException e) {
             throw new AzureInterfaceException(e.getMessage());
@@ -332,6 +337,15 @@ public class AzureInterface {
     }
 
     /**
+     * Lookup single drug record
+     *
+     */
+    public ListenableFuture<MobileServiceList<DrugRecord>> readDrugRecord(String productID) {
+        Log.e("trying to read id ", productID);
+        return this.drugRecordTable.where().field("productID").eq(productID).execute();
+    }
+
+    /**
      * Populate Azure with mock device database
      *
      */
@@ -345,5 +359,33 @@ public class AzureInterface {
      */
     public ListenableFuture<PhraseItem> writePhraseItem(PhraseItem phraseItem) {
         return this.phraseItemTable.insert(phraseItem);
+    }
+
+    /**
+     * Add a drug to the patient record
+     *
+     */
+    public ListenableFuture<PatientMedRecord> writePatientMedRecord(PatientMedRecord medRecord) {
+        return this.patientMedRecordTable.insert(medRecord);
+    }
+
+    /**
+     * Read all drugs from the patient record
+     *
+     */
+    public ListenableFuture<MobileServiceList<PatientMedRecord>> readPatientMedRecord() throws MobileServiceException {
+        return this.patientMedRecordTable.where().execute();
+    }
+
+    public ListenableFuture<PatientMedRecord> checkIfPatientMedRecordExists(String rxNumber) {
+        return this.patientMedRecordTable.lookUp(rxNumber);
+    }
+
+    /**
+     * Delete a drug from the patient record
+     *
+     */
+    public ListenableFuture<PatientMedRecord> deletePatientMedRecord(PatientMedRecord medRecord) {
+        return this.patientMedRecordTable.insert(medRecord);
     }
 }

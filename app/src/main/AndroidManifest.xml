@@ -61,6 +61,12 @@
         <activity
             android:name=".notifications.RefillReminderSplash"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".patientmedrecord.AddMedRecordSplash"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".patientmedrecord.MedRecordActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
             android:name=".notifications.AlarmReceiver"
