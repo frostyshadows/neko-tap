@@ -1,6 +1,7 @@
 package com.squad.betakua.tap_neko.patientmedrecord;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +16,11 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.squad.betakua.tap_neko.PatientActivity;
 import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.DrugRecord;
+import com.squad.betakua.tap_neko.nfc.NFCActivity;
 import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideAudioPlayFragment;
 
@@ -41,13 +44,7 @@ public class MedRecordActivity extends AppCompatActivity {
 
 
         addMedRecordBtn.setOnClickListener((View view) -> {
-            Intent drugIntent = new Intent(getApplicationContext(), ScreenSlideAudioPlayFragment.class);
-            startActivity(drugIntent);
-        });
-
-        viewInfo.setOnClickListener((View view) -> {
-            //TODO change to audio fragment of medication
-            Intent drugIntent = new Intent(getApplicationContext(), ScreenSlideAudioPlayFragment.class);
+            Intent drugIntent = new Intent(getApplicationContext(), NFCPatientActivity.class);
             startActivity(drugIntent);
         });
 
@@ -116,11 +113,19 @@ public class MedRecordActivity extends AppCompatActivity {
                     row1.addView(label);
 
                     // assemble row 2
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    LinearLayout row2 = new LinearLayout(getApplicationContext());
+                    row2.setLayoutParams(layoutParams);
+                    row1.setOrientation(LinearLayout.HORIZONTAL);
+                    Button viewInfo = new Button(getApplicationContext());
+                    viewInfo.setText("view drug");
+                    row2.addView(viewInfo);
 
                     // assemble row 3
 
                     // finally, add the row to the med list
                     medicationRow.addView(row1);
+                    medicationRow.addView(row2);
                     medListRoot.addView(medicationRow);
 
                     removeEmptyRecordState();
