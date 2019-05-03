@@ -331,7 +331,6 @@ public class AzureInterface {
         return this.drugRecordTable.insert(drugRecord);
     }
 
-
     /**
      * Populate Azure with mock device database
      *
