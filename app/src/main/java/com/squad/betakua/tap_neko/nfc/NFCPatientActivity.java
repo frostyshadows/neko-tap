@@ -23,17 +23,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.squad.betakua.tap_neko.Constants;
 import com.squad.betakua.tap_neko.PatientActivity;
 import com.squad.betakua.tap_neko.R;
+import com.squad.betakua.tap_neko.azure.AzureInterface;
+import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
+import com.squad.betakua.tap_neko.azure.InfoItem;
+import com.squad.betakua.tap_neko.notifications.RefillReminderSplash;
 
 import java.util.Locale;
 
 public class NFCPatientActivity extends AppCompatActivity {
     public static final int NFC_REQ_CODE = 123;
     public static final String NFC_ID_KEY = "nfc_id";
+    public static final int REFILL_SPLASH_REQ_CODE = 124;
+    public static final String REFILL_SPLASH_KEY = "refill_splash_id";
     Button nfcDemoBtn;
     String nfcId;
+    String barcodeId;
+    String productName;
     TextView text;
     TextView textSuccess;
     NfcAdapter nfcAdapter;
@@ -103,7 +115,16 @@ public class NFCPatientActivity extends AppCompatActivity {
         });
     }
 
-    void speak(String s) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REFILL_SPLASH_REQ_CODE && resultCode == RESULT_OK) {
+            boolean acceptsRefillNotification = data.getBooleanExtra(REFILL_SPLASH_KEY, false);
+            Log.e("--- INTENT ----", "result is: " + acceptsRefillNotification);
+            startPatientIntent();
+        }
+    }
+
+    private void speak(String s) {
         Bundle bundle = new Bundle();
         bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
         // mTts.speak(s, TextToSpeech.QUEUE_FLUSH, bundle, null);
@@ -203,12 +224,47 @@ public class NFCPatientActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class);
-                patientIntent.putExtra(NFC_ID_KEY, nfcId);
-                startActivity(patientIntent);
+                checkForRefillNotification();
             }
         }, 2000);
     }
 
+    private void checkForRefillNotification() {
+        try {
+            ListenableFuture<MobileServiceList<InfoItem>> infoItemsFuture = AzureInterface.getInstance().readInfoItem(nfcId);
+            Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
+                public void onSuccess(MobileServiceList<InfoItem> infoItems) {
+                    String reminder = infoItems.get(0).getReminder();
+                    if (reminder != null && !reminder.equals("")) {
+                        barcodeId = infoItems.get(0).getProductID();
+                        productName = infoItems.get(0).getProductName();
 
+                        startRefillSplashIntent();
+                    } else {
+                        startPatientIntent();
+                    }
+                }
+
+                public void onFailure(Throwable t) {
+                    Log.e("HERE11", "fail " + t.toString());
+                    t.printStackTrace();
+                }
+            });
+        } catch (AzureInterfaceException e) {
+            Log.e("ERROR:", e.toString());
+        }
+    }
+
+    private void startPatientIntent() {
+        Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class);
+        patientIntent.putExtra(NFC_ID_KEY, nfcId);
+        startActivity(patientIntent);
+    }
+
+    private void startRefillSplashIntent() {
+        Intent refillSplashIntent = new Intent(getApplicationContext(), RefillReminderSplash.class);
+        refillSplashIntent.putExtra("barcodeId", barcodeId);
+        refillSplashIntent.putExtra("productName", productName);
+        startActivityForResult(refillSplashIntent, REFILL_SPLASH_REQ_CODE);
+    }
 }

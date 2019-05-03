@@ -105,9 +105,7 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
         notifBuilder.setDefaults(Notification.DEFAULT_SOUND);
         notifBuilder.setAutoCancel(false);
         NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(01234, notifBuilder.build());
-
-
+        // notificationManager.notify(01234, notifBuilder.build());
     }
 
     public void retrieveProductInfo() {

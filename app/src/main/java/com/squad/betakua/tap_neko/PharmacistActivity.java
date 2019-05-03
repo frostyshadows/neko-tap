@@ -42,7 +42,7 @@ public class PharmacistActivity extends AppCompatActivity {
     public static final String AUDIO_REQ_KEY = "audio_record";
     public static final String AUDIO_TRANSCRIPT_KEY = "audio_transcript";
     public static final String AUDIO_TRANSLATE_KEY = "audio_translate";
-    public static final int REFILL_REMINDER_CODE = 100;
+    public static final int REFILL_REMINDER_CODE = 102;
     public static final String REFILL_REMINDER_KEY = "refill_reminder";
 
     private ImageButton settingsButton;
@@ -61,7 +61,6 @@ public class PharmacistActivity extends AppCompatActivity {
     private LottieAnimationView submitButtonProgress;
 
     private TableRow refillButton;
-    private String refillId;
     private String refillDate;
     private boolean hasReminder = false;
 
@@ -201,7 +200,7 @@ public class PharmacistActivity extends AppCompatActivity {
             refreshSubmitButton();
         } else if (requestCode == REFILL_REMINDER_CODE && resultCode == RESULT_OK){
             //get date
-            refillId = data.getStringExtra(REFILL_REMINDER_KEY);
+            refillDate = data.getStringExtra(REFILL_REMINDER_KEY);
             //Set refill date
             hasReminder = true;
 
@@ -210,6 +209,10 @@ public class PharmacistActivity extends AppCompatActivity {
             refillButton.setBackgroundColor(Color.parseColor("#6dcc5b"));
             lottieRefill.setMaxProgress(0.5f);
             lottieRefill.playAnimation();
+
+            refillButton.setEnabled(true);
+            refreshSubmitButton();
+
         }
     }
 
@@ -297,7 +300,7 @@ public class PharmacistActivity extends AppCompatActivity {
         String pharmacyName = "Shoppers Drug Mart #2323";
         String pharmacist = "John Lee";
         String translated = demoGenerateTranslated();
-        String reminder = "";
+        String reminder = refillDate;
 
         try {
             ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance()
@@ -338,7 +341,7 @@ public class PharmacistActivity extends AppCompatActivity {
         String pharmacyName = "Shoppers Drug Mart #2323";
         String pharmacist = "John Lee";
         String translated = demoGenerateTranslated();
-        String reminder = "";
+        String reminder = refillDate;
 
         try {
             ListenableFuture<InfoItem> infoItemsFuture = AzureInterface.getInstance()

@@ -13,10 +13,14 @@ import android.widget.TextView;
 import com.squad.betakua.tap_neko.PatientActivity;
 import com.squad.betakua.tap_neko.PharmacistActivity;
 import com.squad.betakua.tap_neko.R;
+import com.squad.betakua.tap_neko.nfc.Utils;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import static com.squad.betakua.tap_neko.PharmacistActivity.REFILL_REMINDER_KEY;
 
 public class RefillReminder extends AppCompatActivity {
 
@@ -69,14 +73,21 @@ public class RefillReminder extends AppCompatActivity {
 
         submitButton.setOnClickListener((View view) -> {
             //Adding notification on date
-            Intent notificationIntent = new Intent(this, PatientActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 001, notificationIntent, 0);
+            Intent data = new Intent();
+            DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
+            String strDate = dateFormat.format(reminderDate);
 
-            AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, reminderDate.getTime(),pendingIntent);
+            data.putExtra(REFILL_REMINDER_KEY, strDate);
+            setResult(RESULT_OK, data);
+            finish();
 
+            // Intent notificationIntent = new Intent(this, PatientActivity.class);
+            // PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 001, notificationIntent, 0);
 
+            // AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+            // alarmManager.set(AlarmManager.RTC_WAKEUP, reminderDate.getTime(),pendingIntent);
         });
-
     }
+
+
 }

@@ -58,6 +58,9 @@
         <activity
             android:name=".notifications.RefillReminder"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".notifications.RefillReminderSplash"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
             android:name=".notifications.AlarmReceiver"
