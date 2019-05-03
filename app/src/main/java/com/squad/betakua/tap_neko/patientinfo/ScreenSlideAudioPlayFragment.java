@@ -59,6 +59,7 @@ public class ScreenSlideAudioPlayFragment extends Fragment {
         audioFilePath = getArguments().getString("audioFilePath", "");
         productName = getArguments().getString("productName", "Aerochamber (Child)") + "\nProduct ID: " + getArguments().getString("productID", "80092323");
         nfcId = getArguments().getString("nfcId", "");
+        Log.e("nfcID3", nfcId);
         fileId = Utils.nfcToFileName(nfcId);
         mediaPlayer = new MediaPlayer();
 

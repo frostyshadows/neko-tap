@@ -86,6 +86,8 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
         }
 
         nfcId = getIntent().getStringExtra(NFC_ID_KEY);
+        Log.e("nfcID2", nfcId);
+
         fileId = Utils.nfcToFileName(nfcId);
         retrieveProductInfo();
 
