@@ -1,13 +1,20 @@
 package com.squad.betakua.tap_neko;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -23,6 +30,7 @@ import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.InfoItem;
 import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
+import com.squad.betakua.tap_neko.notifications.RefillReminder;
 import com.squad.betakua.tap_neko.patientinfo.OnButtonClickListener;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideAudioPlayFragment;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideTextPanelFragment;
@@ -80,6 +88,26 @@ public class PatientActivity extends AppCompatActivity implements OnButtonClickL
         nfcId = getIntent().getStringExtra(NFC_ID_KEY);
         fileId = Utils.nfcToFileName(nfcId);
         retrieveProductInfo();
+
+        //Refill notification
+        //TODO get name of medication from database
+        String medicationName = "";
+        Intent intent = new Intent(this, RefillReminder.class);
+        long[] pattern = {0, 300, 0};
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 01234, intent, 0);
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this)
+                .setContentTitle("Refill reminder")
+                .setContentText("Get a refill for "+medicationName)
+                .setVibrate(pattern)
+                .setAutoCancel(false);
+
+        notifBuilder.setContentIntent(pendingIntent);
+        notifBuilder.setDefaults(Notification.DEFAULT_SOUND);
+        notifBuilder.setAutoCancel(false);
+        NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(01234, notifBuilder.build());
+
+
     }
 
     public void retrieveProductInfo() {
