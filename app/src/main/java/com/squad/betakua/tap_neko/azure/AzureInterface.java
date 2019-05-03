@@ -49,11 +49,17 @@ public class AzureInterface {
     private static final String DEBUG_TABLE_NAME = "debug_item_table";
     private static final String INFO_TABLE_NAME = "info_item_table";
     private static final String DRUG_INFO_TABLE_NAME = "drug_info_item";
+    private static final String DRUG_RECORD_TABLE_NAME = "drug_record_table";
+    private static final String DEVICE_RECORD_TABLE_NAME = "device_record_table";
+    private static final String PHRASE_ITEM_TABLE_NAME = "phrase_table";
     private static final String TRANSLATIONS_TABLE_NAME = "translated_drug_info";
     private final MobileServiceClient mClient;
     private final MobileServiceTable<DebugItem> debugTable;
     private final MobileServiceTable<InfoItem> infoTable;
     private final MobileServiceTable<DrugInfoItem> drugInfoTable;
+    private final MobileServiceTable<DrugRecord> drugRecordTable;
+    private final MobileServiceTable<DeviceRecord> deviceRecordTable;
+    private final MobileServiceTable<PhraseItem> phraseItemTable;
     private final MobileServiceTable<TranslationsItem> translationsTable;
 
 
@@ -95,6 +101,9 @@ public class AzureInterface {
             this.infoTable = mClient.getTable(INFO_TABLE_NAME, InfoItem.class);
             this.debugTable = mClient.getTable(DEBUG_TABLE_NAME, DebugItem.class);
             this.drugInfoTable = mClient.getTable(DRUG_INFO_TABLE_NAME, DrugInfoItem.class);
+            this.drugRecordTable = mClient.getTable(DRUG_RECORD_TABLE_NAME, DrugRecord.class);
+            this.deviceRecordTable = mClient.getTable(DEVICE_RECORD_TABLE_NAME, DeviceRecord.class);
+            this.phraseItemTable = mClient.getTable(PHRASE_ITEM_TABLE_NAME, PhraseItem.class);
             this.translationsTable = mClient.getTable(TRANSLATIONS_TABLE_NAME, TranslationsItem.class);
             this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
         } catch (URISyntaxException | InvalidKeyException | MalformedURLException e) {
@@ -314,4 +323,27 @@ public class AzureInterface {
         return this.translationsTable.where().field("id").eq(translationsID).execute();
     }
 
+    /**
+     * Populate Azure with mock drug database
+     *
+     */
+    public ListenableFuture<DrugRecord> writeDrugRecord(DrugRecord drugRecord) {
+        return this.drugRecordTable.insert(drugRecord);
+    }
+
+    /**
+     * Populate Azure with mock device database
+     *
+     */
+    public ListenableFuture<DeviceRecord> writeDeviceRecord(DeviceRecord deviceRecord) {
+        return this.deviceRecordTable.insert(deviceRecord);
+    }
+
+    /**
+     * Populate Azure with counselling phrases
+     *
+     */
+    public ListenableFuture<PhraseItem> writePhraseItem(PhraseItem phraseItem) {
+        return this.phraseItemTable.insert(phraseItem);
+    }
 }

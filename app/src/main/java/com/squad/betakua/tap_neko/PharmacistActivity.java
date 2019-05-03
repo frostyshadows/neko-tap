@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.InfoItem;
 import com.squad.betakua.tap_neko.barcode.BarcodeScannerActivity;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
+import com.squad.betakua.tap_neko.pharmacistsettings.PharmacistSettingsActivity;
 import com.squad.betakua.tap_neko.notifications.RefillReminder;
 import com.squad.betakua.tap_neko.utils.Utils;
 
@@ -42,6 +44,8 @@ public class PharmacistActivity extends AppCompatActivity {
     public static final String AUDIO_TRANSLATE_KEY = "audio_translate";
     public static final int REFILL_REMINDER_CODE = 100;
     public static final String REFILL_REMINDER_KEY = "refill_reminder";
+
+    private ImageButton settingsButton;
 
     private TableRow audioRecorderButton;
     private String transcript;
@@ -75,12 +79,12 @@ public class PharmacistActivity extends AppCompatActivity {
     private LottieAnimationView lottieAudio;
     private LottieAnimationView lottieRefill;
 
-    private static final String MOCK_YOUTUBE_URL = "https://www.youtube.com/watch?v=uGkbreu169Q";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pharmacist);
+
+        audioRecorderButton = findViewById(R.id.audio_recorder_button);
         barcodeScannerButton = findViewById(R.id.barcode_scanner_button);
         nfcButton = findViewById(R.id.nfc_button);
         audioRecorderButton = findViewById(R.id.audio_recorder_button);
@@ -90,6 +94,7 @@ public class PharmacistActivity extends AppCompatActivity {
         textAudio = findViewById(R.id.audio_text);
         textRefill = findViewById(R.id.refill_text);
 
+        initSettingsButton();
         initAudioRecorderButton();
         initBarcodeScannerButton();
         initNfcButton();
@@ -105,6 +110,15 @@ public class PharmacistActivity extends AppCompatActivity {
         nfcButton.setBackgroundColor(getResources().getColor(R.color.superLightGrey));
         audioRecorderButton.setBackgroundColor(getResources().getColor(R.color.superLightGrey));
         refillButton.setBackgroundColor(getResources().getColor(R.color.superLightGrey));
+    }
+
+    private void initSettingsButton() {
+        settingsButton = findViewById(R.id.settings_button);
+
+        settingsButton.setOnClickListener((View view) -> {
+            Intent settingsIntent = new Intent(getApplicationContext(), PharmacistSettingsActivity.class);
+            startActivity(settingsIntent);
+        });
     }
 
     private void initCheckboxAnimations() {
@@ -401,6 +415,7 @@ public class PharmacistActivity extends AppCompatActivity {
                 // Spiriva
                 return "Spiriva Respimat Inhaler 2.5mcg (60 puffs)";
             case 6:
+                return "Ritalin LA Extended-Release Capsules 20mg";
             case 7:
                 // Accucheck
                 return "Accucheck Nano Blood Glucose Monitoring Device";
@@ -431,6 +446,8 @@ public class PharmacistActivity extends AppCompatActivity {
                 // Spiriva
                 return "ln6zmUHVdfE";
             case 6:
+                // Ritalin LA
+                return "pIqeXj6ubbg";
             case 7:
                 // Accucheck
                 return "pxgyAvKkoc4";
@@ -461,6 +478,8 @@ public class PharmacistActivity extends AppCompatActivity {
                 // Spiriva
                 return "https://www.spiriva.com/asthma/how-to-use";
             case 6:
+                // Ritalin LA
+                return "https://www.mayoclinic.org/drugs-supplements/methylphenidate-oral-route/description/drg-20068297";
             case 7:
                 // Accucheck
                 return "https://www.accu-chek.ca/en/diabetescare/when-why-how-test";

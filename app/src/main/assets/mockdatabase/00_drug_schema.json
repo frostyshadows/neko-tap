@@ -1,0 +1,23 @@
+{
+  "productID": "",
+  "DIN": "",
+
+  "rxNumber": "",
+
+  "genericName": "",
+  "tradeName": "",
+  "label": "",
+
+  "dose": "",
+  "dosageForm": "",
+  "doseUnit": "",
+
+  "url": "",
+  "webUrl": "",
+
+  "monograph_description": "",
+  "monograph_instructions": "",
+  "monograph_side_effects": "",
+  "monograph_warnings": "",
+  "monograph_interactions": ""
+}

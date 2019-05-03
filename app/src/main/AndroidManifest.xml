@@ -41,6 +41,9 @@
             android:name=".PharmacistActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".pharmacistsettings.PharmacistSettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".audiorecord.AzureSpeechActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
