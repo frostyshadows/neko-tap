@@ -1,6 +1,8 @@
 package com.squad.betakua.tap_neko.azure;
 
 public class DeviceRecord {
+    @com.google.gson.annotations.SerializedName("id")
+    public String id;
     @com.google.gson.annotations.SerializedName("productID")
     private String productID;
     @com.google.gson.annotations.SerializedName("rxNumber")
@@ -15,6 +17,14 @@ public class DeviceRecord {
     private String url;
     @com.google.gson.annotations.SerializedName("webUrl")
     private String webUrl;
+
+    public String getId() {
+        return id;
+    }
+
+    public final void setId(String id) {
+        this.id = id;
+    }
 
     public String getProductID() {
         return productID;

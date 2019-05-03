@@ -1,6 +1,8 @@
 package com.squad.betakua.tap_neko.azure;
 
 public class PhraseItem {
+    @com.google.gson.annotations.SerializedName("id")
+    private String id;
     @com.google.gson.annotations.SerializedName("DIN")
     private String DIN;
     @com.google.gson.annotations.SerializedName("phrase")
@@ -9,6 +11,14 @@ public class PhraseItem {
     private String phraseID;
     @com.google.gson.annotations.SerializedName("category")
     private String category;
+
+    public String getId() {
+        return id;
+    }
+
+    public final void setId(String id) {
+        this.id = id;
+    }
 
     public String getDIN() {
         return DIN;

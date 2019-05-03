@@ -1,6 +1,8 @@
 package com.squad.betakua.tap_neko.azure;
 
 public class DrugRecord {
+    @com.google.gson.annotations.SerializedName("id")
+    public String id;
     @com.google.gson.annotations.SerializedName("productID")
     private String productID;
     @com.google.gson.annotations.SerializedName("DIN")
@@ -23,6 +25,14 @@ public class DrugRecord {
     private String url;
     @com.google.gson.annotations.SerializedName("webUrl")
     private String webUrl;
+
+    public String getId() {
+        return id;
+    }
+
+    public final void setId(String id) {
+        this.id = id;
+    }
 
     public String getProductID() {
         return productID;

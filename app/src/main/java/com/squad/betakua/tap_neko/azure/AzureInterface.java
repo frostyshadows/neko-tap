@@ -51,6 +51,7 @@ public class AzureInterface {
     private static final String DRUG_INFO_TABLE_NAME = "drug_info_item";
     private static final String DRUG_RECORD_TABLE_NAME = "drug_record_table";
     private static final String DEVICE_RECORD_TABLE_NAME = "device_record_table";
+    private static final String PHRASE_ITEM_TABLE_NAME = "phrase_table";
     private static final String TRANSLATIONS_TABLE_NAME = "translated_drug_info";
     private final MobileServiceClient mClient;
     private final MobileServiceTable<DebugItem> debugTable;
@@ -58,6 +59,7 @@ public class AzureInterface {
     private final MobileServiceTable<DrugInfoItem> drugInfoTable;
     private final MobileServiceTable<DrugRecord> drugRecordTable;
     private final MobileServiceTable<DeviceRecord> deviceRecordTable;
+    private final MobileServiceTable<PhraseItem> phraseItemTable;
     private final MobileServiceTable<TranslationsItem> translationsTable;
 
 
@@ -101,6 +103,7 @@ public class AzureInterface {
             this.drugInfoTable = mClient.getTable(DRUG_INFO_TABLE_NAME, DrugInfoItem.class);
             this.drugRecordTable = mClient.getTable(DRUG_RECORD_TABLE_NAME, DrugRecord.class);
             this.deviceRecordTable = mClient.getTable(DEVICE_RECORD_TABLE_NAME, DeviceRecord.class);
+            this.phraseItemTable = mClient.getTable(PHRASE_ITEM_TABLE_NAME, PhraseItem.class);
             this.translationsTable = mClient.getTable(TRANSLATIONS_TABLE_NAME, TranslationsItem.class);
             this.speechConfig = SpeechConfig.fromSubscription(SPEECH_SUB_KEY, SERVICE_REGION);
         } catch (URISyntaxException | InvalidKeyException | MalformedURLException e) {
@@ -324,33 +327,8 @@ public class AzureInterface {
      * Populate Azure with mock drug database
      *
      */
-    public ListenableFuture<DrugRecord> writeDrugRecord(
-                                                    String productID,
-                                                    String DIN,
-                                                    String rxNumber,
-                                                    String genericName,
-                                                    String tradeName,
-                                                    String label,
-                                                    String dose,
-                                                    String dosageForm,
-                                                    String doseUnit,
-                                                    String url,
-                                                    String webUrl) {
-        final DrugRecord item = new DrugRecord();
-
-        item.setProductID(productID);
-        item.setDIN(DIN);
-        item.setRxNumber(rxNumber);
-        item.setGenericName(genericName);
-        item.setTradeName(tradeName);
-        item.setLabel(label);
-        item.setDose(dose);
-        item.setDosageForm(dosageForm);
-        item.setDoseUnit(doseUnit);
-        item.setUrl(url);
-        item.setWebUrl(webUrl);
-
-        return this.drugRecordTable.insert(item);
+    public ListenableFuture<DrugRecord> writeDrugRecord(DrugRecord drugRecord) {
+        return this.drugRecordTable.insert(drugRecord);
     }
 
 
@@ -358,24 +336,15 @@ public class AzureInterface {
      * Populate Azure with mock device database
      *
      */
-    public ListenableFuture<DeviceRecord> writeDeviceRecord(
-            String productID,
-            String rxNumber,
-            String className,
-            String tradeName,
-            String label,
-            String url,
-            String webUrl) {
-        final DeviceRecord item = new DeviceRecord();
+    public ListenableFuture<DeviceRecord> writeDeviceRecord(DeviceRecord deviceRecord) {
+        return this.deviceRecordTable.insert(deviceRecord);
+    }
 
-        item.setProductID(productID);
-        item.setRxNumber(rxNumber);
-        item.setClassName(className);
-        item.setTradeName(tradeName);
-        item.setLabel(label);
-        item.setUrl(url);
-        item.setWebUrl(webUrl);
-
-        return this.deviceRecordTable.insert(item);
+    /**
+     * Populate Azure with counselling phrases
+     *
+     */
+    public ListenableFuture<PhraseItem> writePhraseItem(PhraseItem phraseItem) {
+        return this.phraseItemTable.insert(phraseItem);
     }
 }
