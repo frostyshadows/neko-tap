@@ -9,6 +9,12 @@
     android:background="@color/colorPrimary"
     android:layout_gravity="center">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_calendar_with_a_clock_time_tools" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,12 +23,6 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:text="Your pharmacist has scheduled a refill reminder for you on 22/05/2019.\n\nWould you like to receive a refill reminder on this date?"/>
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_calendar_with_a_clock_time_tools" />
 
     <Button
         android:id="@+id/refill_reminder_splash_button_accept"

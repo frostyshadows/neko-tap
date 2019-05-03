@@ -19,6 +19,7 @@ import com.squad.betakua.tap_neko.R;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.DrugRecord;
 import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
+import com.squad.betakua.tap_neko.patientinfo.ScreenSlideAudioPlayFragment;
 
 import static android.view.View.VISIBLE;
 
@@ -26,6 +27,7 @@ public class MedRecordActivity extends AppCompatActivity {
     Button addMedRecordBtn;
     LinearLayout emptyStatePanel;
     LinearLayout medListRoot;
+    Button viewInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +37,20 @@ public class MedRecordActivity extends AppCompatActivity {
         addMedRecordBtn = findViewById(R.id.med_record_add_med_btn);
         emptyStatePanel = findViewById(R.id.empty_state_panel);
         medListRoot = findViewById(R.id.med_record_list);
+        viewInfo = findViewById(R.id.viewButton);
+
 
         addMedRecordBtn.setOnClickListener((View view) -> {
-            Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class); //NFCPatientActivity.class
-            startActivity(patientIntent);
+            Intent drugIntent = new Intent(getApplicationContext(), ScreenSlideAudioPlayFragment.class);
+            startActivity(drugIntent);
         });
+
+        viewInfo.setOnClickListener((View view) -> {
+            //TODO change to audio fragment of medication
+            Intent drugIntent = new Intent(getApplicationContext(), ScreenSlideAudioPlayFragment.class);
+            startActivity(drugIntent);
+        });
+
         emptyStatePanel.setVisibility(VISIBLE);
 
         checkForExistingRecords();
