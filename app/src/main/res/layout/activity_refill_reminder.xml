@@ -29,7 +29,8 @@
             <Button
                 android:id="@+id/twoWeeksButton"
                 android:layout_width="match_parent"
-                android:text="2 weeks" />
+                android:text="2 weeks"
+                android:background="@color/white"/>
         </TableRow>
 
         <TableRow
@@ -40,7 +41,8 @@
             <Button
                 android:id="@+id/thirtyDaysButton"
                 android:layout_width="match_parent"
-                android:text="30 days" />
+                android:text="30 days"
+                android:background="@color/white"/>
         </TableRow>
 
         <TableRow
@@ -51,7 +53,8 @@
             <Button
                 android:id="@+id/ninetyDaysButton"
                 android:layout_width="match_parent"
-                android:text="90 days" />
+                android:text="90 days"
+                android:background="@color/white"/>
         </TableRow>
 
         <TableRow
@@ -71,12 +74,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Refill reminder set for:"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/dateText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp" />
+        android:textSize="40sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:text="Submit"
+            android:textSize="24sp" />
+    </RelativeLayout>
+
 </LinearLayout>
+
