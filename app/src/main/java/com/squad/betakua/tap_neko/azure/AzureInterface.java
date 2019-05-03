@@ -366,6 +366,8 @@ public class AzureInterface {
      *
      */
     public ListenableFuture<PatientMedRecord> writePatientMedRecord(PatientMedRecord medRecord) {
+        Log.e("---------", medRecord.getProductID());
+        Log.e("---------", medRecord.getRxNumber());
         return this.patientMedRecordTable.insert(medRecord);
     }
 

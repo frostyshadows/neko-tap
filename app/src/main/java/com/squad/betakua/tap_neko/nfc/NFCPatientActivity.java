@@ -128,10 +128,6 @@ public class NFCPatientActivity extends AppCompatActivity {
         } else if (requestCode == ADD_MED_RECORD_SPLASH_REQ_CODE && resultCode == RESULT_OK) {
             boolean acceptsAddMedRecord = data.getBooleanExtra(ADD_MED_RECORD_SPLASH_KEY, false);
             Log.e("--- INTENT ----", "result is: " + acceptsAddMedRecord);
-            if (acceptsAddMedRecord) {
-                addNewMedRecord(barcodeId);
-            }
-
             startPatientIntent();
         }
     }
@@ -250,7 +246,7 @@ public class NFCPatientActivity extends AppCompatActivity {
                     if (reminder != null && !reminder.equals("")) {
                         barcodeId = infoItems.get(0).getProductID();
                         productName = infoItems.get(0).getProductName();
-
+                        addNewMedRecord();
                         startRefillSplashIntent();
                     } else {
                         startPatientIntent();
@@ -317,10 +313,13 @@ public class NFCPatientActivity extends AppCompatActivity {
         startActivityForResult(refillSplashIntent, ADD_MED_RECORD_SPLASH_REQ_CODE);
     }
 
-    private void addNewMedRecord(String barcodeId) {
+    private void addNewMedRecord() {
         PatientMedRecord record = new PatientMedRecord();
+        record.setId(nfcId);
+        Log.e("awefawef", "fff: " + barcodeId);
         record.setProductID(barcodeId);
         record.setRxNumber(barcodeId);
+        record.setNfcID(nfcId);
         record.setDirections("Take one tablet once daily."); // TODO: mock
         record.setQuantity("30"); // TODO: mock
         record.setRefills("3"); // TODO: mock

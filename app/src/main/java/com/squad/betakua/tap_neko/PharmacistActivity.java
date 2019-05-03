@@ -302,7 +302,7 @@ public class PharmacistActivity extends AppCompatActivity {
         String webUrl = demoGenerateWebUrl();
         String pharmacyPhone = "1-800-867-1389";
         String pharmacyName = "Shoppers Drug Mart #2323";
-        String pharmacist = "John Lee";
+        String pharmacist = "Sophie Berger";
         String translated = demoGenerateTranslated();
         String reminder = refillDate;
 

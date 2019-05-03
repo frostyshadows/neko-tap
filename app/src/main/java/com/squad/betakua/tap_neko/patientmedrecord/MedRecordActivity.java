@@ -25,6 +25,7 @@ import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
 import com.squad.betakua.tap_neko.patientinfo.ScreenSlideAudioPlayFragment;
 
 import static android.view.View.VISIBLE;
+import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
 
 public class MedRecordActivity extends AppCompatActivity {
     Button addMedRecordBtn;
@@ -40,7 +41,6 @@ public class MedRecordActivity extends AppCompatActivity {
         addMedRecordBtn = findViewById(R.id.med_record_add_med_btn);
         emptyStatePanel = findViewById(R.id.empty_state_panel);
         medListRoot = findViewById(R.id.med_record_list);
-        viewInfo = findViewById(R.id.viewButton);
 
 
         addMedRecordBtn.setOnClickListener((View view) -> {
@@ -58,7 +58,6 @@ public class MedRecordActivity extends AppCompatActivity {
             ListenableFuture<MobileServiceList<PatientMedRecord>> patientMedRecordFuture = AzureInterface.getInstance().readPatientMedRecord();
             Futures.addCallback(patientMedRecordFuture, new FutureCallback<MobileServiceList<PatientMedRecord>>() {
                 public void onSuccess(MobileServiceList<PatientMedRecord> items) {
-                    Log.e("----", "it is " + items.getTotalCount());
                     if (items.getTotalCount() > 0) {
                         populateMedRecord(items);
                     } else {
@@ -109,7 +108,7 @@ public class MedRecordActivity extends AppCompatActivity {
                     rxNumber.setText(record.getRxNumber());
                     TextView label = new TextView(getApplicationContext());
                     label.setText(drug.getLabel());
-                    row1.addView(rxNumber);
+                    label.setTextSize(18);
                     row1.addView(label);
 
                     // assemble row 2
@@ -119,11 +118,19 @@ public class MedRecordActivity extends AppCompatActivity {
                     row1.setOrientation(LinearLayout.HORIZONTAL);
                     Button viewInfo = new Button(getApplicationContext());
                     viewInfo.setText("view drug");
+
+                    String nfcID = record.getNfcID();
+                    viewInfo.setOnClickListener((View view) -> {
+                        startPatientIntent(nfcID);
+                    });
                     row2.addView(viewInfo);
 
                     // assemble row 3
 
                     // finally, add the row to the med list
+                    LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    llparams.setMargins(16,8,16, 8);
+                    medicationRow.setLayoutParams(llparams);
                     medicationRow.addView(row1);
                     medicationRow.addView(row2);
                     medListRoot.addView(medicationRow);
@@ -140,5 +147,11 @@ public class MedRecordActivity extends AppCompatActivity {
         }
     }
 
+    private void startPatientIntent(String nfcId) {
+        Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class);
+        patientIntent.putExtra(NFC_ID_KEY, nfcId);
+        Log.e("nfcID1", nfcId);
+        startActivity(patientIntent);
+    }
 
 }

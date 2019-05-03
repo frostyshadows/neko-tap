@@ -5,6 +5,8 @@ public class PatientMedRecord {
     public String id;
     @com.google.gson.annotations.SerializedName("productID")
     public String productID;
+    @com.google.gson.annotations.SerializedName("nfcID")
+    public String nfcID;
     @com.google.gson.annotations.SerializedName("rxNumber")
     private String rxNumber;
     @com.google.gson.annotations.SerializedName("directions")
@@ -21,6 +23,15 @@ public class PatientMedRecord {
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getNfcID() {
+        return nfcID;
+    }
+
+    public void setNfcID(String id) {
+        this.nfcID = id;
+    }
+
 
     public String getProductID() {
         return productID;
