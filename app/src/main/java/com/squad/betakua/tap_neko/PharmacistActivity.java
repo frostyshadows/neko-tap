@@ -58,6 +58,7 @@ public class PharmacistActivity extends AppCompatActivity {
 
     private TableRow refillButton;
     private String refillId;
+    private String refillDate;
     private boolean hasReminder = false;
 
     private String nfcId;
@@ -164,6 +165,9 @@ public class PharmacistActivity extends AppCompatActivity {
             lottieAudio.setMaxProgress(0.5f);
             lottieAudio.playAnimation();
 
+            refillButton.setEnabled(true);
+            refillButton.setBackgroundColor(getResources().getColor(R.color.white));
+
             refreshSubmitButton();
         } else if (requestCode == NFC_REQ_CODE && resultCode == RESULT_OK) {
             // get NFC id
@@ -184,6 +188,7 @@ public class PharmacistActivity extends AppCompatActivity {
         } else if (requestCode == REFILL_REMINDER_CODE && resultCode == RESULT_OK){
             //get date
             refillId = data.getStringExtra(REFILL_REMINDER_KEY);
+            //Set refill date
             hasReminder = true;
 
             // change colors

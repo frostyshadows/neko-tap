@@ -22,6 +22,7 @@
 
 
         <TableRow
+            android:id="@+id/twoWeeksRow"
             android:layout_width="match_parent"
             android:layout_weight="1">
 
@@ -32,6 +33,7 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/thirtyDaysRow"
             android:layout_width="match_parent"
             android:layout_weight="1">
 
@@ -42,6 +44,7 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/ninetyDayRow"
             android:layout_width="match_parent"
             android:layout_weight="1">
 
@@ -51,18 +54,30 @@
                 android:text="90 days" />
         </TableRow>
 
-        <TableRow android:layout_width="match_parent">
+        <TableRow
+            android:id="@+id/calenderRow"
+            android:layout_width="match_parent">
 
             <CalendarView
                 android:id="@+id/calenderView"
                 android:layout_width="match_parent" />
+
         </TableRow>
 
     </TableLayout>
 
     <TextView
+        android:id="@+id/refillText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Refill reminder set for:"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
         android:id="@+id/dateText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textSize="20sp"/>
 </LinearLayout>
