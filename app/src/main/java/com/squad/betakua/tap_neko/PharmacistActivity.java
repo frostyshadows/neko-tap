@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -169,6 +170,7 @@ public class PharmacistActivity extends AppCompatActivity {
         } else if (requestCode == AUDIO_REQ_CODE && resultCode == RESULT_OK) {
             // get audio transcript
             transcript = data.getStringExtra(AUDIO_TRANSCRIPT_KEY);
+            Log.e("transcript11", transcript);
             translation = data.getStringExtra(AUDIO_TRANSLATE_KEY);
             hasAudio = true;
 
@@ -260,11 +262,13 @@ public class PharmacistActivity extends AppCompatActivity {
                 Futures.addCallback(infoItemsFuture, new FutureCallback<InfoItem>() {
                     public void onSuccess(InfoItem infoItem) {
                         // if row already exists, update it
+                        Log.e("---", "updating");
                         updateInfoItemToTable();
                     }
 
                     public void onFailure(Throwable t) {
                         // if row doesn't exist, add it
+                        Log.e("---", "replacing");
                         insertInfoItemToTable();
                     }
                 });

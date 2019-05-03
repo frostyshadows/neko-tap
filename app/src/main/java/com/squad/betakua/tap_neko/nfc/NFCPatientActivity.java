@@ -124,7 +124,7 @@ public class NFCPatientActivity extends AppCompatActivity {
         if (requestCode == REFILL_SPLASH_REQ_CODE && resultCode == RESULT_OK) {
             boolean acceptsRefillNotification = data.getBooleanExtra(REFILL_SPLASH_KEY, false);
             Log.e("--- INTENT ----", "result is: " + acceptsRefillNotification);
-            checkForAddMedRecord();
+            startPatientIntent();
         } else if (requestCode == ADD_MED_RECORD_SPLASH_REQ_CODE && resultCode == RESULT_OK) {
             boolean acceptsAddMedRecord = data.getBooleanExtra(ADD_MED_RECORD_SPLASH_KEY, false);
             Log.e("--- INTENT ----", "result is: " + acceptsAddMedRecord);
@@ -253,7 +253,7 @@ public class NFCPatientActivity extends AppCompatActivity {
 
                         startRefillSplashIntent();
                     } else {
-                        checkForAddMedRecord();
+                        startPatientIntent();
                     }
                 }
 
@@ -299,6 +299,7 @@ public class NFCPatientActivity extends AppCompatActivity {
     private void startPatientIntent() {
         Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class);
         patientIntent.putExtra(NFC_ID_KEY, nfcId);
+        Log.e("nfcID1", nfcId);
         startActivity(patientIntent);
     }
 

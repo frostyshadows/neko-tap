@@ -140,7 +140,7 @@ public class AzureInterface {
         // Log.e("writing... ", url + " " + webUrl + " " + pharmacyPhone + " " + pharmacyName);
         // Log.e("writing... ", pharmacist + " " + translated + " " + reminder);
 
-        // item.setId(nfcID);
+        item.setId(nfcID);
         item.setNfcID(nfcID);
         item.setProductID(productID);
         item.setProductName(productName);
