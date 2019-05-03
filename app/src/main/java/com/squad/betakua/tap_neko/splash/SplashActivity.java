@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private boolean IS_DEV_MODE = true; // add button to access pharmacist interface
     private boolean isPatient = true;
-    // private boolean isPatient = true;
+    // private boolean isPatient = false;
     private boolean bypassAuth = true;
 
     @Override

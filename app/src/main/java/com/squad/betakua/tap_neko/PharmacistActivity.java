@@ -23,6 +23,7 @@ import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.InfoItem;
 import com.squad.betakua.tap_neko.barcode.BarcodeScannerActivity;
 import com.squad.betakua.tap_neko.nfc.NFCActivity;
+import com.squad.betakua.tap_neko.notifications.RefillReminder;
 import com.squad.betakua.tap_neko.utils.Utils;
 
 import static com.squad.betakua.tap_neko.nfc.NFCActivity.NFC_ID_KEY;
@@ -39,6 +40,8 @@ public class PharmacistActivity extends AppCompatActivity {
     public static final String AUDIO_REQ_KEY = "audio_record";
     public static final String AUDIO_TRANSCRIPT_KEY = "audio_transcript";
     public static final String AUDIO_TRANSLATE_KEY = "audio_translate";
+    public static final int REFILL_REMINDER_CODE = 100;
+    public static final String REFILL_REMINDER_KEY = "refill_reminder";
 
     private TableRow audioRecorderButton;
     private String transcript;
@@ -53,6 +56,11 @@ public class PharmacistActivity extends AppCompatActivity {
     private Button submitButton;
     private LottieAnimationView submitButtonProgress;
 
+    private TableRow refillButton;
+    private String refillId;
+    private String refillDate;
+    private boolean hasReminder = false;
+
     private String nfcId;
     private String fileId;
     private boolean hasNfcId = false;
@@ -60,10 +68,12 @@ public class PharmacistActivity extends AppCompatActivity {
     private TextView textBarcode;
     private TextView textNFC;
     private TextView textAudio;
+    private TextView textRefill;
 
     private LottieAnimationView lottieBarcode;
     private LottieAnimationView lottieNFC;
     private LottieAnimationView lottieAudio;
+    private LottieAnimationView lottieRefill;
 
     private static final String MOCK_YOUTUBE_URL = "https://www.youtube.com/watch?v=uGkbreu169Q";
 
@@ -74,9 +84,11 @@ public class PharmacistActivity extends AppCompatActivity {
         barcodeScannerButton = findViewById(R.id.barcode_scanner_button);
         nfcButton = findViewById(R.id.nfc_button);
         audioRecorderButton = findViewById(R.id.audio_recorder_button);
+        refillButton = findViewById(R.id.refill_reminder_button);
         textBarcode = findViewById(R.id.scan_text);
         textNFC = findViewById(R.id.nfc_text);
         textAudio = findViewById(R.id.audio_text);
+        textRefill = findViewById(R.id.refill_text);
 
         initAudioRecorderButton();
         initBarcodeScannerButton();
@@ -84,21 +96,27 @@ public class PharmacistActivity extends AppCompatActivity {
         initSubmitButton();
         initCheckboxAnimations();
         refreshSubmitButton();
+        initRefillReminderButton();
 
         nfcButton.setEnabled(false);
         audioRecorderButton.setEnabled(false);
+        refillButton.setEnabled(false);
+
         nfcButton.setBackgroundColor(getResources().getColor(R.color.superLightGrey));
         audioRecorderButton.setBackgroundColor(getResources().getColor(R.color.superLightGrey));
+        refillButton.setBackgroundColor(getResources().getColor(R.color.superLightGrey));
     }
 
     private void initCheckboxAnimations() {
         lottieBarcode = findViewById(R.id.check_barcode);
         lottieNFC = findViewById(R.id.check_nfc);
         lottieAudio = findViewById(R.id.check_audio);
+        lottieRefill = findViewById(R.id.check_refill);
 
         lottieBarcode.setProgress(0f);
         lottieNFC.setProgress(0f);
         lottieAudio.setProgress(0f);
+        lottieRefill.setProgress(0f);
 
         lottieBarcode.addValueCallback(
                 new KeyPath("**"),
@@ -109,6 +127,10 @@ public class PharmacistActivity extends AppCompatActivity {
                 LottieProperty.COLOR,
                 new LottieValueCallback<>(Color.WHITE));
         lottieAudio.addValueCallback(
+                new KeyPath("**"),
+                LottieProperty.COLOR,
+                new LottieValueCallback<>(Color.WHITE));
+        lottieRefill.addValueCallback(
                 new KeyPath("**"),
                 LottieProperty.COLOR,
                 new LottieValueCallback<>(Color.WHITE));
@@ -143,6 +165,9 @@ public class PharmacistActivity extends AppCompatActivity {
             lottieAudio.setMaxProgress(0.5f);
             lottieAudio.playAnimation();
 
+            refillButton.setEnabled(true);
+            refillButton.setBackgroundColor(getResources().getColor(R.color.white));
+
             refreshSubmitButton();
         } else if (requestCode == NFC_REQ_CODE && resultCode == RESULT_OK) {
             // get NFC id
@@ -160,6 +185,17 @@ public class PharmacistActivity extends AppCompatActivity {
             audioRecorderButton.setBackgroundColor(getResources().getColor(R.color.white));
 
             refreshSubmitButton();
+        } else if (requestCode == REFILL_REMINDER_CODE && resultCode == RESULT_OK){
+            //get date
+            refillId = data.getStringExtra(REFILL_REMINDER_KEY);
+            //Set refill date
+            hasReminder = true;
+
+            // change colors
+            textRefill.setTextColor(Color.parseColor("#FFFFFF"));
+            refillButton.setBackgroundColor(Color.parseColor("#6dcc5b"));
+            lottieRefill.setMaxProgress(0.5f);
+            lottieRefill.playAnimation();
         }
     }
 
@@ -175,6 +211,13 @@ public class PharmacistActivity extends AppCompatActivity {
         barcodeScannerButton.setOnClickListener((View view) -> {
             Intent barcodeScannerIntent = new Intent(getApplicationContext(), BarcodeScannerActivity.class);
             startActivityForResult(barcodeScannerIntent, BARCODE_REQ_CODE);
+        });
+    }
+
+    private void initRefillReminderButton(){
+        refillButton.setOnClickListener((View view) -> {
+            Intent refillReminderIntent = new Intent(getApplicationContext(), RefillReminder.class);
+            startActivityForResult(refillReminderIntent, REFILL_REMINDER_CODE);
         });
     }
 
@@ -218,7 +261,7 @@ public class PharmacistActivity extends AppCompatActivity {
 
     // submit button should only be enabled if both audio, barcode, and NFC have been prepared
     private void refreshSubmitButton() {
-        if (hasAudio && hasBarcode && hasNfcId) {
+        if (hasAudio && hasBarcode && hasNfcId && hasReminder) {
             submitButton.setEnabled(true);
         } else {
             submitButton.setEnabled(false);

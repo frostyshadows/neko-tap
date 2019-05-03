@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/reminderText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set refill reminder for"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="0">
+
+
+        <TableRow
+            android:id="@+id/twoWeeksRow"
+            android:layout_width="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/twoWeeksButton"
+                android:layout_width="match_parent"
+                android:text="2 weeks"
+                android:background="@color/white"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/thirtyDaysRow"
+            android:layout_width="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/thirtyDaysButton"
+                android:layout_width="match_parent"
+                android:text="30 days"
+                android:background="@color/white"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/ninetyDayRow"
+            android:layout_width="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/ninetyDaysButton"
+                android:layout_width="match_parent"
+                android:text="90 days"
+                android:background="@color/white"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/calenderRow"
+            android:layout_width="match_parent">
+
+            <CalendarView
+                android:id="@+id/calenderView"
+                android:layout_width="match_parent" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/refillText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Refill reminder set for:"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:text="Submit"
+            android:textSize="24sp" />
+    </RelativeLayout>
+
+</LinearLayout>
+
