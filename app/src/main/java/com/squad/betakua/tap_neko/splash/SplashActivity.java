@@ -13,6 +13,7 @@ import com.squad.betakua.tap_neko.auth.AuthActivity;
 import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.nfc.NFCPatientActivity;
+import com.squad.betakua.tap_neko.patientmedrecord.MedRecordActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -56,8 +57,8 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(pharmIntent);
         } else if (id == R.id.splash_screen) {
             if (isPatient) {
-                Intent patientIntent = new Intent(getApplicationContext(), NFCPatientActivity.class); //NFCPatientActivity.class
-                startActivity(patientIntent);
+                Intent medRecordIntent = new Intent(getApplicationContext(), MedRecordActivity.class); //NFCPatientActivity.class
+                startActivity(medRecordIntent);
             } else {
                 if (bypassAuth) {
                     Intent pharmIntent = new Intent(getApplicationContext(), PharmacistActivity.class);

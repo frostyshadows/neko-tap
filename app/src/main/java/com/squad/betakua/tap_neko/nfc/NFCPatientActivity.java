@@ -34,6 +34,8 @@ import com.squad.betakua.tap_neko.azure.AzureInterface;
 import com.squad.betakua.tap_neko.azure.AzureInterfaceException;
 import com.squad.betakua.tap_neko.azure.InfoItem;
 import com.squad.betakua.tap_neko.notifications.RefillReminderSplash;
+import com.squad.betakua.tap_neko.patientmedrecord.AddMedRecordSplash;
+import com.squad.betakua.tap_neko.patientmedrecord.PatientMedRecord;
 
 import java.util.Locale;
 
@@ -42,6 +44,8 @@ public class NFCPatientActivity extends AppCompatActivity {
     public static final String NFC_ID_KEY = "nfc_id";
     public static final int REFILL_SPLASH_REQ_CODE = 124;
     public static final String REFILL_SPLASH_KEY = "refill_splash_id";
+    public static final int ADD_MED_RECORD_SPLASH_REQ_CODE = 125;
+    public static final String ADD_MED_RECORD_SPLASH_KEY = "add_med_record_splash_id";
     Button nfcDemoBtn;
     String nfcId;
     String barcodeId;
@@ -120,6 +124,14 @@ public class NFCPatientActivity extends AppCompatActivity {
         if (requestCode == REFILL_SPLASH_REQ_CODE && resultCode == RESULT_OK) {
             boolean acceptsRefillNotification = data.getBooleanExtra(REFILL_SPLASH_KEY, false);
             Log.e("--- INTENT ----", "result is: " + acceptsRefillNotification);
+            checkForAddMedRecord();
+        } else if (requestCode == ADD_MED_RECORD_SPLASH_REQ_CODE && resultCode == RESULT_OK) {
+            boolean acceptsAddMedRecord = data.getBooleanExtra(ADD_MED_RECORD_SPLASH_KEY, false);
+            Log.e("--- INTENT ----", "result is: " + acceptsAddMedRecord);
+            if (acceptsAddMedRecord) {
+                addNewMedRecord(barcodeId);
+            }
+
             startPatientIntent();
         }
     }
@@ -241,7 +253,7 @@ public class NFCPatientActivity extends AppCompatActivity {
 
                         startRefillSplashIntent();
                     } else {
-                        startPatientIntent();
+                        checkForAddMedRecord();
                     }
                 }
 
@@ -255,6 +267,35 @@ public class NFCPatientActivity extends AppCompatActivity {
         }
     }
 
+    private void checkForAddMedRecord() {
+        // TODO: actually check for the med record here
+        startAddMedRecordSplashIntent();
+
+        // try {
+        //     ListenableFuture<MobileServiceList<PatientMedRecord>> infoItemsFuture = AzureInterface.getInstance().checkIfPatientMedRecordExists(barcodeId);
+        //     Futures.addCallback(infoItemsFuture, new FutureCallback<MobileServiceList<InfoItem>>() {
+        //         public void onSuccess(MobileServiceList<InfoItem> infoItems) {
+        //             String reminder = infoItems.get(0).getReminder();
+        //             if (reminder != null && !reminder.equals("")) {
+        //                 barcodeId = infoItems.get(0).getProductID();
+        //                 productName = infoItems.get(0).getProductName();
+        //
+        //                 startRefillSplashIntent();
+        //             } else {
+        //                 startAddMedRecordSplashIntent();
+        //             }
+        //         }
+        //
+        //         public void onFailure(Throwable t) {
+        //             Log.e("HERE11", "fail " + t.toString());
+        //             t.printStackTrace();
+        //         }
+        //     });
+        // } catch (AzureInterfaceException e) {
+        //     Log.e("ERROR:", e.toString());
+        // }
+    }
+
     private void startPatientIntent() {
         Intent patientIntent = new Intent(getApplicationContext(), PatientActivity.class);
         patientIntent.putExtra(NFC_ID_KEY, nfcId);
@@ -266,5 +307,27 @@ public class NFCPatientActivity extends AppCompatActivity {
         refillSplashIntent.putExtra("barcodeId", barcodeId);
         refillSplashIntent.putExtra("productName", productName);
         startActivityForResult(refillSplashIntent, REFILL_SPLASH_REQ_CODE);
+    }
+
+    private void startAddMedRecordSplashIntent() {
+        Intent refillSplashIntent = new Intent(getApplicationContext(), AddMedRecordSplash.class);
+        refillSplashIntent.putExtra("barcodeId", barcodeId);
+        refillSplashIntent.putExtra("productName", productName);
+        startActivityForResult(refillSplashIntent, ADD_MED_RECORD_SPLASH_REQ_CODE);
+    }
+
+    private void addNewMedRecord(String barcodeId) {
+        PatientMedRecord record = new PatientMedRecord();
+        record.setProductID(barcodeId);
+        record.setRxNumber(barcodeId);
+        record.setDirections("Take one tablet once daily."); // TODO: mock
+        record.setQuantity("30"); // TODO: mock
+        record.setRefills("3"); // TODO: mock
+
+        try {
+            AzureInterface.getInstance().writePatientMedRecord(record);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
